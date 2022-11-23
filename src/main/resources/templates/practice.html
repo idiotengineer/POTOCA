@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+
+    <link rel = "stylesheet" href ="/css/sample.css">
+    <link href="/css/thumbs.css" rel="stylesheet">
+    <link href="/css/TodaysPostList.css" rel="stylesheet">
+    <link href="/css/base_nav.css" rel ="stylesheet">
+    <link href="/css/font.css" rel = "stylesheet">
+    <link href = "/css/navbar.css" rel = "stylesheet">
+
+
+
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+
+   <nav class="navbar bg-light fixed-top" id = "container-fluid_custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://cdn-icons-png.flaticon.com/512/6815/6815258.png" alt="Bootstrap" width="30" height="24">
+              </a>
+          <a class="navbar-brand" href="http://localhost:8080/">Main Page</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">My Page</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#">설정</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">마이페이지</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="http://localhost:8080/mypoint">마이포인트</a>
+                  </li>
+               </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+
+
+
+    <ul class="nav" id = "nav_custom">
+        <span class = "nav_custom_inner">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="http://localhost:8080/listpage" id = "nav_link_active_custom">일반 게시글 목록 보기</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:8080/votelistpage">투표 게시글 목록보기</a>
+        </li>
+        </span>
+      <button type="button" class="btn btn-primary" id ="login_button" onclick="location.href='http://localhost:8080/login'">로그인</button>
+    </ul>
+
+
+
+
+
+
+
+
+
+
+  <div class ="empty">
+   <h2 class = "best_vote_list_banner">오늘의 베스트 투표글</h2>
+
+
+   <section class = "thums">
+    <div class = "thums_wrapper">
+    <div class = "each_votes_post"  onclick="location.href='http://localhost:8080/votepost'">
+      <img class = "post_image" src = "https://img.hankyung.com/photo/202210/BF.31506021.1.jpg">
+      <div class = "post_information">
+        <h2 class = "post_title">제목 : 카리나는 여신 카리나는 여신 카리나는 여신 카리나는 여신 카리나는 여신 카리나는 여신 카리나는 여신 </h2>
+        <p class = "post_publisher">게시자 : 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동  </p>
+        <p class = "post_hits">조회수 : 100000000000000000000000000000000000000000000000000000000000000000000000000000000000 </p>
+        <p class = "post_hits">투표수 : 999999999999999999999999999999999999999999999999999999999999999999999999999999999999</p>
+      </div>
+    </div>
+
+    <div class = "each_votes_post"  onclick="location.href='http://localhost:8080/votepost'">
+      <img class = "post_image" src = "https://upload.wikimedia.org/wikipedia/commons/c/c8/Karina_for_Eternal_Return_%C3%97_aespa_collaboration_BTS_photoshoot_03.jpg">
+      <div class = "post_information">
+        <h2 class = "post_title">제목 : </h2>
+        <div class = "post_inner_information">
+        <p class = "post_publisher">게시자 : </p>
+        <p class = "post_hits">조회수 : </p>
+        <p class = "post_hits">투표수 : </p>
+      </div>
+      </div>
+    </div>
+
+    <div class = "each_votes_post"  onclick="location.href='http://localhost:8080/votepost'">
+      <img class = "post_image" src = "https://img.hankyung.com/photo/202210/BF.31506021.1.jpg">
+      <div class = "post_information">
+        <h2 class = "post_title">제목 : </h2>
+        <div class = "post_inner_information">
+        <p class = "post_publisher">게시자 : </p>
+        <p class = "post_hits">조회수 : </p>
+        <p class = "post_hits">투표수 : </p>
+      </div>
+      </div>
+    </div>
+
+     <div class = "each_votes_post"  onclick="location.href='http://localhost:8080/votepost'">
+      <img class = "post_image" src = "https://img.hankyung.com/photo/202210/BF.31506021.1.jpg">
+      <div class = "post_information">
+        <h2 class = "post_title">제목 : </h2>
+        <div class = "post_inner_information">
+        <p class = "post_publisher">게시자 : </p>
+        <p class = "post_hits">조회수 : </p>
+        <p class = "post_hits">투표수 : </p>
+      </div>
+      </div>
+    </div>
+  </div>
+   </section>
+</div>
+  </div>
+
+    <section class = "Todays_Post_List">
+      <div class = "Todays_Post_Background">
+        <h2 class = "Todays_Post_List_Banner">오늘의 베스트 게시물</h2>
+        <table class="table" id = "practice_table" style="table-layout: fixed;">
+          <thead>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="col" id = "table-th-1">순위</th>
+            <th scope="col" id = "table-th-2">추천수</th>
+            <th scope="col" id = "table-th-3">제목</th>
+            <th scope="col" id = "table-th-4">작성자</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="row">1</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Mark</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">@mdo</td>
+          </tr>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="row">2</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Jacob</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Thornton</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">@fat</td>
+          </tr>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="row">3</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Jacob</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Thornton</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">@fat</td>
+          </tr>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="row">4</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Jacob</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Thornton</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">@fat</td>
+          </tr>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="row">5</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Jacob</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Thornton</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">@fat</td>
+          </tr>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="row">6</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Jacob</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Thornton</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">@fat</td>
+          </tr>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="row">7</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Jacob</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Thornton</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">@fat</td>
+          </tr>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="row">8</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Jacob</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Thornton</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">@fat</td>
+          </tr>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="row">9</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Jacob</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Thornton</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">@fat</td>
+          </tr>
+          <tr onclick="location.href='http://localhost:8080/post'">
+            <th scope="row">10</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Jacob</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">Thornton</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">@fat</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start bg-white text-muted">
+      <!-- Section: Social media -->
+      <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+        <!-- Left -->
+        <div class="me-5 d-none d-lg-block">
+          <span>Get connected with us on social networks:</span>
+        </div>
+        <!-- Left -->
+
+        <!-- Right -->
+        <div>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-google"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+        <!-- Right -->
+      </section>
+      <!-- Section: Social media -->
+
+      <!-- Section: Links  -->
+      <section class="">
+        <div class="container text-center text-md-start mt-5">
+          <!-- Grid row -->
+          <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+              <!-- Content -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                <i class="fas fa-gem me-3 text-secondary"></i>Company name
+              </h6>
+              <p>
+                This is a side project website, and we're not generating any revenue yet.
+                Thank you for your visit. :)
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                Products
+              </h6>
+              <p>
+                <a href="#!" class="text-reset">HTML, CSS, BOOTSTRAP</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">SPRING</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">JPA</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">MYSQL</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+
+
+
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+              <p><i class="fas fa-home me-3 text-secondary"></i> Seoul, 129 Teheran-ro, KR</p>
+              <p>
+                <i class="fas fa-envelope me-3 text-secondary"></i>
+                gurtjd97@naver.com
+              </p>
+              <p><i class="fas fa-phone me-3 text-secondary"></i> +82)10-2729-3646</p>
+            </div>
+            <!-- Grid column -->
+          </div>
+          <!-- Grid row -->
+        </div>
+      </section>
+      <!-- Section: Links  -->
+
+      <!-- Copyright -->
+      <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+        © 2021 Copyright:
+        <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+
+  </body>
+</html>

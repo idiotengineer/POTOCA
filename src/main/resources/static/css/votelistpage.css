@@ -1,0 +1,85 @@
+@font-face {
+    src : url("../css/font/DoHyeon-Regular.ttf");
+    font-family: "dohyeon"
+}
+
+*{
+    font-family: "dohyeon";
+}
+
+.List_Banner{
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    justify-content: space-around;
+    z-index: 3;
+    margin : 10px;
+}
+
+.Background{
+    display: flex;
+    position: relative;
+    height:450px;
+    background-color: white;
+    margin: 0px 10px 10px 10px;
+}
+
+#list1{
+    position:relative;
+}
+
+#navbar_custom{
+    display: inline;
+    position : relative;
+}
+
+#container-fluid_custom{
+    background-color: #f9f9f9;
+    padding: 10px 20px 10px 20px;
+}
+
+#row_g-3_cumstom{
+    padding : 10px;
+}
+
+
+#search_condition{
+    display: inline-block;
+    width: 30%;
+    margin : 10px 5px 10px 5px;
+}
+
+#search_content{
+    display: inline-block;
+    width: 50%;
+    margin : 10px 5px 10px 5px;
+}
+
+#search_button_wrapper{
+    display: inline-block;
+    width:10%;
+    margin : 10px 5px 10px 5px;
+}
+
+#bb{
+    margin-right: 100%;
+    width:50%;
+}
+
+#table-th-1{
+    width: 7%;
+}
+
+#table-th-2{
+    width:20%;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#table-th-3{
+    width:63%;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

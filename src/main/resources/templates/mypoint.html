@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile = "http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mypoint</title>
+
+    <link href = "/css/sample.css" rel = "stylesheet">
+    <link href= "/css/font.css" rel = "stylesheet">
+    <link href= "/css/navbar2.css" rel = "stylesheet">
+    <link href = "/css/mypoint.css" rel = "stylesheet">
+</head>
+<body>
+    <nav class="navbar bg-light fixed-top" id = "navbar_custom">
+        <div class="container-fluid" id = "container-fluid_custom">
+            <a class="navbar-brand" href="#">
+                <img src="https://cdn-icons-png.flaticon.com/512/6815/6815258.png" alt="Bootstrap" width="30" height="24">
+              </a>
+          <a class="navbar-brand" href="http://localhost:8080/">Main Page</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">My Page</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#">설정</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">마이페이지</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="http://localhost:8080/mypoint">마이포인트</a>
+                  </li>
+               </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+    <div class = "my_point_background">
+        <div class = "my_point">MY POINT : 999999999 Point </div>
+    </div>
+
+    <!-- <div class = "LOL_background">
+        <div class = "LOL_exchange">
+            <img class = "LOL_photo" src = "https://new-version.download/wp-content/uploads/league-of-legends.png">
+        </div>
+        <div class = "LOL_UI_wrapper">
+            
+        </div>
+    </div> -->
+    
+
+    <h2 class = "mypoint_expain">포인트를 캐쉬로 환전하기</h2>
+
+
+    <div class = "LOL_background">
+        <div class = "LOL_UI_wrapper">
+            <div class = "LOL_logo_parent">
+                <img class = "LOL_logo" src = "data:image/jpeg;base64,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">
+            </div>
+            <div class = "LOL_UI_parent">
+                <div class = "LOL_UI_child">
+                    리그오브레전드 아이디
+                    <input  class = "LOL_input", placeholder="ex) abcd1234">
+                </div>
+                <div class = "LOL_UI_child">
+                  리그오브레전드 패스워드
+                    <input  class = "LOL_input", placeholder="ex) password">
+                </div>
+                <div class = "LOL_UI_child">
+                  리그오브레전드 충전할 포인트
+                    <input  class = "LOL_input", placeholder="ex) 500RP">
+                </div>
+                <div class = "LOL_UI_child">
+                    <button type="button" class="btn btn-success">실행</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class = "VALORANT_background">
+        <div class = "VALORANT_UI_wrapper">
+            <div class = "VALORANT_logo_parent">
+                <img class = "VALORANT_logo" src = "https://post-phinf.pstatic.net/MjAyMDA2MDJfMTM3/MDAxNTkxMDQzNDk2NDMw.yVcWMEMVHBycpIks6k3_7Hj8qXBmAIWDMbpvMDaK7jQg.fICd2xkk_F380CbVbWGEDtahHEIkCtyzjrrpewm422Qg.PNG/21.png?type=w1200">
+            </div>
+            <div class = "VALORANT_UI_parent">
+                <div class = "VALORANT_UI_child">
+                    VALORANT 아이디
+                    <input  class = "VALORANT_input", placeholder="ex) abcd1234">
+                </div>
+                <div class = "VALORANT_UI_child">
+                    VALORANT 패스워드
+                    <input  class = "VALORANT_input", placeholder="ex) password">
+                </div>
+                <div class = "VALORANT_UI_child">
+                    VALORANT 충전할 포인트
+                    <input  class = "VALORANT_input", placeholder="ex) 500RP">
+                </div>
+                <div class = "VALORANT_UI_child">
+                    <button type="button" class="btn btn-success">실행</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- Footer -->
+<footer class="text-center text-lg-start bg-white text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <!-- Left -->
+      <div class="me-5 d-none d-lg-block">
+        <span>Get connected with us on social networks:</span>
+      </div>
+      <!-- Left -->
+  
+      <!-- Right -->
+      <div>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+  
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              <i class="fas fa-gem me-3 text-secondary"></i>Company name
+            </h6>
+            <p>
+              This is a side project website, and we're not generating any revenue yet.
+              Thank you for your visit. :)
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              Products
+            </h6>
+            <p>
+              <a href="#!" class="text-reset">HTML, CSS, BOOTSTRAP</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">SPRING</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">JPA</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">MYSQL</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+         
+  
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+            <p><i class="fas fa-home me-3 text-secondary"></i> Seoul, 129 Teheran-ro, KR</p>
+            <p>
+              <i class="fas fa-envelope me-3 text-secondary"></i>
+              gurtjd97@naver.com
+            </p>
+            <p><i class="fas fa-phone me-3 text-secondary"></i> +82)10-2729-3646</p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+  
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+      © 2021 Copyright:
+      <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+</body>
+</html>

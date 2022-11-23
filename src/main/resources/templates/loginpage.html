@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel = "stylesheet" href ="/css/sample.css">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <link href="/css/font.css" rel = "stylesheet">
+    <link href="/css/navbar.css" rel = "stylesheet">
+    
+    <title>loginpage</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body class="p-3 m-0 border-0 bd-example">
+
+    
+    <nav class="navbar bg-light fixed-top" id = "navbar_custom">
+      <div class="container-fluid" id = "container-fluid_custom">
+          <a class="navbar-brand" href="#">
+              <img src="https://cdn-icons-png.flaticon.com/512/6815/6815258.png" alt="Bootstrap" width="30" height="24">
+            </a>
+        <a class="navbar-brand" href="http://localhost:8080/">Main Page</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">My Page</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">설정</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">마이페이지</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="http://localhost:8080/mypoint">마이포인트</a>
+                </li>
+             </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+    <!-- Example Code -->
+    <div class="dropdown-menu">
+      <form class="px-4 py-3">
+        <div class="mb-3">
+          <label for="exampleDropdownFormEmail1" class="form-label">이메일을 입력하세요</label>
+          <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
+        </div>
+        <div class="mb-3">
+          <label for="exampleDropdownFormPassword1" class="form-label">비밀번호를 입력하세요.</label>
+          <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
+        </div>
+        <div class="mb-3">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="dropdownCheck">
+            <label class="form-check-label" for="dropdownCheck">
+              비밀번호 기억하기
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">확인</button>
+      </form>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="http://localhost:8080/signup">회원가입 하기</a>
+      <a class="dropdown-item" href="http://localhost:8080/forgotpassword">비밀번호 찾기</a>
+    </div>
+    
+    <!-- End Example Code -->
+
+      <!-- Footer -->
+<footer class="text-center text-lg-start bg-white text-muted">
+  <!-- Section: Social media -->
+  <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+    <!-- Left -->
+    <div class="me-5 d-none d-lg-block">
+      <span></span>
+    </div>
+    <!-- Left -->
+
+    <!-- Right -->
+    <div>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-google"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <!-- Right -->
+  </section>
+  <!-- Section: Social media -->
+
+  <!-- Section: Links  -->
+  <section class="">
+    <div class="container text-center text-md-start mt-5">
+      <!-- Grid row -->
+      <div class="row mt-3">
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            <i class="fas fa-gem me-3 text-secondary"></i>Company name
+          </h6>
+          <p>
+            This is a side project website, and we're not generating any revenue yet.
+            Thank you for your visit. :)
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            Products
+          </h6>
+          <p>
+            <a href="#!" class="text-reset">HTML, CSS, BOOTSTRAP</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">SPRING</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">JPA</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">MYSQL</a>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+       
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+          <p><i class="fas fa-home me-3 text-secondary"></i> Seoul, 129 Teheran-ro, KR</p>
+          <p>
+            <i class="fas fa-envelope me-3 text-secondary"></i>
+            gurtjd97@naver.com
+          </p>
+          <p><i class="fas fa-phone me-3 text-secondary"></i> +82)10-2729-3646</p>
+        </div>
+        <!-- Grid column -->
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links  -->
+
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+    © 2021 Copyright:
+    <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
+  </body>
+</html>

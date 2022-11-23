@@ -1,0 +1,20 @@
+#nav_custom{
+    position: relative;
+    top: 56px;
+    justify-content: space-between;
+}
+
+#nav_link_active_custom{
+    color: black;
+}
+
+.nav_custom_inner{
+    display: inline-block;
+    display:flex;
+}
+
+#login_button{
+    margin-right: 30px;
+    padding-left : 20px;
+    padding-right : 20px;
+}

@@ -1,0 +1,104 @@
+.my_point_background{
+    width:100%;
+    height: 40vh;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.my_point{
+    display:inline-block;
+    border: solid #aeaeae 3px;
+    border-radius: 1%;
+    font-size : 2.5rem;
+    padding : 10px;
+}
+
+
+.LOL_background{
+    height: 25vh;
+    width: 100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.LOL_UI_wrapper{
+    width:90%;
+    height: 100%;
+    display:inline-block;
+    border: solid #aeaeae 3px;
+    border-radius: 1%;
+    display: flex;
+}
+
+.LOL_logo_parent{
+    width:50%;
+    height: 100%;
+    display:inline-block;
+    border-right: #aeaeae solid 3px;
+}
+
+.LOL_UI_parent{
+    width:50%;
+    height: 100%;
+    display:inline-block;
+}
+
+.LOL_logo{
+    width:100%;
+    height: 100%;
+}
+
+.LOL_UI_child{
+    width: 100%;
+    margin : 2.5%;
+}
+
+.VALORANT_background{
+    height: 25vh;
+    width: 100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.VALORANT_UI_wrapper{
+    width:90%;
+    height: 100%;
+    display:inline-block;
+    border: solid #aeaeae 3px;
+    border-radius: 1%;
+    display: flex;
+}
+
+.VALORANT_logo_parent{
+    width:50%;
+    height: 100%;
+    display:inline-block;
+    border-right: #aeaeae solid 3px;
+}
+
+.VALORANT_UI_parent{
+    width:50%;
+    height: 100%;
+    display:inline-block;
+}
+
+.VALORANT_logo{
+    width:100%;
+    height: 100%;
+}
+
+.VALORANT_UI_child{
+    width: 100%;
+    margin : 2.5%;
+}
+
+.mypoint_expain{
+    margin-left: 5%;
+}

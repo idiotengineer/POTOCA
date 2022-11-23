@@ -1,0 +1,38 @@
+.vote_example_wrapper{
+    width:100%;
+    height: 16vh;
+    display: flex;
+    margin-top : 2.5%;
+    margin-bottom : 2.5%;
+}
+
+.vote_example_photo_wrapper{
+    width:20%;
+    height:100%;
+    display: inline-block;
+    border: #aeaeae solid 3px;
+}
+
+.vote_example_content_wrapper{
+    width:80%;
+    height:100%;
+    display: inline-block;
+    border: #aeaeae solid 3px;
+    border-left: transparent;
+}
+
+.vote_example_photo{
+    width: 100%;
+    height: 100%;
+}
+
+.vote_example_content_wrapper{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

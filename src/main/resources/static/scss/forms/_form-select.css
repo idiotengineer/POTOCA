@@ -1,0 +1,17 @@
+/* Error: Undefined variable.
+ *   ,
+ * 9 |   padding: $form-select-padding-y $form-select-indicator-padding $form-select-padding-y $form-select-padding-x;
+ *   |            ^^^^^^^^^^^^^^^^^^^^^^
+ *   '
+ *   _form-select.scss 9:12  root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Undefined variable.\a   \2577 \a 9 \2502    padding: $form-select-padding-y $form-select-indicator-padding $form-select-padding-y $form-select-padding-x;\a   \2502             ^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   _form-select.scss 9:12  root stylesheet";
+}
