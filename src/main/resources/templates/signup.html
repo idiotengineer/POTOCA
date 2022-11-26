@@ -43,27 +43,27 @@
 
 
 
-    <form class="row g-3" id = "row_g-3_cumstom">
+    <form class="row g-3" id = "row_g-3_cumstom" action="/signup_execute" name = "user_info" method="post">
         <div class="col-md-6">
           <label for="inputEmail4" class="form-label">이메일</label>
-          <input type="email" class="form-control" id="inputEmail4">
+          <input type="email" class="form-control" id="inputEmail4" placeholder="최대 20자리 까지 입력가능" name = "id" maxlength="40">
         </div>
         <div class="col-md-6">
           <label for="inputPassword4" class="form-label">비밀번호</label>
-          <input type="password" class="form-control" id="inputPassword4">
+          <input type="password" class="form-control" id="inputPassword4" placeholder="최대 20자리 까지 입력가능" name = "password" maxlength="20">
         </div>
+      <div class="col-md-6">
+        <label for="inputPassword4" class="form-label">닉네임</label>
+        <input type="password" class="form-control" placeholder="최대 25자리까지 입력가능" name = "name" maxlength="25">
+      </div>
+      <div class="col-md-6">
+        <label for="inputPassword4" class="form-label">전화번호</label>
+        <input type="password" class="form-control" placeholder="ex) 01012345678" name = "phone" maxlength="12">
+      </div>
         <div class="col-12">
-          <label for="inputAddress" class="form-label">도로명/지번</label>
-          <input type="text" class="form-control" id="inputAddress" placeholder="ex) 테헤란로 231">
+          <label for="inputAddress" class="form-label">주민번호</label>
+          <input type="text" class="form-control" id="inputAddress" placeholder="13자리를 입려하세요." name = "ssn" maxlength="13">
         </div>
-        <div class="col-12">
-          <label for="inputAddress2" class="form-label">상세주소</label>
-          <input type="text" class="form-control" id="inputAddress2" placeholder="ex) 센터필드">
-        </div>
-        <div class="col-12">
-            <label for="inputAddress2" class="form-label">전화번호</label>
-            <input type="text" class="form-control" id="number" placeholder="ex) 01012341234">
-          </div>
 
         <div class="form-check">
             <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
@@ -83,16 +83,24 @@
         <div class="row g-3">
             <div class="col-sm-7">
                 도시명
-              <input type="text" class="form-control" placeholder="ex) 서울특별시" aria-label="City">
+              <input type="text" class="form-control" placeholder="ex) 서울특별시" aria-label="City" name = "city_name" maxlength="20">
             </div>
             <div class="col-sm">
-                읍/면/동
-              <input type="text" class="form-control" placeholder="ex) 논현동" aria-label="State">
+                동명
+              <input type="text" class="form-control" placeholder="ex) 논현동" aria-label="State" name = "town_name" maxlength="20">
             </div>
             <div class="col-sm">
-                우편번호
-              <input type="text" class="form-control" placeholder="ex) 06049" aria-label="Zip">
+                도로명
+              <input type="text" class="form-control" placeholder="ex) 테헤란로 221길" aria-label="Zip" name = "street_name" maxlength="20">
             </div>
+          <div class="col-sm">
+            우편번호
+            <input type="text" class="form-control" placeholder="ex) 06049" aria-label="Zip" name = "zip_code" maxlength="20">
+          </div>
+          <div class="col-sm">
+            상세주소
+            <input type="text" class="form-control" placeholder="ex) 5층 505호" aria-label="Zip" name = "details" maxlength="20">
+          </div>
           </div>
         <div class="col-12">
           <div class="form-check">
@@ -103,7 +111,7 @@
           </div>
         </div>
         <div class="col-12">
-          <button type="submit" class="btn btn-primary">가입하기</button>
+          <button type="submit" class="btn btn-primary" >가입하기</button>
         </div>
     
       </form>

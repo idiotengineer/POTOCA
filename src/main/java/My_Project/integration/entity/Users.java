@@ -17,7 +17,7 @@ import java.util.List;
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"ssn","phone_number"})})
 public class Users {
 
-    @Column(name = "id", length = 20, updatable = false)
+    @Column(name = "id", length = 40, updatable = false)
     @Id
     private String id;
 

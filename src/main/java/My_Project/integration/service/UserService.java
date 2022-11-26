@@ -19,14 +19,15 @@ public class UserService {
     private UsersRepository usersRepository;
 
     @Transactional
-    public Users addUsers(Users users) {
+    public Users addUsers(Users users) throws Exception{
         if (!usersRepository.duplicateCheck(users)) {
-            Exception e = new Exception("중복된 값이 검출됨");
-            e.
+            throw new Exception("중복된 값이 검출되었습니다.");
         } else {
             usersRepository.save(users);
             System.out.println("Users 엔티티를 저장하였습니다.");
             return users;
         }
     }
+
+
 }
