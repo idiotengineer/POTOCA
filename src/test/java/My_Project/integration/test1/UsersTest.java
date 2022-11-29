@@ -173,4 +173,9 @@ public class UsersTest {
         }
         return;
     }
+
+    @Test
+    public void view_controller사용_로그인테스트() {
+
+    }
 }

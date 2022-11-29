@@ -1,15 +1,17 @@
 package My_Project.integration.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
+@Getter
 @AllArgsConstructor
 public class Address {
 
-    @Column(name = "city_name", length = 20, nullable = false) //도시명
+    @Column(name = "city_name", nullable = false) //도시명
     private String cityName;
 
     @Column(name = "town_name", length = 20) //동명
