@@ -6,6 +6,8 @@ import My_Project.integration.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,5 +31,10 @@ public class SignupPageController {
             return "redirect:/errorpage";
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/errorpage")
+    public String errorPageUp() {
+        return "errorpage";
     }
 }

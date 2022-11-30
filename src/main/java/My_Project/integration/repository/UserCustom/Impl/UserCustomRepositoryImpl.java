@@ -7,6 +7,7 @@ import net.bytebuddy.implementation.bytecode.Throw;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
@@ -34,5 +35,18 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
         if(!resultList3.isEmpty()) return false;
 
         return true;
+    }
+
+    @Override
+    public boolean checkUserInfo(String id,String password) {
+        Users matchedUser = em.createQuery("select u from Users u where u.id = :id", Users.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+        if (matchedUser.getPassword().equals(password)) {
+            return true;
+        } else{
+            return false;
+        }
     }
 }

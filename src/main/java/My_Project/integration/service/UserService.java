@@ -1,5 +1,6 @@
 package My_Project.integration.service;
 
+import My_Project.integration.entity.Dto.LoginDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.repository.UsersRepository;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,4 +32,7 @@ public class UserService {
     }
 
 
+    public boolean login(LoginDto loginDto) {
+        return usersRepository.checkUserInfo(loginDto.getId(), loginDto.getPassword());
+    }
 }

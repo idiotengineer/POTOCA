@@ -10,6 +10,24 @@
     
     <title>loginpage</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+      function func() {
+        let id =  document.getElementById('exampleDropdownFormEmail1').value;
+        let password = document.getElementById('exampleDropdownFormPassword1').value;
+
+        if (id == "" || password == "") {
+          alert("회원 정보를 입력하세요");
+          history.back();
+        } else{
+            location.href = "/trylogin?id=" + id + "&password=" + password;
+          if("${result_value}"==true){
+            alert("로그인되었습니다");
+          } else {
+            alert("로그인 실패하셨습니다.");
+          }
+        }
+      }
+    </script>
   </head>
   <body class="p-3 m-0 border-0 bd-example">
 
@@ -47,14 +65,14 @@
     
     <!-- Example Code -->
     <div class="dropdown-menu">
-      <form class="px-4 py-3">
+      <form class="px-4 py-3" method="get" action="login">
         <div class="mb-3">
           <label for="exampleDropdownFormEmail1" class="form-label">이메일을 입력하세요</label>
-          <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
+          <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com" name = "id">
         </div>
         <div class="mb-3">
           <label for="exampleDropdownFormPassword1" class="form-label">비밀번호를 입력하세요.</label>
-          <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
+          <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password" name = "password">
         </div>
         <div class="mb-3">
           <div class="form-check">
@@ -64,7 +82,7 @@
             </label>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">확인</button>
+        <button type="submit" class="btn btn-primary" ONCLICK="func()">확인</button>
       </form>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="http://localhost:8080/signup">회원가입 하기</a>

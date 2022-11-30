@@ -8,6 +8,24 @@
     <link href="/css/listpage_copy.css" rel="stylesheet">
     <link href="/css/font.css" rel = "stylesheet">
 
+    <script type="text/javascript">
+      function func() {
+        let id = document.getElementById('inputEmail4').value;
+        let password = document.getElementById('inputPassword4').value;
+        let name = document.getElementById('inputName4').value;
+        let ssn = document.getElementById('inputId4').value;
+        let phone_number = document.getElementById('inputPhoneNumber4').value;
+
+
+        if(id=="")  {alert("Email이 입력되지 않았습니다"); onsubmit("return false;");};
+        if(password =="")  {alert("Password가 입력되지 않았습니다.");onsubmit("return false;");};
+        if(name=="")  {alert("별명이 입력되지 않았습니다.");onsubmit("return false;");};
+        if(ssn=="")  {alert("주먼번호가 입력되지 않았습니다.");onsubmit("return false;");};
+        if(phone_number=="")  {alert("전화번호가 입력되지 않았습니다."); onsubmit("return false;");};
+
+        document.onsubmit;
+      }
+    </script>
   </head>
   <body>
 
@@ -55,15 +73,15 @@
         </div>
       <div class="col-md-6">
         <label for="inputPassword4" class="form-label">닉네임</label>
-        <input type="text" class="form-control" placeholder="최대 25자리까지 입력가능" name = "name" maxlength="25">
+        <input type="text" class="form-control" id = 'inputName4' placeholder="최대 25자리까지 입력가능" name = "name" maxlength="25">
       </div>
       <div class="col-md-6">
         <label for="inputPassword4" class="form-label">전화번호</label>
-        <input type="text" class="form-control" placeholder="ex) 01012345678" name = "phone_number" maxlength="12">
+        <input type="text" id = "inputPhoneNumber4"class="form-control" placeholder="ex) 01012345678" name = "phone_number" maxlength="12">
       </div>
         <div class="col-12">
-          <label for="inputAddress" class="form-label">주민번호</label>
-          <input type="password" class="form-control" id="inputAddress" placeholder="13자리를 입려하세요." pattern="[0-9]{13}" name = "ssn" maxlength="13">
+          <label for="inputId4" class="form-label">주민번호</label>
+          <input type="password" class="form-control" id="inputId4" placeholder="13자리를 입력하세요." pattern="[0-9]{13}" name = "ssn" maxlength="13">
         </div>
 
         <div class="form-check">
@@ -109,7 +127,7 @@
           </div>
         </div>
         <div class="col-12">
-          <button type="submit" class="btn btn-primary" >가입하기</button>
+          <button type="submit" class="btn btn-primary" onclick="func()">가입하기</button>
         </div>
       </form>
 
