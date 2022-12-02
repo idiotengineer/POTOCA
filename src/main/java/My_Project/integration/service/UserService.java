@@ -7,8 +7,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -32,7 +34,7 @@ public class UserService {
     }
 
 
-    public boolean login(LoginDto loginDto) {
+    public boolean login(LoginDto loginDto) throws NoResultException, EmptyResultDataAccessException {
         return usersRepository.checkUserInfo(loginDto.getId(), loginDto.getPassword());
     }
 }

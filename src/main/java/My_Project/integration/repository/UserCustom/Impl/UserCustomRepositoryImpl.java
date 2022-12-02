@@ -4,8 +4,10 @@ import My_Project.integration.entity.Users;
 import My_Project.integration.repository.UserCustom.UserCustomRepository;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bytecode.Throw;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.swing.text.html.Option;
@@ -38,15 +40,17 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     }
 
     @Override
-    public boolean checkUserInfo(String id,String password) {
-        Users matchedUser = em.createQuery("select u from Users u where u.id = :id", Users.class)
+    public boolean checkUserInfo(String id,String password) throws NoResultException, EmptyResultDataAccessException {
+        Optional<Users> matchedUser = Optional.ofNullable(em.createQuery("select u from Users u where u.id = :id", Users.class)
                 .setParameter("id", id)
-                .getSingleResult();
+                .getSingleResult());
 
-        if (matchedUser.getPassword().equals(password)) {
-            return true;
-        } else{
-            return false;
+        if (matchedUser.isPresent() || matchedUser.isEmpty()) {
+            if(matchedUser.get().getPassword().equals(password)) {
+                return true;
+            }
         }
+
+        return false;
     }
 }

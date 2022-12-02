@@ -19,14 +19,13 @@
           alert("회원 정보를 입력하세요");
           history.back();
         } else{
-            location.href = "/trylogin?id=" + id + "&password=" + password;
-          if("${result_value}"==true){
-            alert("로그인되었습니다");
-          } else {
-            alert("로그인 실패하셨습니다.");
-          }
+          var req = new XMLHttpRequest();
+          var path= "/login?id=" + id + "&password=" + password;
+          req.open("GET",path);
+          req.send();
         }
       }
+
     </script>
   </head>
   <body class="p-3 m-0 border-0 bd-example">

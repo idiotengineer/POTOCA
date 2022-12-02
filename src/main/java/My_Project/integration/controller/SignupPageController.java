@@ -19,7 +19,6 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class SignupPageController {
-
     @Autowired private UserService userService;
     @PostMapping("/signup_execute")
     public String signUp(UserInfoDto userInfoDto) {
