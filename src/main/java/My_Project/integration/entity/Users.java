@@ -19,9 +19,9 @@ import java.util.List;
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"ssn","phone_number"})})
 public class Users {
 
-    @Column(name = "id", length = 40, updatable = false, nullable = false)
+    @Column(name = "email", length = 40, updatable = false, nullable = false)
     @Id
-    private String id;
+    private String email;
 
     @Column(name = "password", length = 20, nullable = false)
     private String password;
@@ -51,7 +51,7 @@ public class Users {
     private Dates dates;
 
     public Users(UserInfoDto userInfoDto){
-        this.setId(userInfoDto.getId());
+        this.setEmail(userInfoDto.getEmail());
         this.setPassword(userInfoDto.getPassword());
         this.setPhoneNumber(userInfoDto.getPhone_number());
         this.setSsn(userInfoDto.getSsn());
@@ -79,8 +79,8 @@ public class Users {
         this.setDates(dates);
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setEmail(String id) {
+        this.email = id;
     }
 
     public void setPassword(String password) {

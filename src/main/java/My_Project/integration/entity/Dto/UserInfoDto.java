@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 public class UserInfoDto {
 
-    private String id;
+    private String email;
     private String password;
     private String name;
     private String phone_number;
@@ -23,8 +23,8 @@ public class UserInfoDto {
     private String zip_code;
     private String details;
 
-    public UserInfoDto(String id, String password, String name, String phone_number, String ssn, String cityName, String townName, String streetName, String zipCode, String detailsCode) {
-        this.id = id;
+    public UserInfoDto(String Email, String password, String name, String phone_number, String ssn, String cityName, String townName, String streetName, String zipCode, String detailsCode) {
+        this.email = Email;
         this.password = password;
         this.name = name;
         this.phone_number = phone_number;

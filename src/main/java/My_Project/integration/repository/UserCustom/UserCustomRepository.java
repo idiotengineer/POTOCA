@@ -8,6 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface UserCustomRepository {
 
     boolean duplicateCheck(Users users);
-
-    public boolean checkUserInfo(String id,String password);
 }

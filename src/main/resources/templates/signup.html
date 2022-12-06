@@ -10,14 +10,14 @@
 
     <script type="text/javascript">
       function func() {
-        let id = document.getElementById('inputEmail4').value;
+        let email = document.getElementById('inputEmail4').value;
         let password = document.getElementById('inputPassword4').value;
         let name = document.getElementById('inputName4').value;
         let ssn = document.getElementById('inputId4').value;
         let phone_number = document.getElementById('inputPhoneNumber4').value;
 
 
-        if(id=="")  {alert("Email이 입력되지 않았습니다"); onsubmit("return false;");};
+        if(email=="")  {alert("Email이 입력되지 않았습니다"); onsubmit("return false;");};
         if(password =="")  {alert("Password가 입력되지 않았습니다.");onsubmit("return false;");};
         if(name=="")  {alert("별명이 입력되지 않았습니다.");onsubmit("return false;");};
         if(ssn=="")  {alert("주먼번호가 입력되지 않았습니다.");onsubmit("return false;");};
@@ -65,7 +65,7 @@
     <form class="row g-3" id = "row_g-3_cumstom" action="/signup_execute" method="post">
         <div class="col-md-6">
           <label for="inputEmail4" class="form-label">이메일</label>
-          <input type="email" class="form-control" id="inputEmail4" placeholder="최대 20자리 까지 입력가능" name = "id" maxlength="40">
+          <input type="email" class="form-control" id="inputEmail4" placeholder="최대 20자리 까지 입력가능" name = "email" maxlength="40">
         </div>
         <div class="col-md-6">
           <label for="inputPassword4" class="form-label">비밀번호</label>

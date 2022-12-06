@@ -23,6 +23,8 @@ public class SignupPageController {
     @PostMapping("/signup_execute")
     public String signUp(UserInfoDto userInfoDto) {
         try {
+            System.out.println("userInfoDto.getEmail() = " + userInfoDto.getEmail());
+            System.out.println("userInfoDto.getPassword() = " + userInfoDto.getPassword());
             Users users = new Users(userInfoDto);
             userService.addUsers(users);
         } catch (Exception e){

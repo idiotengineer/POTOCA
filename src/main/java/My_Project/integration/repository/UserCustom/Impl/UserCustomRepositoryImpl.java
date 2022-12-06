@@ -2,27 +2,26 @@ package My_Project.integration.repository.UserCustom.Impl;
 
 import My_Project.integration.entity.Users;
 import My_Project.integration.repository.UserCustom.UserCustomRepository;
+import My_Project.integration.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 public class UserCustomRepositoryImpl implements UserCustomRepository {
 
+    @Autowired
     private final EntityManager em;
 
     @Override
     public boolean duplicateCheck(Users users) {
-        Query query1 = em.createQuery("select u from Users u where u.id = :name",Users.class)
-                        .setParameter("name",users.getId());
+        Query query1 = em.createQuery("select u from Users u where u.email = :name",Users.class)
+                        .setParameter("name",users.getEmail());
         List resultList1 = query1.getResultList();
         if(!resultList1.isEmpty()) return false;
 
@@ -39,18 +38,24 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
         return true;
     }
 
-    @Override
-    public boolean checkUserInfo(String id,String password) throws NoResultException, EmptyResultDataAccessException {
-        Optional<Users> matchedUser = Optional.ofNullable(em.createQuery("select u from Users u where u.id = :id", Users.class)
-                .setParameter("id", id)
-                .getSingleResult());
+//    @Override
+//    public boolean checkUserInfo(String id,String password) {
+//        try {
+//            System.out.println("Service의 LoginDto.getId() : " + id);
+//            System.out.println("Service의 LoginDto.getPassword() : " + password);
+//
+//            Optional <Users> matchedUser = Optional.ofNullable(em.createQuery("select u from Users u where u.id = :id", Users.class)
+//                    .setParameter("id", id)
+//                    .getSingleResult());
+//
+//            if(matchedUser.get().getPassword().equals(password)){
+//                return true;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return false;
+//    }
 
-        if (matchedUser.isPresent() || matchedUser.isEmpty()) {
-            if(matchedUser.get().getPassword().equals(password)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

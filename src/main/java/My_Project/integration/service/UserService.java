@@ -1,16 +1,14 @@
 package My_Project.integration.service;
 
+import My_Project.integration.entity.Dto.FindEmailDto;
 import My_Project.integration.entity.Dto.LoginDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.repository.UsersRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -23,7 +21,7 @@ public class UserService {
     private UsersRepository usersRepository;
 
     @Transactional
-    public Users addUsers(Users users) throws Exception{
+    public Users addUsers(Users users) throws Exception {
         if (!usersRepository.duplicateCheck(users)) {
             throw new Exception("중복된 값이 검출되었습니다.");
         } else {
@@ -33,8 +31,13 @@ public class UserService {
         }
     }
 
+    @Transactional
+    public Optional<Users> login(LoginDto loginDto) throws Exception{
+        return usersRepository.findByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword());
+    }
 
-    public boolean login(LoginDto loginDto) throws NoResultException, EmptyResultDataAccessException {
-        return usersRepository.checkUserInfo(loginDto.getId(), loginDto.getPassword());
+    @Transactional
+    public Optional<Users> findEmail(FindEmailDto findEmailDto){
+        return usersRepository.findUsersByPhoneNumberAndName(findEmailDto.getPhoneNumber(), findEmailDto.getName());
     }
 }
