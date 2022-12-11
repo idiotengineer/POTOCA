@@ -1,14 +1,19 @@
 package My_Project.integration.controller;
 
 import My_Project.integration.entity.Dto.LoginDto;
+import My_Project.integration.entity.Users;
 import My_Project.integration.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.DataOutputStream;
+import java.util.Optional;
 
 @Controller
 public class LoginController {
@@ -17,30 +22,20 @@ public class LoginController {
     @Autowired
     private
     UserService userService;
-
-    @GetMapping("/loginSuccess")
-    public String loginSuccess() {
-        return "login_success";
-    }
-
-    @GetMapping("/loginFailed")
-    public String loginFailed()  {
-        return "login_failed";
-    }
-
-    @GetMapping("/trylogin")
-    public String login(LoginDto loginDto) {
+    @RequestMapping(value = "/trylogin", method = RequestMethod.POST)
+    public String login(LoginDto loginDto, RedirectAttributes redirectAttributes) {
         try {
-            RedirectView redirectView = new RedirectView();
-            if(userService.login(loginDto).isPresent()) {
-                return "redirect:/loginSuccess";
+            Optional<Users> users = userService.login(loginDto);
+            if(users.isPresent()) {
+                redirectAttributes.addAttribute("string",(users.get().getEmail() + " 로그인 되었습니다."));
+                return "redirect:/alert";
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:/loginFailed";
+            redirectAttributes.addAttribute("string", "로그인 실패하였습니다");
+            return "redirect:/alert";
         }
-        return "redirect:/loginFailed";
-
-
+        redirectAttributes.addAttribute("string", "로그인 실패하였습니다");
+        return "redirect:/alert";
     }
 }
