@@ -1,6 +1,7 @@
 package My_Project.integration.service;
 
 import My_Project.integration.entity.Dto.FindEmailDto;
+import My_Project.integration.entity.Dto.FindPasswordDto;
 import My_Project.integration.entity.Dto.LoginDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.repository.UsersRepository;
@@ -38,6 +39,11 @@ public class UserService {
 
     @Transactional
     public Optional<Users> findEmail(FindEmailDto findEmailDto){
-        return usersRepository.findUsersByPhoneNumberAndName(findEmailDto.getPhoneNumber(), findEmailDto.getName());
+        return usersRepository.findUsersByPhoneNumberAndName(findEmailDto.getPhone_number(), findEmailDto.getName());
+    }
+
+    @Transactional
+    public Optional<Users> findPassword(FindPasswordDto findPasswordDto){
+        return usersRepository.findUsersByPhoneNumberAndEmail(findPasswordDto.getPhone_number2(), findPasswordDto.getEmail());
     }
 }
