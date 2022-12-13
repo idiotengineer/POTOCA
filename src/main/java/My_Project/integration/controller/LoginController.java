@@ -31,7 +31,7 @@ public class LoginController {
         try {
             Optional<Users> users = userService.login(loginDto);
             if(users.isPresent()) {
-                LOGGER.info("login success");
+                LOGGER.info("로그인 성공");
                 redirectAttributes.addAttribute("string",(users.get().getEmail() + " 로그인 되었습니다."));
                 return "redirect:/alert";
             }
