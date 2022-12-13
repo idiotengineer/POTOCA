@@ -4,6 +4,8 @@ import My_Project.integration.entity.Dto.FindEmailDto;
 import My_Project.integration.entity.Dto.FindPasswordDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
+@Api(tags = {"회원정보 찾기 API"})
 @Controller
 public class ForgotController {
 
@@ -20,6 +23,7 @@ public class ForgotController {
 
 
     @GetMapping("/alert")
+    @ApiOperation(value = "알림 페이지")
     public String alertPage(@RequestParam("string") String s, Model model) {
         model.addAttribute("string", s);
         return "alert";
