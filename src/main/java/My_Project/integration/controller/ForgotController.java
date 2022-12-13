@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Optional;
 
@@ -23,14 +24,15 @@ public class ForgotController {
 
 
     @GetMapping("/alert")
-    @ApiOperation(value = "알림 페이지")
-    public String alertPage(@RequestParam("string") String s, Model model) {
+    @ApiOperation(value = "결과 알림 페이지")
+    public String alertPage(@RequestParam("string") String s,@ApiIgnore Model model) {
         model.addAttribute("string", s);
         return "alert";
     }
 
+    @ApiOperation(value = "이메일 찾기 API")
     @RequestMapping(value = "/find_email",method = {RequestMethod.POST})
-    public String findEmail(FindEmailDto findEmailDto, RedirectAttributes redirectAttributes) {
+    public String findEmail(FindEmailDto findEmailDto,@ApiIgnore RedirectAttributes redirectAttributes) {
         try {
             Optional<Users> users = userService.findEmail(findEmailDto);
             if (users.isPresent()) {
@@ -46,8 +48,9 @@ public class ForgotController {
         return "redirect:/alert";
     }
 
+    @ApiOperation("패스워드 찾기 API")
     @RequestMapping(value = "/find_email2",method = {RequestMethod.POST})
-    public String findEmail2(FindPasswordDto findPasswordDto, RedirectAttributes redirectAttributes) {
+    public String findEmail2(FindPasswordDto findPasswordDto, @ApiIgnore RedirectAttributes redirectAttributes) {
         try {
             Optional<Users> users = userService.findPassword(findPasswordDto);
             if (users.isPresent()) {
