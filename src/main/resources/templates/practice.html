@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -63,7 +63,11 @@
           <a class="nav-link" href="http://localhost:8080/votelistpage">투표 게시글 목록보기</a>
         </li>
         </span>
-      <button type="button" class="btn btn-primary" id ="login_button" onclick="location.href='http://localhost:8080/login'">로그인</button>
+      <button th:if="${#strings.isEmpty(users)}" type="button" class="btn btn-primary" id ="login_button" onclick="location.href='http://localhost:8080/login'">로그인</button>
+      <span th:unless="${#strings.isEmpty(users)}">
+        로그인 되었습니다.
+        <button type="button" class="btn btn-warning" id ="logout_button" onclick="location.href='http://localhost:8080/logout'">로그아웃</button>
+      </span>
     </ul>
 
 

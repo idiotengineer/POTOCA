@@ -5,7 +5,16 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Api(tags = {"페이지 이동 API"})
 @Controller
@@ -15,9 +24,21 @@ public class MainpageController {
 
     @ApiOperation(value = "메인 페이지")
     @GetMapping("/")
-    public String mainPage() {
+    public String mainPage(@CookieValue(name = "users") Optional<Cookie> cookie
+            , Model model) {
         LOGGER.info("메인 페이지 접속");
+        if (cookie.isPresent()) {
+            model.addAttribute("users", cookie.get().getValue());
+        } else {
+            model.addAttribute("users",null);
+        }
         return "practice";
+        /*
+        if (Arrays.stream(cookies).findAny().isPresent()) {
+            return "practice_login";
+        } else {
+            return "practice";
+        }*/
     }
 
     @ApiOperation(value = "일반 게시글 리스트 페이지 접속")

@@ -2,15 +2,12 @@ package My_Project.integration.repository.UserCustom.Impl;
 
 import My_Project.integration.entity.Users;
 import My_Project.integration.repository.UserCustom.UserCustomRepository;
-import My_Project.integration.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 public class UserCustomRepositoryImpl implements UserCustomRepository {

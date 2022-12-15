@@ -9,11 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Api(tags = {"로그인 API"})
@@ -25,16 +29,24 @@ public class LoginController {
     @Autowired
     private
     UserService userService;
+
     @RequestMapping(value = "/trylogin", method = RequestMethod.POST)
     @ApiOperation(value = "로그인 API")
-    public String login(LoginDto loginDto,@ApiIgnore RedirectAttributes redirectAttributes) {
+    public String login(LoginDto loginDto, @ApiIgnore RedirectAttributes redirectAttributes, @ApiIgnore HttpServletResponse response) {
         try {
             Optional<Users> users = userService.login(loginDto);
-            if(users.isPresent()) {
+            if (users.isPresent()) {
                 LOGGER.info("로그인 성공");
+                Cookie cookie = new Cookie("users", users.get().getEmail());
+                cookie.setPath("/");
+                response.addCookie(cookie);
+
+                return "redirect:/";
+                /*
                 redirectAttributes.addAttribute("string",(users.get().getEmail() + " 로그인 되었습니다."));
-                return "redirect:/alert";
+                return "redirect:/alert";*/
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.info("로그인 실패");
@@ -44,5 +56,12 @@ public class LoginController {
         LOGGER.warn("로그인 에러 발생");
         redirectAttributes.addAttribute("string", "로그인 실패하였습니다");
         return "redirect:/alert";
+    }
+
+    @GetMapping("/logout")
+    public String logout(@CookieValue(name = "users") Cookie cookie,HttpServletResponse response) {
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
