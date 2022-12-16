@@ -59,9 +59,11 @@ public class LoginController {
     }
 
     @GetMapping("/logout")
-    public String logout(@CookieValue(name = "users") Cookie cookie,HttpServletResponse response) {
+    @ApiOperation(value = "로그아웃 API")
+    public String logout(@CookieValue(name = "users") @ApiIgnore Cookie cookie,@ApiIgnore HttpServletResponse response) {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+        LOGGER.info("로그아웃됨");
         return "redirect:/";
     }
 }

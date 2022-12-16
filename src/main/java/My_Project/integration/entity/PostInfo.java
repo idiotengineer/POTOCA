@@ -1,10 +1,24 @@
 package My_Project.integration.entity;
 
+import My_Project.integration.entity.Dto.PostInfoDto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
+import javax.servlet.http.Cookie;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 public class PostInfo {
 
     @Id
@@ -26,10 +40,24 @@ public class PostInfo {
     public Dates dates;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    private List<Byte> image = new ArrayList<>();
+    private List<Byte> image;
 
     @OneToMany
     @JoinColumn(name = "id")
-    private List<PostComments> comments = new ArrayList<>();
+    private List<PostComments> comments;
+
+    public PostInfo(Users users, PostInfoDto postInfo) {
+        Dates dates = new Dates(
+                LocalDateTime.now(),LocalDateTime.now()
+        );
+
+        this.postedUser = users;
+        this.postTitle = postInfo.getPostTitle();
+        this.postContent = postInfo.getPostContent();
+        this.dates = dates;
+        this.comments = new ArrayList<>();
+        this.image = new ArrayList<>(postInfo.getImage().size());
+        Collections.copy(this.image,postInfo.getImage());
+    }
 }
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +15,7 @@
     <a class="navbar-brand" href="#">
       <img src="https://cdn-icons-png.flaticon.com/512/6815/6815258.png" alt="Bootstrap" width="30" height="24">
     </a>
-    <a class="navbar-brand" href="#">Main Page</a>
+    <a class="navbar-brand" href="http://localhost:8080/">Main Page</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -41,7 +41,7 @@
   </div>
 </nav>
 
-<h1 class = "List_Banner">투표 게시글 목록
+<h1 class = "List_Banner">일반 게시글 목록
   <button type="button" class="btn btn-success" onclick="location.href='http://localhost:8080/posting'">일반 게시글쓰기</button>
 </h1>
 
