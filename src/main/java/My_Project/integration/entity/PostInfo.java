@@ -39,12 +39,27 @@ public class PostInfo {
     @Embedded
     public Dates dates;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    private List<Byte> image;
+    @OneToMany(
+            mappedBy = "postInfo",
+            orphanRemoval = true,
+            cascade= {CascadeType.PERSIST, CascadeType.REMOVE}
+    )
+    private List<Photo> photo = new ArrayList<>();
 
     @OneToMany
     @JoinColumn(name = "id")
     private List<PostComments> comments;
+
+
+    // Board에서 파일 처리 위함
+    public void addPhoto(Photo photo) {
+        this.photo.add(photo);
+
+        // 게시글에 파일이 저장되어있지 않은 경우
+        if(photo.getPostInfo() != this)
+            // 파일 저장
+            photo.setPostInfo(this);
+    }
 
     public PostInfo(Users users, PostInfoDto postInfo) {
         Dates dates = new Dates(
@@ -56,8 +71,6 @@ public class PostInfo {
         this.postContent = postInfo.getPostContent();
         this.dates = dates;
         this.comments = new ArrayList<>();
-        this.image = new ArrayList<>(postInfo.getImage().size());
-        Collections.copy(this.image,postInfo.getImage());
     }
 }
 

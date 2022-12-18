@@ -5,6 +5,7 @@ import My_Project.integration.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,7 +13,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class PostInfoDto {
+    private Users users;
     private String postTitle;
     private String postContent;
-    private List<Byte> image;
+    private List<MultipartFile> files;
 }
