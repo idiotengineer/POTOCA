@@ -1,8 +1,10 @@
 package My_Project.integration.service;
 
+import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
 import My_Project.integration.entity.Photo;
 import My_Project.integration.entity.PostInfo;
+import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.repository.PhotoRepository;
 import My_Project.integration.repository.PostRepository;
@@ -31,6 +33,17 @@ public class PostService {
     private final FileHandler fileHandler;
     private final PhotoRepository photoRepository;
 
+    public PostDto findPost(Long id) throws Exception {
+        Optional<PostInfo> postInfo = postRepository.findPostInfoByPostNumber(id);
+
+        if (postInfo.isPresent()) {
+            PostDto postDto = new PostDto(postInfo.get());
+            return postDto;
+        }
+
+        throw new Exception("postInfo 객체를 찾을 수 없습니다");
+    }
+
     public boolean Posting(@CookieValue(name = "users") Cookie cookie, PostInfoDto postInfoDto) {
         Optional<Users> usersByEmail = usersRepository.findUsersByEmail(cookie.getValue());
         if (usersByEmail.isPresent()) {
@@ -42,7 +55,7 @@ public class PostService {
     }
 
     @Transactional
-    public Long create(
+    public PostDto create(
             PostInfoDto postInfoDto,
             List<MultipartFile> files,
             @CookieValue(name = "users") Cookie cookie
@@ -68,8 +81,17 @@ public class PostService {
                 postInfo.addPhoto(photoRepository.save(photo));
             }
         }
+        postRepository.save(postInfo);
 
-        return postRepository.save(postInfo).getPostNumber();
+        PostDto postDto = new PostDto(postInfo);
+        return postDto;
     }
 
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public PostInfoResponseDto searchById(Long id,List<Long> fileId) {
+        PostInfo postInfo = postRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 게시글이 존재하지 않습니다"));
+
+        return new PostInfoResponseDto(postInfo,fileId);
+    }
 }

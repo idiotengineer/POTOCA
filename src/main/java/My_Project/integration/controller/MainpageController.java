@@ -1,5 +1,6 @@
 package My_Project.integration.controller;
 
+import My_Project.integration.entity.Dto.PostDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -64,8 +65,9 @@ public class MainpageController {
 
     @ApiOperation(value = "일반 게시글 페이지")
     @GetMapping("/post")
-    public String post() {
+    public String post(Model model, PostDto postDto) {
         LOGGER.info("일반 게시글 페이지 접속");
+        model.addAttribute(postDto);
         return "post";
     }
     @ApiOperation(value = "투표 게시글 리스팅 페이지")

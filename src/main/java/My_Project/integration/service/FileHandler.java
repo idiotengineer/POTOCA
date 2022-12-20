@@ -1,5 +1,6 @@
 package My_Project.integration.service;
 
+//https://velog.io/@yu-jin-song/SpringBoot-%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B5%AC%ED%98%84-4-MultipartFile-%EB%8B%A4%EC%A4%91-%ED%8C%8C%EC%9D%BC%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C
 import My_Project.integration.entity.Dto.PhotoDto;
 import My_Project.integration.entity.Photo;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,7 @@
 package My_Project.integration.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -8,6 +9,7 @@ import javax.persistence.Embeddable;
 import java.time.LocalDateTime;
 
 @Embeddable
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Dates {
