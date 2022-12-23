@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,16 +23,18 @@ public class PostDto {
     private List<Photo> images;
     private List<PostComments> comments;
 
+
     public PostDto(PostInfo postInfo) {
         this.postNumber = postInfo.getPostNumber();
         this.users = postInfo.getPostedUser();
         this.dates = postInfo.getDates();
-        this.postTitle = getPostTitle();
-        this.postContent = getPostContent();
-        if(!postInfo.getPhoto().isEmpty())
-            Collections.copy(this.images, postInfo.getPhoto());
+        this.postTitle = postInfo.getPostTitle();
+        this.postContent = postInfo.getPostContent();
 
-        if(!postInfo.getComments().isEmpty())
-          Collections.copy(this.comments,postInfo.getComments());
+        this.images = new ArrayList<>(postInfo.getPhoto());
+        this.comments = new ArrayList<>(postInfo.getComments());
+
+        Collections.copy(this.images, postInfo.getPhoto());
+        Collections.copy(this.comments,postInfo.getComments());
     }
 }

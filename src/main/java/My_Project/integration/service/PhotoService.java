@@ -32,7 +32,7 @@ public class PhotoService {
 
     @Transactional(readOnly = true)
     public List<PhotoResponseDto> findAllByPostInfo(Long postNumber) {
-        List<Photo> photoList = photoRepository.findAllByPostInfo_PostNumber(postNumber);
+        List<Photo> photoList = photoRepository.findAllByPostInfoPostNumber(postNumber);
 
         return photoList.stream()
                 .map(PhotoResponseDto::new)

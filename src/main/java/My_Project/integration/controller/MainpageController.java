@@ -9,12 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Api(tags = {"페이지 이동 API"})
@@ -65,9 +67,16 @@ public class MainpageController {
 
     @ApiOperation(value = "일반 게시글 페이지")
     @GetMapping("/post")
-    public String post(Model model, PostDto postDto) {
+    public String post(Model model,
+            @RequestParam("photoPath") List<String> photoPath,
+            @RequestParam("time") String time,
+            @RequestParam("postDtoEmail") String postDtoEmail,
+            @RequestParam("postDtoGetPostContent") String postDtoGetPostContent){
         LOGGER.info("일반 게시글 페이지 접속");
-        model.addAttribute(postDto);
+        model.addAttribute("postDtoEmail",postDtoEmail);
+        model.addAttribute("postDtoGetPostContent",postDtoGetPostContent);
+        model.addAttribute("time", time);
+        model.addAttribute("photoPath",photoPath);
         return "post";
     }
     @ApiOperation(value = "투표 게시글 리스팅 페이지")

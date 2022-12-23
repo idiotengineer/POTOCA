@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -55,7 +56,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostDto create(
+    public PostDto create1(
             PostInfoDto postInfoDto,
             List<MultipartFile> files,
             @CookieValue(name = "users") Cookie cookie
@@ -86,6 +87,36 @@ public class PostService {
         PostDto postDto = new PostDto(postInfo);
         return postDto;
     }
+
+    @Transactional
+    public PostDto create(
+            PostInfoDto postInfoDto,
+            List<MultipartFile> files,
+            @CookieValue(name = "users") Cookie cookie
+    ) throws Exception{
+        try{
+        // 파일 처리를 위한 Board 객체 생성
+        Optional<Users> usersByEmail = usersRepository.findUsersByEmail(cookie.getValue());
+        PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto);
+        List<Photo> photoList = fileHandler.parseFileInfo(files);
+
+            // 파일이 존재할 때에만 처리
+            if (!photoList.isEmpty()) {
+                for (Photo photo : photoList) {
+                    // 파일을 DB에 저장
+                    postInfo.addPhoto(photoRepository.save(photo));
+                }
+            }
+
+            postRepository.save(postInfo);
+
+            PostDto postDto = new PostDto(postInfo);
+            return postDto;
+        } catch (NoSuchElementException e) {
+            throw new Exception("존재하지 않는 회원입니다");
+        }
+    }
+
 
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public PostInfoResponseDto searchById(Long id,List<Long> fileId) {

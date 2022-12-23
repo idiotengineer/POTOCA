@@ -13,8 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
+import java.io.File;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class PostController {
     @Autowired
     PhotoService photoService;
 
-    @ApiOperation(value = "일반 게시글 페이지")
+    /*@ApiOperation(value = "일반 게시글 페이지")
     @GetMapping("/post123")
     public String post(@RequestParam("postnum") Long id, Model model) {
         try {
@@ -44,7 +46,7 @@ public class PostController {
             model.addAttribute("string", "에러 발생");
             return "alert";
         }
-    }
+    }*/
 
     public String getTimeDiffAndReturnElapsedTime(LocalDateTime startTime, LocalDateTime endTime) {
         Duration duration = Duration.between(startTime, endTime);
@@ -79,45 +81,50 @@ public class PostController {
     }
 
     @PostMapping("/post_execute2")
-    @ResponseStatus(HttpStatus.CREATED)
     public String create(
             @RequestPart(value = "image", required = false) List<MultipartFile> files,
             PostInfoDto postInfoDto,
             @CookieValue(name = "users") Cookie cookie,
-            Model model) {
+            RedirectAttributes model) {
         try {
             PostDto postDto = postService.create(postInfoDto, files, cookie);
 
             List<PhotoResponseDto> photoResponseDtoList = photoService.findAllByPostInfo(postDto.getPostNumber());
-            List<Long> photoId = new ArrayList<>();
+            List<String> photoPath = new ArrayList<>();
+
+/*
+            File file = new File(".");
+            String projectPath = file.getAbsolutePath();
+            String subStringProjectPath = projectPath.substring(0, projectPath.length() - 1);
+*/
 
             for (PhotoResponseDto photoResponseDto : photoResponseDtoList) {
-                photoId.add(photoResponseDto.getFileId());
+                photoPath.add(photoResponseDto.getFilePath());
             }
-
-            model.addAttribute("fileIdList",photoId);
-            model.addAttribute("postDto", postDto);
-            model.addAttribute("time", postDto.getDates().getUpdatedTime());
-            return "/post";
+            model.addAttribute("time", getTimeDiffAndReturnElapsedTime(postDto.getDates().getUpdatedTime(),LocalDateTime.now()));
+            model.addAttribute("photoPath",photoPath);
+            model.addAttribute("postDtoEmail", postDto.getUsers().getEmail());
+            model.addAttribute("postDtoGetPostContent",postDto.getPostContent());
+            return "redirect:/post";
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("일반 게시글 작성에 실패하셨습니다");
-            return "/alert";
+            model.addAttribute("string","일반 게시글 작성에 실패하셨습니다");
+            return "redirect:/alert";
         }
     }
-
+/*
     @GetMapping("/board/{id}")
     public PostInfoResponseDto searchById(@PathVariable Long id) {
         List<PhotoResponseDto> photoResponseDtoList =
                 photoService.findAllByPostInfo(id);
 
-        List<Long> photoId = new ArrayList<>();
+        List<String> photoPath = new ArrayList<>();
 
         for (PhotoResponseDto photoResponseDto : photoResponseDtoList) {
-            photoId.add(photoResponseDto.getFileId());
+            photoPath.add(photoResponseDto.getFilePath());
         }
 
-        return postService.searchById(id,photoId);
-    }
+        return postService.searchById(id,);
+    }*/
 }
 
