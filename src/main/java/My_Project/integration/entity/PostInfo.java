@@ -46,9 +46,13 @@ public class PostInfo {
     )
     private List<Photo> photo = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+    )
     @JoinColumn(name = "id")
     private List<PostComments> comments;
+
 
 
     // Board에서 파일 처리 위함

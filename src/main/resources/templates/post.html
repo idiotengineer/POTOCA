@@ -89,14 +89,16 @@
     
     <!-- post2.css-->
     <hr class = "hr1_class">
-
-    <h5 class = "reply_head">댓글 목록</h5>
-
+<div class = "reply_head">
+    <h5 id="h5_style">댓글 목록</h5>
+    <input type="text" class="form-control" id="validationCustom03" name="input_comment" required>
+  <button type="button" class="btn btn-success" id= "search_button" >댓글 작성</button>
+</div>
     <div class = "reply_list">
-      <div class = "reply">
+      <div class = "reply" th:each="value: ${postDto.getComments()}">
         <img class = "reply_profile_img" src = "https://mblogthumb-phinf.pstatic.net/MjAyMTA1MjhfMjUg/MDAxNjIyMTk3NzUyMTAz.JgBnXWFplrlgwuGvVqlosma8FFPXqfGwVApVvMeP3vQg.LRmquqydeYieBEwyF9jWhljRvcd37HQf5dMa_AXxB1Ag.JPEG.mykpoint/Screenshot%EF%BC%BF20210528%EF%BC%8D192632%EF%BC%BFSamsung_Internet.jpg?type=w800">
-        <div class = "reply_profile_name">작성자</div>
-        <div class = "reply_profile_time">작성 시간</div>
+        <div class = "reply_profile_name" th:text="${value.getPostCommentedUsersEmail()}">작성자</div>
+        <div class = "reply_profile_time" th:text="${My_Project.integration.controller.MainpageController.getTimeDiffAndReturnElapsedTime(value.getDates().getUploadedTime(),time)}">작성 시간</div>
         <div class = "reply_profile_content">카리나에 대한 댓글 카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글</div>
         <button class="material-symbols-outlined">
           thumb_up thumb_down

@@ -1,22 +1,28 @@
 package My_Project.integration.controller;
 
 import My_Project.integration.entity.Dto.PostDto;
+import My_Project.integration.service.PostService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Api(tags = {"페이지 이동 API"})
@@ -24,6 +30,9 @@ import java.util.Optional;
 public class MainpageController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(MainpageController.class);
+
+    @Autowired
+    private PostService postService;
 
     @ApiOperation(value = "메인 페이지")
     @GetMapping("/")
@@ -69,16 +78,55 @@ public class MainpageController {
     @GetMapping("/post")
     public String post(Model model,
             @RequestParam("photoPath") List<String> photoPath,
-            @RequestParam("time") String time,
+            @RequestParam("time") LocalDateTime time,
             @RequestParam("postDtoEmail") String postDtoEmail,
-            @RequestParam("postDtoGetPostContent") String postDtoGetPostContent){
+            @RequestParam("postDtoGetPostContent") String postDtoGetPostContent,
+            @ModelAttribute PostDto postDto) {
         LOGGER.info("일반 게시글 페이지 접속");
         model.addAttribute("postDtoEmail",postDtoEmail);
         model.addAttribute("postDtoGetPostContent",postDtoGetPostContent);
-        model.addAttribute("time", time);
+        model.addAttribute("time", getTimeDiffAndReturnElapsedTime(time,LocalDateTime.now()));
         model.addAttribute("photoPath",photoPath);
+        model.addAttribute("postDto",postDto);
         return "post";
     }
+
+    @GetMapping("/find_post")
+    public String findPost(@RequestParam("id") Long id,Model model,RedirectAttributes redirectAttributes) {
+        try {
+            PostDto post = postService.findPost(id);
+            model.addAttribute("post", post);
+            model.addAttribute("time",LocalDateTime.now());
+            return "copy_post";
+        } catch (NoSuchElementException e) {
+            redirectAttributes.addAttribute(e.toString());
+            return "redirect:/alert";
+        }
+    }
+
+    public String getTimeDiffAndReturnElapsedTime(LocalDateTime startTime, LocalDateTime endTime) {
+        Duration duration = Duration.between(startTime, endTime);
+        long year = duration.getSeconds() / 31556926;
+        long month = duration.getSeconds() / 2629800;
+        long day = duration.getSeconds() / 86400;
+        long hour = duration.getSeconds() / 3600;
+        long minute = duration.getSeconds() / 60;
+        if (year > 0) { //
+            return year + "년 전";
+        } else if (month > 0) {
+            return month + "개월 전";
+        } else if (day > 0) {
+            return day + "일 전";
+        } else if (hour > 0) {
+            return hour + "시간 전";
+        } else if (minute > 0) {
+            return minute + "분 전";
+        } else {
+            return duration.getSeconds() + "초 전";
+        }
+    }
+
+
     @ApiOperation(value = "투표 게시글 리스팅 페이지")
     @GetMapping("/votelistpage")
     public String voteListPage(){

@@ -34,7 +34,7 @@ public class PostService {
     private final FileHandler fileHandler;
     private final PhotoRepository photoRepository;
 
-    public PostDto findPost(Long id) throws Exception {
+    public PostDto findPost(Long id) throws NoSuchElementException {
         Optional<PostInfo> postInfo = postRepository.findPostInfoByPostNumber(id);
 
         if (postInfo.isPresent()) {
@@ -42,7 +42,7 @@ public class PostService {
             return postDto;
         }
 
-        throw new Exception("postInfo 객체를 찾을 수 없습니다");
+        throw new NoSuchElementException("postInfo 객체를 찾을 수 없습니다");
     }
 
     public boolean Posting(@CookieValue(name = "users") Cookie cookie, PostInfoDto postInfoDto) {

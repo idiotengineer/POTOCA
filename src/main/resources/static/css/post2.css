@@ -11,6 +11,8 @@
     margin: auto;
     margin-bottom : 20px;
     width:95vw;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .reply{
@@ -43,4 +45,29 @@
     margin-bottom : 3%;
     margin-left : 10%;
     margin-right: 10%;
+}
+
+#validationCustom03{
+    display: inline-block;
+    width:75%;
+}
+
+#h5_style{
+    width: 10%;
+    display: inline-block;
+}
+
+#search_button{
+    display: inline-block;
+    width:10%;
+}
+
+@media screen and (max-width: 840px){
+    #search_button{
+        font-size: 0.5em;
+    }
+
+    #h5_style{
+        font-size: 0.5em;
+    }
 }
