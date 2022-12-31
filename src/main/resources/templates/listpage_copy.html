@@ -56,157 +56,21 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="product : ${}">
-      <th scope="row" th:text="${}">1</th>
+    <tr th:each="product : ${list}">
+      <th scope="row" th:text="${product.getPostNumber()}">1</th>
       <td style="
             overflow:hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;">Mark</td>
+            white-space: nowrap;" th:text="${product.getUsers().getEmail()}">Mark</td>
       <td style="
             overflow:hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;">카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!</td>
+            white-space: nowrap;" th:text="${product.getPostTitle()}">카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!</td>
       <td style="
             overflow:hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;">@mdo</td>
+            white-space: nowrap;" th:text="${#temporals.format(product.getDates().getUploadedTime(),'yyyy-MM-dd')}">@mdo</td>
     </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">4</th>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">5</th>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">6</th>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">7</th>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">8</th>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">9</th>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">10</th>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-      <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-    </tr>
-
     </tbody>
   </table>
 </div>
@@ -216,22 +80,16 @@
   <div class="col-md-3" id = "search_condition">
     <label for="validationCustom04" class="form-label">검색 조건</label>
     <select class="form-select" id="validationCustom04" required>
-      <option selected disabled value="">제목</option>
-      <option>제목 + 내용</option>
+      <option th:value="title">제목</option>
+      <option th:value="postedUser">작성자</option>
     </select>
-    <div class="invalid-feedback">
-      Please select a valid state.
-    </div>
   </div>
 
   <div class="col-md-6" id = "search_content">
     <label for="validationCustom03" class="form-label">내용</label>
     <input type="text" class="form-control" id="validationCustom03" required>
-    <div class="invalid-feedback">
-      Please provide a valid city.
-    </div>
-
   </div>
+
   <div class="col-md-6" id = "search_button_wrapper">
     <label for="validationCustom03" class="form-label" id = "bb">검색</label>
     <button type="button" class="btn btn-success" id= "search_button">button</button>

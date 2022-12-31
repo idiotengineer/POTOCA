@@ -14,6 +14,9 @@ import My_Project.integration.repository.PostRepository;
 import My_Project.integration.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -111,12 +114,12 @@ public class PostService {
             PostInfoDto postInfoDto,
             List<MultipartFile> files,
             @CookieValue(name = "users") Cookie cookie
-    ) throws Exception{
-        try{
-        // 파일 처리를 위한 Board 객체 생성
-        Optional<Users> usersByEmail = usersRepository.findUsersByEmail(cookie.getValue());
-        PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto);
-        List<Photo> photoList = fileHandler.parseFileInfo(files);
+    ) throws Exception {
+        try {
+            // 파일 처리를 위한 Board 객체 생성
+            Optional<Users> usersByEmail = usersRepository.findUsersByEmail(cookie.getValue());
+            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto);
+            List<Photo> photoList = fileHandler.parseFileInfo(files);
 
             // 파일이 존재할 때에만 처리
             if (!photoList.isEmpty()) {
@@ -137,11 +140,11 @@ public class PostService {
 
 
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
-    public PostInfoResponseDto searchById(Long id,List<Long> fileId) {
+    public PostInfoResponseDto searchById(Long id, List<Long> fileId) {
         PostInfo postInfo = postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다"));
 
-        return new PostInfoResponseDto(postInfo,fileId);
+        return new PostInfoResponseDto(postInfo, fileId);
     }
 
 
@@ -163,11 +166,21 @@ public class PostService {
 
     @Transactional
     public List<PostDto> search(String keyword) {
-        List<PostInfo> postInfo = postRepository.findByTitleContaining(keyword);
+        List<PostInfo> postInfo = postRepository.findByPostTitleContaining(keyword);
         List<PostDto> postDto = postInfo.stream()
                 .map(postInfo1 -> new PostDto(postInfo1))
                 .collect(Collectors.toList());
 
         return postDto;
+    }
+
+    @Transactional
+    public Page<PostDto> getPostInfoList(Pageable pageable) {
+        Page<PostInfo> all = postRepository.findAll(pageable);
+        List<PostDto> collect = all.stream().map(
+                postInfo -> new PostDto(postInfo)
+        ).collect(Collectors.toList());
+
+        return new PageImpl<PostDto>(collect);
     }
 }

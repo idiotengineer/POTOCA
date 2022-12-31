@@ -50,12 +50,6 @@ public class MainpageController {
         }*/
     }
 
-    @ApiOperation(value = "일반 게시글 리스트 페이지 접속")
-    @GetMapping("/listpage")
-    public String listPage(@ApiIgnore Model model,PostDto postDto) {
-        LOGGER.info("리스트페이지 접속");
-        return "listpage_copy";
-    }
 
     @ApiOperation(value = "포인트 페이지")
     @GetMapping("/mypoint")
