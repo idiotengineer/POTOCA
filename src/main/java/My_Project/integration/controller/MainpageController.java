@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -55,7 +52,7 @@ public class MainpageController {
 
     @ApiOperation(value = "일반 게시글 리스트 페이지 접속")
     @GetMapping("/listpage")
-    public String listPage() {
+    public String listPage(@ApiIgnore Model model,PostDto postDto) {
         LOGGER.info("리스트페이지 접속");
         return "listpage_copy";
     }
@@ -92,15 +89,15 @@ public class MainpageController {
     }
 
     @GetMapping("/find_post")
-    public String findPost(@RequestParam("id") Long id,Model model,RedirectAttributes redirectAttributes) {
+    public String findPost(@RequestParam("id") Long id,Model model) {
         try {
             PostDto post = postService.findPost(id);
             model.addAttribute("post", post);
             model.addAttribute("time",LocalDateTime.now());
             return "copy_post";
         } catch (NoSuchElementException e) {
-            redirectAttributes.addAttribute(e.toString());
-            return "redirect:/alert";
+            model.addAttribute("string",e.toString());
+            return "alert";
         }
     }
 

@@ -1,41 +1,59 @@
 package My_Project.integration.service;
 
+import My_Project.integration.entity.Dto.CommentDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
 import My_Project.integration.entity.Photo;
+import My_Project.integration.entity.PostComments;
 import My_Project.integration.entity.PostInfo;
 import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.repository.PhotoRepository;
+import My_Project.integration.repository.PostCommentsRepository;
 import My_Project.integration.repository.PostRepository;
 import My_Project.integration.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.Cookie;
+import javax.sql.DataSource;
+import javax.transaction.Transaction;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
     @Autowired
-    PostRepository postRepository;
+    private final PostRepository postRepository;
 
     @Autowired
-    UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
 
+    @Autowired
+    private final PostCommentsRepository postCommentsRepository;
+
+    @Autowired
+    private final EntityManager em;
+
+
+    @Autowired
     private final FileHandler fileHandler;
+    @Autowired
     private final PhotoRepository photoRepository;
 
     public PostDto findPost(Long id) throws NoSuchElementException {
-        Optional<PostInfo> postInfo = postRepository.findPostInfoByPostNumber(id);
+        Optional<PostInfo> postInfo = postRepository.findById(id);
 
         if (postInfo.isPresent()) {
             PostDto postDto = new PostDto(postInfo.get());
@@ -124,5 +142,32 @@ public class PostService {
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다"));
 
         return new PostInfoResponseDto(postInfo,fileId);
+    }
+
+
+    @Transactional
+    public Boolean registerComments(CommentDto commentDto, Optional<Cookie> cookie) {
+        if (cookie.isPresent()) {
+            PostComments postComments = new PostComments(commentDto);
+            postCommentsRepository.save(postComments);
+            Optional<PostInfo> post = postRepository.findById(commentDto.getPost_number());
+            post.get().getComments().add(postComments);
+
+            em.flush();
+            em.clear();
+            return true;
+        } else {
+            throw new NoSuchElementException("로그인 되어있지 않습니다");
+        }
+    }
+
+    @Transactional
+    public List<PostDto> search(String keyword) {
+        List<PostInfo> postInfo = postRepository.findByTitleContaining(keyword);
+        List<PostDto> postDto = postInfo.stream()
+                .map(postInfo1 -> new PostDto(postInfo1))
+                .collect(Collectors.toList());
+
+        return postDto;
     }
 }

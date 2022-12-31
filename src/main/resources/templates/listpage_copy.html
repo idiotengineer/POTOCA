@@ -56,8 +56,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-      <th scope="row">1</th>
+    <tr th:each="product : ${}">
+      <th scope="row" th:text="${}">1</th>
       <td style="
             overflow:hidden;
             text-overflow: ellipsis;

@@ -13,6 +13,68 @@
   <link href = "/css/post.css" rel = "stylesheet">
   <link href = "/css/post2.css" rel = "stylesheet">
   <link rel = "stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <script th:inline="javascript">
+    function getCookie(cookie_name) {
+      var x, y;
+      var val = document.cookie.split(';');
+      for (var i = 0; i < val.length; i++) {
+        x = val[i].substr(0, val[i].indexOf('='));
+        y = val[i].substr(val[i].indexOf('=') + 1);
+        x = x.replace(/^\s+|\s+$/g, '');
+        // 앞과 뒤의 공백 제거하기
+        if (x == cookie_name) {
+          return y;
+          // unescape로 디코딩 후 값 리턴
+        }
+      }
+    }
+
+    function register_comments(){
+      /*<![CDATA[*/
+      let commentContents = document.getElementById('validationCustom03').value;
+
+      if (commentContents == "") {
+        alert("작성하실 댓글을 입력하세요");
+        history.back();
+      } else if (commentContents.length > 500) {
+        alert("댓글의 길이가 500자를 초과합니다");
+        history.back();
+      } else {
+        /*<![CDATA[*/
+        let number = [[${post.getPostNumber()}]];
+        /*]]*/
+
+        var data = {
+          "post_number": number,
+          "users_email": getCookie('users'),
+          "comment": commentContents
+        };
+
+        let stringify = JSON.stringify(data);
+
+        var request = new XMLHttpRequest();
+        request.open("POST","/register_comments");
+        request.setRequestHeader("Accept", "application/json");
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(stringify);
+
+
+/*
+        fetch('/register_comments', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: stringify
+        })
+                .then(response => response.json())
+                .then(response => console.log(JSON.stringify(response)))*/
+      }
+    }
+  </script>
+
 </head>
 <body>
 <nav class="navbar bg-light fixed-top" id = "navbar_custom">
@@ -89,17 +151,21 @@
 
 <!-- post2.css-->
 <hr class = "hr1_class">
+
 <div class = "reply_head">
+  <form method="post" name="postForm">
   <h5 id="h5_style">댓글 목록</h5>
   <input type="text" class="form-control" id="validationCustom03" name="input_comment" required>
-  <button type="button" class="btn btn-success" id= "search_button" >댓글 작성</button>
+  <button type="button" class="btn btn-success" id= "search_button" onclick="register_comments()">댓글 작성</button>
+</form>
 </div>
+
 <div class = "reply_list">
   <div class = "reply" th:each="value: ${post.getComments()}">
     <img class = "reply_profile_img" src = "https://mblogthumb-phinf.pstatic.net/MjAyMTA1MjhfMjUg/MDAxNjIyMTk3NzUyMTAz.JgBnXWFplrlgwuGvVqlosma8FFPXqfGwVApVvMeP3vQg.LRmquqydeYieBEwyF9jWhljRvcd37HQf5dMa_AXxB1Ag.JPEG.mykpoint/Screenshot%EF%BC%BF20210528%EF%BC%8D192632%EF%BC%BFSamsung_Internet.jpg?type=w800">
     <div class = "reply_profile_name" th:text="${value.getPostCommentedUsersEmail()}">작성자</div>
-    <div class = "reply_profile_time" th:text="*{My_Project.integration.controller.MainpageController.getTimeDiffAndReturnElapsedTime(value.getDates().getUploadedTime(),time)}">작성 시간</div>
-    <div class = "reply_profile_content">카리나에 대한 댓글 카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글</div>
+    <div class = "reply_profile_time" th:text="${@mainpageController.getTimeDiffAndReturnElapsedTime(value.getDates().getUploadedTime(),time)}">작성 시간</div>
+    <div class = "reply_profile_content" th:text="${value.getPostCommentsContents()}">카리나에 대한 댓글 카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글</div>
     <button class="material-symbols-outlined">
       thumb_up thumb_down
     </button>

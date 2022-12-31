@@ -17,11 +17,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
+import javax.swing.text.html.Option;
 import java.io.File;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Controller
 public class PostController {
@@ -68,11 +71,21 @@ public class PostController {
         }
     }
 
-
-    /*@PostMapping("/comments_execute")
-    public String writingOutComments(@CookieValue("users") Cookie cookie, CommentDto commentDto) {
-
-    }*/
+    @RequestMapping(value = "/register_comments",method = {RequestMethod.POST,RequestMethod.GET})
+    public String registerComments(
+            @RequestBody CommentDto commentDto,
+            @CookieValue(name = "users") Optional<Cookie> cookie,
+            RedirectAttributes attr) {
+        try {
+            postService.registerComments(commentDto,cookie);
+            attr.addAttribute("id",commentDto.getPost_number());
+            return "redirect:/find_post";
+        } catch (Exception e) {
+            e.printStackTrace();
+            attr.addAttribute("string","로그인 후 댓글을 작성 해 주세요");
+            return "redirect:/alert";
+        }
+    }
 
 
 /*

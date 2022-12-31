@@ -5,6 +5,7 @@ import My_Project.integration.entity.ResponseDto.PhotoResponseDto;
 import My_Project.integration.entity.Photo;
 import My_Project.integration.repository.PhotoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class PhotoService {
+    @Autowired
     private final PhotoRepository photoRepository;
 
     @Transactional(readOnly = true)

@@ -5,6 +5,7 @@ import My_Project.integration.entity.Photo;
 import My_Project.integration.service.PhotoService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.io.InputStream;
 @RestController
 public class PhotoController {
 
+    @Autowired
     private final PhotoService photoService;
 
     /**
