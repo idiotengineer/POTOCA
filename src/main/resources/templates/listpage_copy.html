@@ -96,24 +96,47 @@
   </div>
 </div>
 
-<nav aria-label="Page navigation example" id="list1">
-  <ul class="pagination justify-content-center">
-    <li class="page-item disabled">
-      <a class="page-link">이전</a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">4</a></li>
-    <li class="page-item"><a class="page-link" href="#">5</a></li>
-    <li class="page-item"><a class="page-link" href="#">6</a></li>
-    <li class="page-item"><a class="page-link" href="#">7</a></li>
-    <li class="page-item"><a class="page-link" href="#">8</a></li>
-    <li class="page-item"><a class="page-link" href="#">9</a></li>
-    <li class="page-item"><a class="page-link" href="#">10</a></li>
-    <li class="page-item">
-      <a class="page-link" href="#">다음</a>
-    </li>
+<nav aria-label="Page navigation example" id="list1" style="justify-content: center">
+  <!--표에 사용될 변수값 초기화 -->
+  <ul class="pagination"
+      th:with="start=${T(java.lang.Math).floor(list.number/10)*10 + 1},
+                    last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
+    <th:block th:with="
+                firstAddr=@{/listpage(page=0)},
+                prevAddr=@{/listpage(page=${list.number - 1})},
+                nextAddr=@{/listpage(page=${list.number + 1})},
+                lastAddr=@{/listpage(page=${list.totalPages -1})}">
+      <li class="page-item">
+        <a class="page-link" th:href="${firstAddr}" aria-label="First">
+          <span aria-hidden="true">First</span>
+        </a>
+      </li>
+      <!-- 이전 페이지로 가기 버튼 -->
+      <li class="page-item" th:class="${list.first} ? 'disabled'">
+        <a class="page-link" th:href="${list.first} ? '#' :${prevAddr}"
+           aria-label="Previous">
+          <span aria-hidden="true">&lt;</span>
+        </a>
+      </li>
+      <!--1,2,3,4,.. 등 페이지-->
+      <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}"
+          th:class="${page == list.number + 1} ? 'active'">
+        <a class="page-link" th:text="${page}" th:href="@{/listpage(page=${page -1})}"></a>
+      </li>
+      <!--다음 페이지로 -->
+      <li class="page-item" th:class="${list.last} ? 'disabled'">
+        <a class="page-link" th:href="${list.last} ? '#' : ${nextAddr}"
+           aria-label="Next">
+          <span aria-hidden="true">&gt;</span>
+        </a>
+      </li>
+      <!--맨 마지막 페이지로 이동 -->
+      <li class="page-item">
+        <a class="page-link" th:href="${lastAddr}" aria-label="Last">
+          <span aria-hidden="true">Last</span>
+        </a>
+      </li>
+    </th:block>
   </ul>
 </nav>
 
