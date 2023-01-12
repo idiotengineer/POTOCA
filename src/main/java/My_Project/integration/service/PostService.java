@@ -179,10 +179,32 @@ public class PostService {
                 postInfo -> new PostDto(postInfo)
         ).collect(Collectors.toList());
 
-        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
-        pageable= PageRequest.of(page,10);
+        /*int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+        pageable= PageRequest.of(page,10);*/
 
         Page<PostDto> postDtos = new PageImpl<>(collect, all.getPageable(), all.getTotalElements());
+        return postDtos;
+    }
+
+    @Transactional
+    public Page<PostDto> SearchByName(String name,Pageable pageable) {
+        List<PostDto> list = postRepository.searchByName(name);
+
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), list.size());
+        Page<PostDto> postDtos = new PageImpl<>(list.subList(start, end), pageable, list.size());
+
+        return postDtos;
+    }
+
+    @Transactional
+    public Page<PostDto> SearchByTitle(String title,Pageable pageable) {
+        List<PostDto> list = postRepository.searchByTitle(title);
+
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), list.size());
+        Page<PostDto> postDtos = new PageImpl<>(list.subList(start, end), pageable, list.size());
+
         return postDtos;
     }
 }

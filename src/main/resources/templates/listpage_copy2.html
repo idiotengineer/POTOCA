@@ -3,25 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>listpage</title>
+  <title>copycopy</title>
   <link rel = "stylesheet" href ="/css/sample.css">
   <link href="/css/votelistpage.css" rel="stylesheet">
   <link href="/css/font.css" rel = "stylesheet">
 
-  <script th:inline="javascript">
+  <script type="text/javascript" th:inline="javascript">
     function search() {
       let string = document.getElementById("validationCustom03").value;
-      var numSelect = document.getElementById("validationCustom04");
-      let value1 = numSelect.options[document.getElementById("validationCustom04").selectedIndex].value;
+
       /*var data = {
         "string": string
       };
 
       let stringify = JSON.stringify(data);
 */
+      var numSelect = document.getElementById("validationCustom04");
+      let value = numSelect.options[document.getElementById("validationCustom04").selectedIndex].value;
       let request = new XMLHttpRequest();
-      if (value1 == "title") {
-        window.location.replace("/search_title?string=" + string);/*
+
+      if (value == "title") {
+        window.location.replace("/search_title?string=" + string);
+
+        /*
         request.open("GET", "/search_title?string=" + string);
         request.send();*/
       } else {
@@ -122,14 +126,15 @@
 
 <nav aria-label="Page navigation example" id="list1" style="justify-content: center">
   <!--표에 사용될 변수값 초기화 -->
+  <th:block  th:if="${how_to_search}=='title'">
   <ul class="pagination"
       th:with="start=${T(java.lang.Math).floor(list.number/10)*10 + 1},
                     last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
     <th:block th:with="
-                firstAddr=@{/listpage(page=0)},
-                prevAddr=@{/listpage(page=${list.number - 1})},
-                nextAddr=@{/listpage(page=${list.number + 1})},
-                lastAddr=@{/listpage(page=${list.totalPages -1})}">
+                firstAddr=@{/search_title(string=${keyword},page=0)},
+                prevAddr=@{/search_title(string=${keyword},page=${list.number - 1})},
+                nextAddr=@{/search_title(string=${keyword},page=${list.number + 1})},
+                lastAddr=@{/search_title(string=${keyword},page=${list.totalPages -1})}">
       <li class="page-item">
         <a class="page-link" th:href="${firstAddr}" aria-label="First">
           <span aria-hidden="true">First</span>
@@ -145,7 +150,7 @@
       <!--1,2,3,4,.. 등 페이지-->
       <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}"
           th:class="${page == list.number + 1} ? 'active'">
-        <a class="page-link" th:text="${page}" th:href="@{/listpage(page=${page -1})}"></a>
+        <a class="page-link" th:text="${page}" th:href="@{/search_title(string=${keyword},page=${page -1})}"></a>
       </li>
       <!--다음 페이지로 -->
       <li class="page-item" th:class="${list.last} ? 'disabled'">
@@ -162,6 +167,50 @@
       </li>
     </th:block>
   </ul>
+  </th:block>
+
+  <th:block  th:unless="${how_to_search}=='title'">
+    <ul class="pagination"
+        th:with="start=${T(java.lang.Math).floor(list.number/10)*10 + 1},
+                    last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
+      <th:block th:with="
+                firstAddr=@{/search_user(string=${keyword},page=0)},
+                prevAddr=@{/search_user(string=${keyword},page=${list.number - 1})},
+                nextAddr=@{/search_user(string=${keyword},page=${list.number + 1})},
+                lastAddr=@{/search_user(string=${keyword},page=${list.totalPages -1})}">
+        <li class="page-item">
+          <a class="page-link" th:href="${firstAddr}" aria-label="First">
+            <span aria-hidden="true">First</span>
+          </a>
+        </li>
+        <!-- 이전 페이지로 가기 버튼 -->
+        <li class="page-item" th:class="${list.first} ? 'disabled'">
+          <a class="page-link" th:href="${list.first} ? '#' :${prevAddr}"
+             aria-label="Previous">
+            <span aria-hidden="true">&lt;</span>
+          </a>
+        </li>
+        <!--1,2,3,4,.. 등 페이지-->
+        <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}"
+            th:class="${page == list.number + 1} ? 'active'">
+          <a class="page-link" th:text="${page}" th:href="@{/search_user(string=${keyword},page=${page -1})}"></a>
+        </li>
+        <!--다음 페이지로 -->
+        <li class="page-item" th:class="${list.last} ? 'disabled'">
+          <a class="page-link" th:href="${list.last} ? '#' : ${nextAddr}"
+             aria-label="Next">
+            <span aria-hidden="true">&gt;</span>
+          </a>
+        </li>
+        <!--맨 마지막 페이지로 이동 -->
+        <li class="page-item">
+          <a class="page-link" th:href="${lastAddr}" aria-label="Last">
+            <span aria-hidden="true">Last</span>
+          </a>
+        </li>
+      </th:block>
+    </ul>
+  </th:block>
 </nav>
 
 
