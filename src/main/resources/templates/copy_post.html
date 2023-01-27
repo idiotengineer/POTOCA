@@ -13,6 +13,11 @@
   <link href = "/css/post.css" rel = "stylesheet">
   <link href = "/css/post2.css" rel = "stylesheet">
   <link rel = "stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link href="/css/lidi.css" rel="stylesheet">
+  <script
+          src="https://code.jquery.com/jquery-3.6.3.js"
+          integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+          crossorigin="anonymous"></script>
 
   <script th:inline="javascript">
     function getCookie(cookie_name) {
@@ -147,10 +152,41 @@
   </div>
 </div>
 
-
-
 <!-- post2.css-->
 <hr class = "hr1_class">
+
+<div class="lidiWrap">
+  <img class="likeButton" onclick="buttonFunc('like')">
+  <div class="likeCount">123</div>
+  <img class="disLikeButton" onclick="buttonFunc('dislike')">
+  <div class="disLikeCount">123</div>
+</div>
+
+<script>
+  function buttonFunc(param1) {
+    let attr = $('.likeButton').css('background-position');
+    let attr1 = $('.disLikeButton').css('background-position');
+
+    if(param1=='like') {
+      if (attr == '0% 0%') {
+        $('.likeButton').css('background-position','-24px');
+        $('.disLikeButton').css('pointer-events','none');
+      } else {
+        $('.likeButton').css('background-position', '0% 0%');
+        $('.disLikeButton').css('pointer-events','auto');
+      }
+    }
+    else if(param1=='dislike') {
+      if(attr1 == '-48px 50%'){
+        $('.disLikeButton').css('background-position','-72px');
+        $('.likeButton').css('pointer-events','none');
+      } else {
+        $('.disLikeButton').css('background-position', '-48px 50%');
+        $('.likeButton').css('pointer-events','auto');
+      }
+    }
+  }
+</script>
 
 <div class = "reply_head">
   <form method="post" name="postForm">
