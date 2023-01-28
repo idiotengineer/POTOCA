@@ -4,26 +4,19 @@ import My_Project.integration.entity.Dto.CommentDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
 import My_Project.integration.entity.ResponseDto.PhotoResponseDto;
-import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
 import My_Project.integration.service.PhotoService;
 import My_Project.integration.service.PostService;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
-import javax.swing.text.html.Option;
-import java.io.File;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -71,18 +64,18 @@ public class PostController {
         }
     }
 
-    @RequestMapping(value = "/register_comments",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/register_comments", method = {RequestMethod.POST, RequestMethod.GET})
     public String registerComments(
             @RequestBody CommentDto commentDto,
             @CookieValue(name = "users") Optional<Cookie> cookie,
             RedirectAttributes attr) {
         try {
-            postService.registerComments(commentDto,cookie);
-            attr.addAttribute("id",commentDto.getPost_number());
+            postService.registerComments(commentDto, cookie);
+            attr.addAttribute("id", commentDto.getPost_number());
             return "redirect:/find_post";
         } catch (Exception e) {
             e.printStackTrace();
-            attr.addAttribute("string","로그인 후 댓글을 작성 해 주세요");
+            attr.addAttribute("string", "로그인 후 댓글을 작성 해 주세요");
             return "redirect:/alert";
         }
     }
@@ -130,6 +123,16 @@ public class PostController {
         return postService.searchById(id,);
     }*/
 
-
+    @PostMapping("/find_post/likeAndDisLike")
+    @ResponseBody
+    public String likeAndDisLike(@RequestBody HashMap<String, Object> data,
+                                 @CookieValue(name = "users") Optional<Cookie> cookie){
+        if (cookie.isPresent()) {
+            PostDto id = postService.findPost(Long.parseLong(data.get("id").toString()));
+            return "1";
+        } else {
+            return "2";
+        }
+    }
 }
 
