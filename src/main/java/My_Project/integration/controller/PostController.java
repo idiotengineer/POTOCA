@@ -4,12 +4,15 @@ import My_Project.integration.entity.Dto.CommentDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
 import My_Project.integration.entity.ResponseDto.PhotoResponseDto;
+import My_Project.integration.entity.Users;
 import My_Project.integration.service.PhotoService;
 import My_Project.integration.service.PostService;
+import My_Project.integration.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
@@ -27,6 +30,9 @@ public class PostController {
 
     @Autowired
     PhotoService photoService;
+
+    @Autowired
+    UserService userService;
 
     @PostMapping("/post_execute2")
     public String create(
@@ -126,12 +132,43 @@ public class PostController {
     @PostMapping("/find_post/likeAndDisLike")
     @ResponseBody
     public String likeAndDisLike(@RequestBody HashMap<String, Object> data,
-                                 @CookieValue(name = "users") Optional<Cookie> cookie){
+                                 @CookieValue(name = "users") Optional<Cookie> cookie,
+                                 RedirectAttributes redirectAttributes){
         if (cookie.isPresent()) {
-            PostDto id = postService.findPost(Long.parseLong(data.get("id").toString()));
-            return "1";
-        } else {
-            return "2";
+            PostDto postDto = postService.findPost(Long.parseLong(data.get("id").toString()));
+            Users users = userService.findById(cookie.get().getValue()).get();
+
+            if (data.get("type").equals("like")) { // Like 일 때
+                boolean anyMatch = postDto
+                        .getPostLikeAndDislike()
+                        .getLikedUser()
+                        .stream().anyMatch(users1 -> users1.equals(users));
+
+                String sizeOfLikeList;
+                if (anyMatch) { // 이미 Like 했을 때
+                    sizeOfLikeList = postService.RemoveUserListValue(postDto.getPostLikeAndDislike().getLikedUser(), users);// PostLikeAndDislike의 likedUser에서 User 제거
+                } else { // Like 하지 않았을 때
+                    sizeOfLikeList = postService.AddUserListValue(postDto.getPostLikeAndDislike().getLikedUser(),users);
+                }
+
+                return sizeOfLikeList;
+            } else { // DisLike 일 때
+                boolean anyMatch = postDto
+                        .getPostLikeAndDislike()
+                        .getDisLikedUser()
+                        .stream().anyMatch(users1 -> users1.equals(users));
+                String sizeOfDislikeList;
+                if (anyMatch) { // 이미 DisLike 했을 때
+                    sizeOfDislikeList = postService.RemoveUserListValue(postDto.getPostLikeAndDislike().getDisLikedUser(), users);// PostLikeAndDislike의 DislikedUser에서 User 제거
+                } else { // DisLike 하지 않았을 때
+                    sizeOfDislikeList = postService.AddUserListValue(postDto.getPostLikeAndDislike().getDisLikedUser(),users);
+                }
+                return sizeOfDislikeList;
+
+            }
+        }
+        else { // 로그인이 안 되어 있을 시
+            return "not_logined";
         }
     }
 }

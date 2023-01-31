@@ -22,7 +22,7 @@ public class PostDto {
     private Dates dates;
     private List<Photo> images;
     private List<PostComments> comments;
-
+    private PostLikeAndDislike postLikeAndDislike;
 
     public PostDto(PostInfo postInfo) {
         this.postNumber = postInfo.getPostNumber();
@@ -33,6 +33,7 @@ public class PostDto {
 
         this.images = new ArrayList<>(postInfo.getPhoto());
         this.comments = new ArrayList<>(postInfo.getComments());
+        this.postLikeAndDislike = postInfo.getPostLikeAndDislike();
 
         Collections.copy(this.images, postInfo.getPhoto());
         Collections.copy(this.comments,postInfo.getComments());

@@ -46,4 +46,9 @@ public class UserService {
     public Optional<Users> findPassword(FindPasswordDto findPasswordDto){
         return usersRepository.findUsersByPhoneNumberAndEmail(findPasswordDto.getPhone_number2(), findPasswordDto.getEmail());
     }
+
+    @Transactional
+    public Optional<Users> findById(String s) {
+        return usersRepository.findById(s);
+    }
 }

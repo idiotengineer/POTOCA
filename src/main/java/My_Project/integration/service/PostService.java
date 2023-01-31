@@ -1,22 +1,15 @@
 package My_Project.integration.service;
 
+import My_Project.integration.entity.*;
 import My_Project.integration.entity.Dto.CommentDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
-import My_Project.integration.entity.Photo;
-import My_Project.integration.entity.PostComments;
-import My_Project.integration.entity.PostInfo;
 import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
-import My_Project.integration.entity.Users;
-import My_Project.integration.repository.PhotoRepository;
-import My_Project.integration.repository.PostCommentsRepository;
-import My_Project.integration.repository.PostRepository;
-import My_Project.integration.repository.UsersRepository;
+import My_Project.integration.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -25,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityManager;
 import javax.servlet.http.Cookie;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -43,6 +35,9 @@ public class PostService {
 
     @Autowired
     private final PostCommentsRepository postCommentsRepository;
+
+    @Autowired
+    private final PostLikeAndDislikeRepository postLikeAndDislikeRepository;
 
     @Autowired
     private final EntityManager em;
@@ -67,14 +62,20 @@ public class PostService {
     public boolean Posting(@CookieValue(name = "users") Cookie cookie, PostInfoDto postInfoDto) {
         Optional<Users> usersByEmail = usersRepository.findUsersByEmail(cookie.getValue());
         if (usersByEmail.isPresent()) {
-            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto);
+
+            PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
+            if (!savePostLikeAndDislike(postLikeAndDislike)) {
+                new Exception("PostLikeAndDislike 객체 생성 실패");
+            }
+
+            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto,postLikeAndDislike);
             postRepository.save(postInfo);
             return true;
         }
         return false;
     }
 
-    @Transactional
+    /*@Transactional
     public PostDto create1(
             PostInfoDto postInfoDto,
             List<MultipartFile> files,
@@ -83,14 +84,18 @@ public class PostService {
         // 파일 처리를 위한 Board 객체 생성
         Optional<Users> usersByEmail = usersRepository.findUsersByEmail(cookie.getValue());
         if (usersByEmail.isPresent()) {
-            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto);
+            PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
+            if (!savePostLikeAndDislike(postLikeAndDislike)) {
+                throw new Exception("PostLikeAndDislike 객체 생성 실패");
+            }
+            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto,postLikeAndDislike);
             postRepository.save(postInfo);
         } else {
             throw new Exception("존재하지 않는 회원입니다");
         }
 
         PostInfo postInfo = new PostInfo(
-                usersByEmail.get(), postInfoDto
+                usersByEmail.get(), postInfoDto,
         );
         List<Photo> photoList = fileHandler.parseFileInfo(files);
 
@@ -105,7 +110,7 @@ public class PostService {
 
         PostDto postDto = new PostDto(postInfo);
         return postDto;
-    }
+    }*/
 
     @Transactional
     public PostDto create(
@@ -116,7 +121,12 @@ public class PostService {
         try {
             // 파일 처리를 위한 Board 객체 생성
             Optional<Users> usersByEmail = usersRepository.findUsersByEmail(cookie.getValue());
-            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto);
+
+            PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
+            if (!savePostLikeAndDislike(postLikeAndDislike)) {
+                new Exception("PostLikeAndDislike 객체 생성 실패");
+            }
+            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto,postLikeAndDislike);
             List<Photo> photoList = fileHandler.parseFileInfo(files);
 
             // 파일이 존재할 때에만 처리
@@ -131,6 +141,7 @@ public class PostService {
 
             PostDto postDto = new PostDto(postInfo);
             return postDto;
+
         } catch (NoSuchElementException e) {
             throw new Exception("존재하지 않는 회원입니다");
         }
@@ -206,5 +217,31 @@ public class PostService {
         Page<PostDto> postDtos = new PageImpl<>(list.subList(start, end), pageable, list.size());
 
         return postDtos;
+    }
+
+    @Transactional
+    public boolean savePostLikeAndDislike(PostLikeAndDislike postLikeAndDislike) {
+        try {
+            postLikeAndDislikeRepository.save(postLikeAndDislike);
+        } catch (Exception e) {
+         return false;
+        }
+        return true;
+    }
+
+    @Transactional
+    public String AddUserListValue(List<Users> list,Users users) {
+        list.add(users);
+        em.flush();
+        em.clear();
+        return String.valueOf(list.size());
+    }
+
+    @Transactional
+    public String RemoveUserListValue(List<Users> list,Users users) {
+        list.remove(users);
+        em.flush();
+        em.clear();
+        return String.valueOf(list.size());
     }
 }
