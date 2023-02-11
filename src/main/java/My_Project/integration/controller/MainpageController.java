@@ -1,7 +1,9 @@
 package My_Project.integration.controller;
 
 import My_Project.integration.entity.Dto.PostDto;
+import My_Project.integration.entity.Users;
 import My_Project.integration.service.PostService;
+import My_Project.integration.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -30,6 +32,9 @@ public class MainpageController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private UserService userService;
 
     @ApiOperation(value = "메인 페이지")
     @GetMapping("/")
@@ -83,10 +88,12 @@ public class MainpageController {
     }
 
     @GetMapping("/find_post")
-    public String findPost(@RequestParam("id") Long id,Model model) {
+    public String findPost(@RequestParam("id") Long id,Model model,@CookieValue("users")Cookie cookie) {
         try {
             PostDto post = postService.findPost(id);
+            Optional<Users> usersOptional = userService.findById(cookie.getValue());
             model.addAttribute("post", post);
+            model.addAttribute("checked",post.checkLikeAndDisLike(usersOptional));
             model.addAttribute("time",LocalDateTime.now());
             return "copy_post";
         } catch (NoSuchElementException e) {

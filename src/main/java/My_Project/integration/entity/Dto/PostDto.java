@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @AllArgsConstructor
@@ -37,5 +38,27 @@ public class PostDto {
 
         Collections.copy(this.images, postInfo.getPhoto());
         Collections.copy(this.comments,postInfo.getComments());
+    }
+
+    public String checkLikeAndDisLike(Optional<Users> users) {
+        if (users.isPresent()) {
+            if (checkLike(users.get())) {
+                return "likeChecked";
+            } else if (checkDisLike(users.get())) {
+                return "dislikeChecked";
+            }
+        }
+
+        return "noneChecked";
+    }
+
+    public boolean checkLike(Users users) {
+        return getPostLikeAndDislike().getLikedUser().stream()
+                .anyMatch(users1 -> users1.equals(users));
+    }
+
+    public boolean checkDisLike(Users users) {
+        return getPostLikeAndDislike().getDisLikedUser().stream()
+                .anyMatch(users1 -> users1.equals(users));
     }
 }

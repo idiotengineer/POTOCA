@@ -78,8 +78,23 @@
                 .then(response => console.log(JSON.stringify(response)))*/
       }
     }
-  </script>
+    /*<![CDATA[*/
+    $(document).ready(function () {
+      let checked = [[${checked}]];
 
+      if (checked == 'likeChecked') {
+        $('.likeButton').css('background-position','-24px');
+        $('.disLikeButton').css('pointer-events','none');
+      } else if (checked == 'dislikeChecked') {
+        $('.disLikeButton').css('background-position','-72px');
+        $('.likeButton').css('pointer-events','none');
+      } else {
+
+      }
+      return ;
+    });
+    /*]]>*/
+  </script>
 </head>
 <body>
 <nav class="navbar bg-light fixed-top" id = "navbar_custom">
@@ -155,12 +170,12 @@
 <!-- post2.css-->
 <hr class = "hr1_class">
 
-<div class="lidiWrap">
-  <img class="likeButton" onclick="buttonFunc('like')">
-  <div class="likeCount" th:text="${post.getPostLikeAndDislike().getLikedUser().size()}">123</div>
-  <img class="disLikeButton" onclick="buttonFunc('dislike')">
-  <div class="disLikeCount" th:text="${post.getPostLikeAndDislike().getDisLikedUser().size()}">123</div>
-</div>
+  <div class="lidiWrap">
+    <img class="likeButton" onclick="buttonFunc('like')">
+    <div class="likeCount" th:text="${post.getPostLikeAndDislike().getLikedUser().size()}">123</div>
+    <img class="disLikeButton" onclick="buttonFunc('dislike')">
+    <div class="disLikeCount" th:text="${post.getPostLikeAndDislike().getDisLikedUser().size()}">123</div>
+  </div>
 
 <script th:inline="javascript">
   function buttonFunc(param1) {
@@ -245,9 +260,10 @@
     <div class = "reply_profile_name" th:text="${value.getPostCommentedUsersEmail()}">작성자</div>
     <div class = "reply_profile_time" th:text="${@mainpageController.getTimeDiffAndReturnElapsedTime(value.getDates().getUploadedTime(),time)}">작성 시간</div>
     <div class = "reply_profile_content" th:text="${value.getPostCommentsContents()}">카리나에 대한 댓글 카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글</div>
-    <button class="material-symbols-outlined">
-      thumb_up thumb_down
-    </button>
+
+      <button class="material-symbols-outlined">
+        thumb_up thumb_down
+      </button>
   </div>
 </div>
 
