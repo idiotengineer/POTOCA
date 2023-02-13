@@ -88,12 +88,16 @@ public class MainpageController {
     }
 
     @GetMapping("/find_post")
-    public String findPost(@RequestParam("id") Long id,Model model,@CookieValue("users")Cookie cookie) {
+    public String findPost(@RequestParam("id") Long id,Model model,@CookieValue("users")Optional<Cookie> cookie) {
         try {
             PostDto post = postService.findPost(id);
-            Optional<Users> usersOptional = userService.findById(cookie.getValue());
+
+            if (cookie.isPresent()) {
+                Optional<Users> usersOptional = userService.findById(cookie.get().getValue());
+                model.addAttribute("checked",post.checkLikeAndDisLike(usersOptional));
+            }
+
             model.addAttribute("post", post);
-            model.addAttribute("checked",post.checkLikeAndDisLike(usersOptional));
             model.addAttribute("time",LocalDateTime.now());
             return "copy_post";
         } catch (NoSuchElementException e) {
