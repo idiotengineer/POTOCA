@@ -88,10 +88,14 @@
       } else if (checked == 'dislikeChecked') {
         $('.disLikeButton').css('background-position','-72px');
         $('.likeButton').css('pointer-events','none');
+      } else if (checked == 'noneChecked') {
+        $('.likeButton').css('pointer-events','auto');
+        $('.disLikeButton').css('pointer-events','auto');
       } else {
         $('.likeButton').css('pointer-events','none');
         $('.disLikeButton').css('pointer-events','none');
       }
+
 
       return ;
     });

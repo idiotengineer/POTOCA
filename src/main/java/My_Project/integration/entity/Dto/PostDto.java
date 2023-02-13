@@ -35,6 +35,7 @@ public class PostDto {
         this.images = new ArrayList<>(postInfo.getPhoto());
         this.comments = new ArrayList<>(postInfo.getComments());
         this.postLikeAndDislike = postInfo.getPostLikeAndDislike();
+        this.images = postInfo.getPhoto();
 
         Collections.copy(this.images, postInfo.getPhoto());
         Collections.copy(this.comments,postInfo.getComments());
@@ -47,9 +48,9 @@ public class PostDto {
             } else if (checkDisLike(users.get())) {
                 return "dislikeChecked";
             }
+            return "noneChecked";
         }
-
-        return "noneChecked";
+        return "notLogin";
     }
 
     public boolean checkLike(Users users) {

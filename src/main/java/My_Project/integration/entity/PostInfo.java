@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class PostInfo {
     @Column(name = "post_number")
     private Long postNumber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
     private Users postedUser;
 
@@ -41,6 +42,7 @@ public class PostInfo {
             orphanRemoval = true,
             cascade= {CascadeType.PERSIST, CascadeType.REMOVE}
     )
+    @BatchSize(size = 100)
     private List<Photo> photo = new ArrayList<>();
 
     @OneToMany(
@@ -49,9 +51,10 @@ public class PostInfo {
     )
 
     @JoinColumn(name = "id")
+    @BatchSize(size = 1000)
     private List<PostComments> comments;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private PostLikeAndDislike postLikeAndDislike;
 

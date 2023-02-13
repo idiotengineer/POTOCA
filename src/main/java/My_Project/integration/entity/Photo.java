@@ -16,7 +16,7 @@ public class Photo {
     @Column(name = "file_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private PostInfo postInfo;
 
