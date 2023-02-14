@@ -10,7 +10,9 @@ import org.hibernate.annotations.BatchSize;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -40,10 +42,11 @@ public class PostInfo {
     @OneToMany(
             mappedBy = "postInfo",
             orphanRemoval = true,
-            cascade= {CascadeType.PERSIST, CascadeType.REMOVE}
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
     )
     @BatchSize(size = 100)
-    private List<Photo> photo = new ArrayList<>();
+//    private List<Photo> photo = new ArrayList<>();
+    private Set<Photo> photo = new HashSet<>();
 
     @OneToMany(
             orphanRemoval = true,
@@ -52,7 +55,8 @@ public class PostInfo {
 
     @JoinColumn(name = "id")
     @BatchSize(size = 1000)
-    private List<PostComments> comments;
+//    private List<PostComments> comments;
+    private Set<PostComments> comments;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn
@@ -76,7 +80,8 @@ public class PostInfo {
         this.postTitle = postInfo.getPostTitle();
         this.postContent = postInfo.getPostContent();
         this.dates = dates;
-        this.comments = new ArrayList<>();
+//        this.comments = new ArrayList<>();
+        this.comments = new HashSet<>();
         setPostLikeAndDislike(postLikeAndDislike);
     }
 }

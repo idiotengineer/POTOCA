@@ -49,7 +49,7 @@ public class PostService {
     private final PhotoRepository photoRepository;
 
     public PostDto findPost(Long id) throws NoSuchElementException {
-        Optional<PostInfo> postInfo = postRepository.findById(id);
+        Optional<PostInfo> postInfo = postRepository.findPostInfoByPostNumber(id);
 
         if (postInfo.isPresent()) {
             PostDto postDto = new PostDto(postInfo.get());

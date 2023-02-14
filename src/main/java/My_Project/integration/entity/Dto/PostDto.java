@@ -6,10 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Getter
 @AllArgsConstructor
@@ -21,8 +18,10 @@ public class PostDto {
     private String postTitle;
     private String postContent;
     private Dates dates;
-    private List<Photo> images;
-    private List<PostComments> comments;
+//    private List<Photo> images;
+    private Set<Photo> images;
+//    private List<PostComments> comments;
+    private Set<PostComments> comments;
     private PostLikeAndDislike postLikeAndDislike;
 
     public PostDto(PostInfo postInfo) {
@@ -31,14 +30,16 @@ public class PostDto {
         this.dates = postInfo.getDates();
         this.postTitle = postInfo.getPostTitle();
         this.postContent = postInfo.getPostContent();
-
-        this.images = new ArrayList<>(postInfo.getPhoto());
-        this.comments = new ArrayList<>(postInfo.getComments());
+//
+//        this.images = new ArrayList<>(postInfo.getPhoto());
+//        this.comments = new ArrayList<>(postInfo.getComments());
+        this.images = new HashSet<>(postInfo.getPhoto());
+        this.comments = new HashSet<>(postInfo.getComments());
         this.postLikeAndDislike = postInfo.getPostLikeAndDislike();
         this.images = postInfo.getPhoto();
-
-        Collections.copy(this.images, postInfo.getPhoto());
-        Collections.copy(this.comments,postInfo.getComments());
+//
+//        Collections.copy(this.images, postInfo.getPhoto());
+//        Collections.copy(this.comments,postInfo.getComments());
     }
 
     public String checkLikeAndDisLike(Optional<Users> users) {
