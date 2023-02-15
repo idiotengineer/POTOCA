@@ -58,7 +58,7 @@ public class PostInfo {
 //    private List<PostComments> comments;
     private Set<PostComments> comments;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn
     private PostLikeAndDislike postLikeAndDislike;
 

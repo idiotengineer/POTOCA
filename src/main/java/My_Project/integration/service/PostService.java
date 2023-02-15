@@ -185,7 +185,7 @@ public class PostService {
 
     @Transactional
     public Page<PostDto> getPostInfoList(Pageable pageable) {
-        Page<PostInfo> all = postRepository.findAll(pageable);
+        Page<PostInfo> all = postRepository.findAllByOrderByPostNumber(pageable);
         List<PostDto> collect = all.stream().map(
                 postInfo -> new PostDto(postInfo)
         ).collect(Collectors.toList());
