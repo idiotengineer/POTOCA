@@ -5,6 +5,7 @@ import My_Project.integration.entity.Dto.CommentDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
 import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
+import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,9 +50,13 @@ public class PostService {
     @Autowired
     private final PhotoRepository photoRepository;
 
-    public PostDto findPost(Long id) throws NoSuchElementException {
+    public PostInfo findPost(Long id) throws NoSuchElementException {
         Optional<PostInfo> postInfo = postRepository.findPostInfoByPostNumber(id);
 
+        return postInfo.get();
+    }
+
+    public PostDto getPostDto(Optional<PostInfo> postInfo) {
         if (postInfo.isPresent()) {
             PostDto postDto = new PostDto(postInfo.get());
             return postDto;
@@ -230,18 +236,23 @@ public class PostService {
     }
 
     @Transactional
-    public String AddUserListValue(List<Users> list,Users users) {
-        list.add(users);
+    public String AddUserListValue(Set<Users> set,Users users) {
+        set.add(users);
         em.flush();
         em.clear();
-        return String.valueOf(list.size());
+        return String.valueOf(set.size());
     }
 
     @Transactional
-    public String RemoveUserListValue(List<Users> list,Users users) {
-        list.remove(users);
+    public String RemoveUserListValue(Set<Users> set, Users users) {
+        set.remove(users);
         em.flush();
         em.clear();
-        return String.valueOf(list.size());
+        return String.valueOf(set.size());
+    }
+
+    @Transactional
+    public PostLikeAndDislikeDto findPostlidiByPostNumber(PostInfo postInfo) {
+        return new PostLikeAndDislikeDto(postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(postInfo.getPostNumber()));
     }
 }

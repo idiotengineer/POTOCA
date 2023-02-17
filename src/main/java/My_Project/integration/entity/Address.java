@@ -26,7 +26,7 @@ public class Address {
     @Column(name = "details",length = 20) //상세주소
     private String detailsCode;
 
-    protected Address() {
+    public Address() {
     }
 
 }

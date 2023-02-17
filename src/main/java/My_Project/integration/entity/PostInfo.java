@@ -1,23 +1,17 @@
 package My_Project.integration.entity;
 
 import My_Project.integration.entity.Dto.PostInfoDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Setter
 public class PostInfo {
 
@@ -61,6 +55,20 @@ public class PostInfo {
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn
     private PostLikeAndDislike postLikeAndDislike;
+
+    public PostInfo(Long postNumber, Users postedUser, String postTitle, String postContent, Dates dates, Set<Photo> photo, Set<PostComments> comments, PostLikeAndDislike postLikeAndDislike) {
+        this.postNumber = postNumber;
+        this.postedUser = postedUser;
+        this.postTitle = postTitle;
+        this.postContent = postContent;
+        this.dates = dates;
+        this.photo = photo;
+        this.comments = comments;
+        this.postLikeAndDislike = postLikeAndDislike;
+    }
+
+    public PostInfo() {
+    }
 
     // Board에서 파일 처리 위함
     public void addPhoto(Photo photo) {

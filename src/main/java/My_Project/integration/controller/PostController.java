@@ -3,7 +3,9 @@ package My_Project.integration.controller;
 import My_Project.integration.entity.Dto.CommentDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
+import My_Project.integration.entity.PostInfo;
 import My_Project.integration.entity.ResponseDto.PhotoResponseDto;
+import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.service.PhotoService;
 import My_Project.integration.service.PostService;
@@ -135,12 +137,14 @@ public class PostController {
                                  @CookieValue(name = "users") Optional<Cookie> cookie,
                                  RedirectAttributes redirectAttributes){
         if (cookie.isPresent()) {
-            PostDto postDto = postService.findPost(Long.parseLong(data.get("id").toString()));
+            PostInfo postInfo = postService.findPost(Long.parseLong(data.get("id").toString()));
+            PostDto postDto = postService.getPostDto(Optional.of(postInfo));
             Users users = userService.findById(cookie.get().getValue()).get();
 
+            PostLikeAndDislikeDto postlidiByPostNumber = postService.findPostlidiByPostNumber(postInfo);
+
             if (data.get("type").equals("like")) { // Like 일 때
-                boolean anyMatch = postDto
-                        .getPostLikeAndDislike()
+                boolean anyMatch = postlidiByPostNumber
                         .getLikedUser()
                         .stream().anyMatch(users1 -> users1.equals(users));
 
@@ -153,8 +157,8 @@ public class PostController {
 
                 return sizeOfLikeList;
             } else { // DisLike 일 때
-                boolean anyMatch = postDto
-                        .getPostLikeAndDislike()
+                boolean anyMatch =
+                        postlidiByPostNumber
                         .getDisLikedUser()
                         .stream().anyMatch(users1 -> users1.equals(users));
                 String sizeOfDislikeList;
