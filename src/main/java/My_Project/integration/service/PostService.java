@@ -2,6 +2,7 @@ package My_Project.integration.service;
 
 import My_Project.integration.entity.*;
 import My_Project.integration.entity.Dto.CommentDto;
+import My_Project.integration.entity.Dto.ListingPostDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
 import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
@@ -190,16 +191,17 @@ public class PostService {
     }
 
     @Transactional
-    public Page<PostDto> getPostInfoList(Pageable pageable) {
+    public Page<ListingPostDto> getPostInfoList(Pageable pageable) {
         Page<PostInfo> all = postRepository.findAllByOrderByPostNumber(pageable);
-        List<PostDto> collect = all.stream().map(
+        /*List<PostDto> collect = all.stream().map(
                 postInfo -> new PostDto(postInfo)
         ).collect(Collectors.toList());
+*/
+        List<ListingPostDto> collect = all.stream().map(
+                postInfo -> new ListingPostDto(postInfo)
+        ).collect(Collectors.toList());
 
-        /*int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
-        pageable= PageRequest.of(page,10);*/
-
-        Page<PostDto> postDtos = new PageImpl<>(collect, all.getPageable(), all.getTotalElements());
+        Page<ListingPostDto> postDtos = new PageImpl<>(collect, all.getPageable(), all.getTotalElements());
         return postDtos;
     }
 

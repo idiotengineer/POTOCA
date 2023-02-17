@@ -1,8 +1,12 @@
 package My_Project.integration.QueryDSL;
 
 import My_Project.integration.entity.*;
+import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.repository.PostRepository;
 import My_Project.integration.repository.UsersRepository;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.aspectj.lang.annotation.Before;
@@ -11,6 +15,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -127,5 +135,27 @@ public class Test1 {
 
         Assertions.assertThat(queryDslUser).containsExactlyElementsOf(springDataJPAUsers);
         Assertions.assertThat(queryDslPostInfo).containsExactlyElementsOf(springDataJPAPostInfo);
-        }
+    }
+
+    @Test
+    public void 페이징개수확인() {
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        List<PostInfo> allPostInfoPaging = findAllPostInfoPaging(pageable);
+//        List<PostDto> postDtos = allPostInfoPaging
+//                .stream().map(
+//                        postInfo1 -> new PostDto(postInfo1)
+//                ).toList();
+
+    }
+
+    public List<PostInfo> findAllPostInfoPaging(Pageable pageable) {
+        return jpaQueryFactory
+                .selectFrom(postInfo)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
 }
+
+

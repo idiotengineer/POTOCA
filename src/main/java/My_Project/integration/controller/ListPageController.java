@@ -1,5 +1,6 @@
 package My_Project.integration.controller;
 
+import My_Project.integration.entity.Dto.ListingPostDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.service.PostService;
 import io.swagger.annotations.ApiOperation;
@@ -36,11 +37,13 @@ public class ListPageController {
         Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
 
         if(flashMap != null){
-            Page<PostDto> list = (Page<PostDto>) flashMap.get("list");
+//            Page<PostDto> list = (Page<PostDto>) flashMap.get("list");
+            Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
             model.addAttribute("list",list);
         } else {
             LOGGER.info("리스트페이지 접속");
-            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
+//            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
             model.addAttribute("list", postDtoList);
         }
         return "listpage_copy";

@@ -22,8 +22,5 @@ public interface PostRepository extends JpaRepository<PostInfo,Long>, PostInfoCu
     List<PostInfo> findByPostTitleContaining(String title);
     // 스프링 데이터 JPA에서 Containing을 쓰게 되면 쿼리로 Like문을 쓸 수 있다!
 
-    @EntityGraph(
-            attributePaths = {"photo", "postLikeAndDislike","comments"}
-    )
     Page<PostInfo> findAllByOrderByPostNumber(Pageable pageable);
 }

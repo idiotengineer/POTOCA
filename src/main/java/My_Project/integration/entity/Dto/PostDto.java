@@ -1,16 +1,13 @@
 package My_Project.integration.entity.Dto;
 
 import My_Project.integration.entity.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class PostDto {
 
     private Long postNumber;
@@ -40,6 +37,20 @@ public class PostDto {
 //
 //        Collections.copy(this.images, postInfo.getPhoto());
 //        Collections.copy(this.comments,postInfo.getComments());
+    }
+
+    public PostDto(Long postNumber, Users users, String postTitle, String postContent, Dates dates, Set<Photo> images, Set<PostComments> comments, PostLikeAndDislike postLikeAndDislike) {
+        this.postNumber = postNumber;
+        this.users = users;
+        this.postTitle = postTitle;
+        this.postContent = postContent;
+        this.dates = dates;
+        this.images = images;
+        this.comments = comments;
+        this.postLikeAndDislike = postLikeAndDislike;
+    }
+
+    public PostDto() {
     }
 
     public String checkLikeAndDisLike(Optional<Users> users) {
