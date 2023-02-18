@@ -1,13 +1,17 @@
 package My_Project.integration.entity.Dto;
 
 import My_Project.integration.entity.*;
+import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PostDto {
 
     private Long postNumber;
@@ -19,7 +23,7 @@ public class PostDto {
     private Set<Photo> images;
 //    private List<PostComments> comments;
     private Set<PostComments> comments;
-    private PostLikeAndDislike postLikeAndDislike;
+    private PostLikeAndDislikeDto postLikeAndDislikeDto;
 
     public PostDto(PostInfo postInfo) {
         this.postNumber = postInfo.getPostNumber();
@@ -32,25 +36,11 @@ public class PostDto {
 //        this.comments = new ArrayList<>(postInfo.getComments());
         this.images = new HashSet<>(postInfo.getPhoto());
         this.comments = new HashSet<>(postInfo.getComments());
-        this.postLikeAndDislike = postInfo.getPostLikeAndDislike();
+        this.postLikeAndDislikeDto = new PostLikeAndDislikeDto(postInfo.getPostLikeAndDislike());
         this.images = postInfo.getPhoto();
 //
 //        Collections.copy(this.images, postInfo.getPhoto());
 //        Collections.copy(this.comments,postInfo.getComments());
-    }
-
-    public PostDto(Long postNumber, Users users, String postTitle, String postContent, Dates dates, Set<Photo> images, Set<PostComments> comments, PostLikeAndDislike postLikeAndDislike) {
-        this.postNumber = postNumber;
-        this.users = users;
-        this.postTitle = postTitle;
-        this.postContent = postContent;
-        this.dates = dates;
-        this.images = images;
-        this.comments = comments;
-        this.postLikeAndDislike = postLikeAndDislike;
-    }
-
-    public PostDto() {
     }
 
     public String checkLikeAndDisLike(Optional<Users> users) {
@@ -66,12 +56,27 @@ public class PostDto {
     }
 
     public boolean checkLike(Users users) {
-        return getPostLikeAndDislike().getLikedUser().stream()
+        return getPostLikeAndDislikeDto().getLikedUser().stream()
                 .anyMatch(users1 -> users1.equals(users));
     }
 
     public boolean checkDisLike(Users users) {
-        return getPostLikeAndDislike().getDisLikedUser().stream()
+        return getPostLikeAndDislikeDto().getDisLikedUser().stream()
                 .anyMatch(users1 -> users1.equals(users));
+    }
+
+    public PostDto(PostInfo postInfo, PostLikeAndDislikeDto postLikeAndDislikeDto) {
+        this.postNumber = postInfo.getPostNumber();
+        this.users = postInfo.getPostedUser();
+        this.dates = postInfo.getDates();
+        this.postTitle = postInfo.getPostTitle();
+        this.postContent = postInfo.getPostContent();
+//
+//        this.images = new ArrayList<>(postInfo.getPhoto());
+//        this.comments = new ArrayList<>(postInfo.getComments());
+        this.images = new HashSet<>(postInfo.getPhoto());
+        this.comments = new HashSet<>(postInfo.getComments());
+        this.postLikeAndDislikeDto = new PostLikeAndDislikeDto(postInfo.getPostLikeAndDislike());
+        this.images = postInfo.getPhoto();
     }
 }

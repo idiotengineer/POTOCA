@@ -66,6 +66,20 @@ public class PostService {
         throw new NoSuchElementException("postInfo 객체를 찾을 수 없습니다");
     }
 
+    public PostDto getPostDtoWithPostlidiDto(Optional<PostInfo> postInfo,PostLikeAndDislikeDto postLikeAndDislikeDto) {
+        if (postInfo.isPresent()) {
+            PostDto postDto = new PostDto(postInfo.get());
+            return postDto;
+        }
+
+        throw new NoSuchElementException("postInfo 객체를 찾을 수 없습니다");
+    }
+
+    @Transactional
+    public PostLikeAndDislikeDto getPostLikeAndDislike(Long id) {
+        return new PostLikeAndDislikeDto(postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(id));
+    }
+
     public boolean Posting(@CookieValue(name = "users") Cookie cookie, PostInfoDto postInfoDto) {
         Optional<Users> usersByEmail = usersRepository.findUsersByEmail(cookie.getValue());
         if (usersByEmail.isPresent()) {
@@ -254,7 +268,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostLikeAndDislikeDto findPostlidiByPostNumber(PostInfo postInfo) {
-        return new PostLikeAndDislikeDto(postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(postInfo.getPostNumber()));
+    public PostLikeAndDislikeDto findPostlidiByPostNumber(Long id) {
+        return new PostLikeAndDislikeDto(postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(id));
     }
 }

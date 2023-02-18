@@ -141,7 +141,7 @@ public class PostController {
             PostDto postDto = postService.getPostDto(Optional.of(postInfo));
             Users users = userService.findById(cookie.get().getValue()).get();
 
-            PostLikeAndDislikeDto postlidiByPostNumber = postService.findPostlidiByPostNumber(postInfo);
+            PostLikeAndDislikeDto postlidiByPostNumber = postService.findPostlidiByPostNumber(postInfo.getPostNumber());
 
             if (data.get("type").equals("like")) { // Like 일 때
                 boolean anyMatch = postlidiByPostNumber
@@ -150,9 +150,9 @@ public class PostController {
 
                 String sizeOfLikeList;
                 if (anyMatch) { // 이미 Like 했을 때
-                    sizeOfLikeList = postService.RemoveUserListValue(postDto.getPostLikeAndDislike().getLikedUser(), users);// PostLikeAndDislike의 likedUser에서 User 제거
+                    sizeOfLikeList = postService.RemoveUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(), users);// PostLikeAndDislike의 likedUser에서 User 제거
                 } else { // Like 하지 않았을 때
-                    sizeOfLikeList = postService.AddUserListValue(postDto.getPostLikeAndDislike().getLikedUser(),users);
+                    sizeOfLikeList = postService.AddUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(),users);
                 }
 
                 return sizeOfLikeList;
@@ -163,9 +163,9 @@ public class PostController {
                         .stream().anyMatch(users1 -> users1.equals(users));
                 String sizeOfDislikeList;
                 if (anyMatch) { // 이미 DisLike 했을 때
-                    sizeOfDislikeList = postService.RemoveUserListValue(postDto.getPostLikeAndDislike().getDisLikedUser(), users);// PostLikeAndDislike의 DislikedUser에서 User 제거
+                    sizeOfDislikeList = postService.RemoveUserListValue(postDto.getPostLikeAndDislikeDto().getDisLikedUser(), users);// PostLikeAndDislike의 DislikedUser에서 User 제거
                 } else { // DisLike 하지 않았을 때
-                    sizeOfDislikeList = postService.AddUserListValue(postDto.getPostLikeAndDislike().getDisLikedUser(),users);
+                    sizeOfDislikeList = postService.AddUserListValue(postDto.getPostLikeAndDislikeDto().getDisLikedUser(),users);
                 }
                 return sizeOfDislikeList;
 

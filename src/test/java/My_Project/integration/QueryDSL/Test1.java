@@ -1,32 +1,26 @@
 package My_Project.integration.QueryDSL;
 
 import My_Project.integration.entity.*;
-import My_Project.integration.entity.Dto.PostDto;
+import My_Project.integration.repository.PostLikeAndDislikeRepository;
 import My_Project.integration.repository.PostRepository;
 import My_Project.integration.repository.UsersRepository;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.aspectj.lang.annotation.Before;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
-import static My_Project.integration.entity.QPostInfo.*;
-import static My_Project.integration.entity.QUsers.*;
+import static My_Project.integration.entity.QPostInfo.postInfo;
+import static My_Project.integration.entity.QUsers.users;
 
 @SpringBootTest
 @Transactional
@@ -42,6 +36,9 @@ public class Test1 {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private PostLikeAndDislikeRepository postLikeAndDislikeRepository;
 
     @BeforeEach
     public void init() {
@@ -146,7 +143,6 @@ public class Test1 {
 //                .stream().map(
 //                        postInfo1 -> new PostDto(postInfo1)
 //                ).toList();
-
     }
 
     public List<PostInfo> findAllPostInfoPaging(Pageable pageable) {
@@ -155,6 +151,13 @@ public class Test1 {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+
+    @Test
+    public void find_postAPI테스트() {
+//        Optional<PostInfo> postInfoByPostNumber = postRepository.findPostInfoByPostNumber(0L);
+        PostLikeAndDislike result = postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(0L);
     }
 }
 

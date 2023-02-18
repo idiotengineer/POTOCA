@@ -178,9 +178,9 @@
 
   <div class="lidiWrap">
     <img class="likeButton" onclick="buttonFunc('like')">
-    <div class="likeCount" th:text="${post.getPostLikeAndDislike().getLikedUser().size()}">123</div>
+    <div class="likeCount" th:text="${post.getPostLikeAndDislikeDto().getLikedUser().size()}">123</div>
     <img class="disLikeButton" onclick="buttonFunc('dislike')">
-    <div class="disLikeCount" th:text="${post.getPostLikeAndDislike().getDisLikedUser().size()}">123</div>
+    <div class="disLikeCount" th:text="${post.getPostLikeAndDislikeDto().getDisLikedUser().size()}">123</div>
   </div>
 
 <script th:inline="javascript">
