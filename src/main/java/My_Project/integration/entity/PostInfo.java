@@ -1,6 +1,7 @@
 package My_Project.integration.entity;
 
 import My_Project.integration.entity.Dto.PostInfoDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
@@ -54,6 +55,7 @@ public class PostInfo {
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn
+    @JsonIgnore
     private PostLikeAndDislike postLikeAndDislike;
 
     public PostInfo(Long postNumber, Users postedUser, String postTitle, String postContent, Dates dates, Set<Photo> photo, Set<PostComments> comments, PostLikeAndDislike postLikeAndDislike) {

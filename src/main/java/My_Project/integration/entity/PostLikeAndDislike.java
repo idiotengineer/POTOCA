@@ -3,12 +3,9 @@ package My_Project.integration.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,4 +30,21 @@ public class PostLikeAndDislike {
     @OneToMany
     @JoinColumn
     private Set<Users> DisLikedUser = new HashSet<>();
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPostInfo(PostInfo postInfo) {
+        this.postInfo = postInfo;
+        postInfo.setPostLikeAndDislike(this);
+    }
+
+    public void setLikedUser(Set<Users> LikedUser) {
+        this.LikedUser = LikedUser;
+    }
+
+    public void setDisLikedUser(Set<Users> DisLikedUser) {
+        this.DisLikedUser = DisLikedUser;
+    }
 }

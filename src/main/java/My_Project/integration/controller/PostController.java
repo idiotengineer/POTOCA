@@ -4,6 +4,7 @@ import My_Project.integration.entity.Dto.CommentDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
 import My_Project.integration.entity.PostInfo;
+import My_Project.integration.entity.PostLikeAndDislike;
 import My_Project.integration.entity.ResponseDto.PhotoResponseDto;
 import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.entity.Users;
@@ -19,10 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class PostController {
@@ -137,38 +135,39 @@ public class PostController {
                                  @CookieValue(name = "users") Optional<Cookie> cookie,
                                  RedirectAttributes redirectAttributes){
         if (cookie.isPresent()) {
-            PostInfo postInfo = postService.findPost(Long.parseLong(data.get("id").toString()));
-            PostDto postDto = postService.getPostDto(Optional.of(postInfo));
+            Long id = Long.parseLong(data.get("id").toString());
+
+            PostInfo postInfo = postService.findPost(id);
+            PostLikeAndDislike postLikeAndDislike = postService.findPostlidiByPostNumber(id);
+
             Users users = userService.findById(cookie.get().getValue()).get();
-
-            PostLikeAndDislikeDto postlidiByPostNumber = postService.findPostlidiByPostNumber(postInfo.getPostNumber());
-
             if (data.get("type").equals("like")) { // Like 일 때
-                boolean anyMatch = postlidiByPostNumber
-                        .getLikedUser()
-                        .stream().anyMatch(users1 -> users1.equals(users));
+                boolean anyMatch = postLikeAndDislike
+                        .getLikedUser().contains(users);
 
-                String sizeOfLikeList;
+                String sizeOfDislikeList;
                 if (anyMatch) { // 이미 Like 했을 때
-                    sizeOfLikeList = postService.RemoveUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(), users);// PostLikeAndDislike의 likedUser에서 User 제거
+                    sizeOfDislikeList = postService.removeUsersSet(postLikeAndDislike, users, "like");
+//                    postService.AddUserListValue(postLikeAndDislikeDto.getLikedUser(),users);
+//                    postService.RemoveUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(), users);// PostLikeAndDislike의 likedUser에서 User 제거
                 } else { // Like 하지 않았을 때
-                    sizeOfLikeList = postService.AddUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(),users);
+//                    postService.AddUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(),users);
+                    sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "like");
                 }
 
-                return sizeOfLikeList;
+                return sizeOfDislikeList;
             } else { // DisLike 일 때
-                boolean anyMatch =
-                        postlidiByPostNumber
-                        .getDisLikedUser()
-                        .stream().anyMatch(users1 -> users1.equals(users));
+                boolean anyMatch = postLikeAndDislike
+                        .getDisLikedUser().contains(users);
+
                 String sizeOfDislikeList;
                 if (anyMatch) { // 이미 DisLike 했을 때
-                    sizeOfDislikeList = postService.RemoveUserListValue(postDto.getPostLikeAndDislikeDto().getDisLikedUser(), users);// PostLikeAndDislike의 DislikedUser에서 User 제거
+                    sizeOfDislikeList = postService.removeUsersSet(postLikeAndDislike, users, "dislike");
                 } else { // DisLike 하지 않았을 때
-                    sizeOfDislikeList = postService.AddUserListValue(postDto.getPostLikeAndDislikeDto().getDisLikedUser(),users);
+                    sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "dislike");
                 }
-                return sizeOfDislikeList;
 
+                return sizeOfDislikeList;
             }
         }
         else { // 로그인이 안 되어 있을 시

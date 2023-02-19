@@ -18,12 +18,10 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Transient;
 import javax.servlet.http.Cookie;
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,7 +64,7 @@ public class PostService {
         throw new NoSuchElementException("postInfo 객체를 찾을 수 없습니다");
     }
 
-    public PostDto getPostDtoWithPostlidiDto(Optional<PostInfo> postInfo,PostLikeAndDislikeDto postLikeAndDislikeDto) {
+    public PostDto getPostDtoWithPostlidiDto(Optional<PostInfo> postInfo, PostLikeAndDislikeDto postLikeAndDislikeDto) {
         if (postInfo.isPresent()) {
             PostDto postDto = new PostDto(postInfo.get());
             return postDto;
@@ -89,7 +87,7 @@ public class PostService {
                 new Exception("PostLikeAndDislike 객체 생성 실패");
             }
 
-            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto,postLikeAndDislike);
+            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto, postLikeAndDislike);
             postRepository.save(postInfo);
             return true;
         }
@@ -147,7 +145,7 @@ public class PostService {
             if (!savePostLikeAndDislike(postLikeAndDislike)) {
                 new Exception("PostLikeAndDislike 객체 생성 실패");
             }
-            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto,postLikeAndDislike);
+            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto, postLikeAndDislike);
             List<Photo> photoList = fileHandler.parseFileInfo(files);
 
             // 파일이 존재할 때에만 처리
@@ -220,7 +218,7 @@ public class PostService {
     }
 
     @Transactional
-    public Page<PostDto> SearchByName(String name,Pageable pageable) {
+    public Page<PostDto> SearchByName(String name, Pageable pageable) {
         List<PostDto> list = postRepository.searchByName(name);
 
         final int start = (int) pageable.getOffset();
@@ -231,7 +229,7 @@ public class PostService {
     }
 
     @Transactional
-    public Page<PostDto> SearchByTitle(String title,Pageable pageable) {
+    public Page<PostDto> SearchByTitle(String title, Pageable pageable) {
         List<PostDto> list = postRepository.searchByTitle(title);
 
         final int start = (int) pageable.getOffset();
@@ -246,29 +244,52 @@ public class PostService {
         try {
             postLikeAndDislikeRepository.save(postLikeAndDislike);
         } catch (Exception e) {
-         return false;
+            return false;
         }
         return true;
     }
 
     @Transactional
-    public String AddUserListValue(Set<Users> set,Users users) {
-        set.add(users);
-        em.flush();
-        em.clear();
-        return String.valueOf(set.size());
-    }
-
-    @Transactional
-    public String RemoveUserListValue(Set<Users> set, Users users) {
-        set.remove(users);
-        em.flush();
-        em.clear();
-        return String.valueOf(set.size());
-    }
-
-    @Transactional
-    public PostLikeAndDislikeDto findPostlidiByPostNumber(Long id) {
+    public PostLikeAndDislikeDto findPostlidiDtoByPostNumber(Long id) {
         return new PostLikeAndDislikeDto(postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(id));
+    }
+
+    @Transactional
+    public PostLikeAndDislike findPostlidiByPostNumber(Long id) {
+        return postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(id);
+    }
+
+    @Transactional
+    public String addUsersSet(PostLikeAndDislike postLikeAndDislike,Users users,String s) {
+        if (likeOrNot(s)) {
+            Set<Users> likedUser = postLikeAndDislike.getLikedUser();
+            likedUser.add(users);
+            return String.valueOf(likedUser.size());
+        } else {
+            Set<Users> disLikedUser = postLikeAndDislike.getDisLikedUser();
+            disLikedUser.add(users);
+            return String.valueOf(disLikedUser.size());
+        }
+    }
+
+    @Transactional
+    public String removeUsersSet(PostLikeAndDislike postLikeAndDislike,Users users,String s) {
+        if (likeOrNot(s)) {
+            Set<Users> likedUser = postLikeAndDislike.getLikedUser();
+            likedUser.remove(users);
+            return String.valueOf(likedUser.size());
+        } else {
+            Set<Users> disLikedUser = postLikeAndDislike.getDisLikedUser();
+            disLikedUser.remove(users);
+            return String.valueOf(disLikedUser.size());
+        }
+    }
+
+    public boolean likeOrNot(String s) {
+        if (s == "like") {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -76,7 +76,6 @@ public class PostDto {
 //        this.comments = new ArrayList<>(postInfo.getComments());
         this.images = new HashSet<>(postInfo.getPhoto());
         this.comments = new HashSet<>(postInfo.getComments());
-        this.postLikeAndDislikeDto = new PostLikeAndDislikeDto(postInfo.getPostLikeAndDislike());
-        this.images = postInfo.getPhoto();
+        this.postLikeAndDislikeDto = postLikeAndDislikeDto;
     }
 }

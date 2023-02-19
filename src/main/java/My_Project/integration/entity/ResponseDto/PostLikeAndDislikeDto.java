@@ -3,26 +3,31 @@ package My_Project.integration.entity.ResponseDto;
 import My_Project.integration.entity.PostInfo;
 import My_Project.integration.entity.PostLikeAndDislike;
 import My_Project.integration.entity.Users;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostLikeAndDislikeDto {
     private Long id;
     private PostInfo postInfo;
-    private Set<Users> LikedUser;
-    private Set<Users> DisLikedUser;
+    private Set<Users> LikedUser = new HashSet<>();
+    private Set<Users> DisLikedUser = new HashSet<>();
 
     public PostLikeAndDislikeDto(PostLikeAndDislike postLikeAndDislike) {
         setId(postLikeAndDislike.getId());
         setPostInfo(postLikeAndDislike.getPostInfo());
-        this.setLikedUser(clone(postLikeAndDislike.getLikedUser()));
-        this.setDisLikedUser(clone(postLikeAndDislike.getDisLikedUser()));
+
+        if (!postLikeAndDislike.getLikedUser().isEmpty()) {
+            this.setLikedUser(clone(postLikeAndDislike.getLikedUser()));
+        }
+
+        if (!postLikeAndDislike.getDisLikedUser().isEmpty()) {
+            this.setDisLikedUser(clone(postLikeAndDislike.getDisLikedUser()));
+        }
 //        Collections.copy(LikedUser,postLikeAndDislike.getLikedUser());
 //        Collections.copy(DisLikedUser,postLikeAndDislike.getDisLikedUser());
     }
@@ -32,5 +37,6 @@ public class PostLikeAndDislikeDto {
         copy.addAll(original);
         return copy;
     }
+
 
 }

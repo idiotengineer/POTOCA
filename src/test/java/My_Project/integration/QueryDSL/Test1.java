@@ -1,6 +1,9 @@
 package My_Project.integration.QueryDSL;
 
+import My_Project.integration.controller.PostController;
 import My_Project.integration.entity.*;
+import My_Project.integration.entity.Dto.PostDto;
+import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.repository.PostLikeAndDislikeRepository;
 import My_Project.integration.repository.PostRepository;
 import My_Project.integration.repository.UsersRepository;
@@ -12,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.Cookie;
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static My_Project.integration.entity.QPostInfo.postInfo;
 import static My_Project.integration.entity.QUsers.users;
@@ -158,6 +161,248 @@ public class Test1 {
     public void find_postAPI테스트() {
 //        Optional<PostInfo> postInfoByPostNumber = postRepository.findPostInfoByPostNumber(0L);
         PostLikeAndDislike result = postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(0L);
+    }
+
+    @Test
+    public void Set조회테스트() {
+        Address Address1 = new Address(
+                "울산광역시",
+                "남구",
+                "신정1동",
+                "1491-4",
+                "xx빌딩"
+        );
+
+        Dates dates = new Dates();
+
+        Users users1 = new Users(
+                "test1234@naver.com",
+                "test1234",
+                "테스트",
+                "123456789099",
+                "01234567890199",
+                Address1,
+                0L,
+                null,
+                null,
+                dates
+        );
+
+        Set<Users> set = new HashSet<>();
+        set.add(users1);
+
+        Assertions.assertThat(set.contains(users1)).isTrue();
+        Assertions.assertThat(set.stream().anyMatch(users2 -> users2.equals(users1))).isTrue();
+    }
+
+    @Test
+    public void PostlikeAndDislikeDto생성자테스트() {
+        Address Address1 = new Address(
+                "울산광역시",
+                "남구",
+                "신정1동",
+                "1491-4",
+                "xx빌딩"
+        );
+
+        Dates dates = new Dates();
+
+        Users users1 = new Users(
+                "test1234@naver.com",
+                "test1234",
+                "테스트",
+                "123456789099",
+                "01234567890199",
+                Address1,
+                0L,
+                null,
+                null,
+                dates
+        );
+
+
+        PostInfo postInfo1 = new PostInfo();
+        PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike(
+                null,
+                postInfo1,
+                new HashSet<>(),
+                new HashSet<>()
+        );
+
+        postLikeAndDislike.getLikedUser().add(users1);
+        postLikeAndDislike.getDisLikedUser().add(users1);
+
+        PostLikeAndDislikeDto postLikeAndDislikeDto = new PostLikeAndDislikeDto(postLikeAndDislike);
+
+        Assertions.assertThat(postLikeAndDislikeDto.getLikedUser()).containsExactlyElementsOf(postLikeAndDislike.getLikedUser());
+        Assertions.assertThat(postLikeAndDislikeDto.getDisLikedUser()).containsExactlyElementsOf(postLikeAndDislike.getDisLikedUser());
+    }
+
+    @Test
+    public void set요소추가제거테스트() throws Exception {
+        //given
+        Address Address1 = new Address(
+                "울산광역시",
+                "남구",
+                "신정1동",
+                "1491-4",
+                "xx빌딩"
+        );
+
+        Dates dates = new Dates();
+
+        Users users1 = new Users(
+                "test1234@naver.com",
+                "test1234",
+                "테스트",
+                "123456789099",
+                "01234567890199",
+                Address1,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                dates
+        );
+
+
+        PostInfo postInfo1 = new PostInfo();
+
+        PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike(
+                null,
+                postInfo1,
+                new HashSet<>(),
+                new HashSet<>()
+        );
+
+        PostLikeAndDislikeDto postLikeAndDislikeDto = new PostLikeAndDislikeDto(postLikeAndDislike);
+
+        //when
+        postLikeAndDislike.getLikedUser().add(users1);
+
+        //then
+        Assertions.assertThat(postLikeAndDislike.getLikedUser().size()).isEqualTo(1);
+
+        //when
+        postLikeAndDislike.getLikedUser().remove(users1);
+
+        //then
+        Assertions.assertThat(postLikeAndDislike.getLikedUser().size()).isEqualTo(0);
+    }
+
+    @Test
+    public void postDto() throws Exception {
+        //given
+        Address Address1 = new Address(
+                "울산광역시",
+                "남구",
+                "신정1동",
+                "1491-4",
+                "xx빌딩"
+        );
+
+        Dates dates = new Dates();
+
+        Users users1 = new Users(
+                "test1234@naver.com",
+                "test1234",
+                "테스트",
+                "123456789099",
+                "01234567890199",
+                Address1,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                dates
+        );
+
+        PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike(
+                69304L,
+                null,
+                new HashSet<>(),
+                new HashSet<>()
+        );
+
+        PostInfo postInfo1 = new PostInfo(
+                null,
+                users1,
+                "title1",
+                "content1",
+                dates,
+                new HashSet<>(),
+                new HashSet<>(),
+                postLikeAndDislike
+        );
+        postLikeAndDislike.setPostInfo(postInfo1);
+
+        PostLikeAndDislikeDto postLikeAndDislikeDto = new PostLikeAndDislikeDto(postLikeAndDislike);
+        //when
+        PostDto postDto = new PostDto(postInfo1, postLikeAndDislikeDto);
+        //then
+        Assertions.assertThat(postDto.getPostLikeAndDislikeDto().getLikedUser()).containsExactlyElementsOf(postLikeAndDislikeDto.getLikedUser());
+        Assertions.assertThat(postDto.getPostLikeAndDislikeDto().getDisLikedUser()).containsExactlyElementsOf(postLikeAndDislikeDto.getDisLikedUser());
+    }
+
+    @Test
+    public void likeAndDisLike테스트() throws Exception {
+        //given
+        PostController postController = new PostController();
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("id", 10101010);
+        map.put("type","like");
+
+        Cookie cookie = new Cookie(
+                "users","test9999@naver.com"
+        );
+
+        Address Address1 = new Address(
+                "울산광역시",
+                "남구",
+                "신정1동",
+                "1491-4",
+                "xx빌딩"
+        );
+
+        Dates dates = new Dates();
+
+        Users users1 = new Users(
+                "test9999@naver.com",
+                "test1234",
+                "테스트",
+                "003456789099",
+                "00234567890199",
+                Address1,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                dates
+        );
+
+        PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike(
+                10101010L,
+                null,
+                new HashSet<>(),
+                new HashSet<>()
+        );
+
+        PostInfo postInfo1 = new PostInfo(
+                null,
+                users1,
+                "title1",
+                "content1",
+                dates,
+                new HashSet<>(),
+                new HashSet<>(),
+                postLikeAndDislike
+        );
+        postLikeAndDislike.setPostInfo(postInfo1);
+
+        PostLikeAndDislikeDto postLikeAndDislikeDto = new PostLikeAndDislikeDto(postLikeAndDislike);
+
+        //when
+        String s = postController.likeAndDisLike(map, Optional.of(cookie), null);
+        //then
+        Assertions.assertThat(s).isEqualTo("1");
     }
 }
 
