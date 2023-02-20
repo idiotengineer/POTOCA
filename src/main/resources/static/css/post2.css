@@ -71,3 +71,8 @@
         font-size: 0.5em;
     }
 }
+
+.gold_medal,.silver_medal, .bronze_medal{
+    display: inline-block;
+    font-size: 2em;
+}

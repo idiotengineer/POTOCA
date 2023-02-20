@@ -36,7 +36,11 @@
 
 .post_profile_info{
     padding : 3%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
 
 .post_content_img{
     max-width: 100%;
@@ -50,3 +54,23 @@
 .post_content_img{
     padding : 7%;
 }
+
+.cash_wrapper{
+    display: inline-block;
+    font-size: 2em;
+}
+.cash {
+    display: inline-block;
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+
+.cash_emoji{
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.post_profile_left{
+    display: inline-block;
+}
+

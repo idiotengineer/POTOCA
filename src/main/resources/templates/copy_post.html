@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +14,7 @@
   <link href = "/css/post2.css" rel = "stylesheet">
   <link rel = "stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link href="/css/lidi.css" rel="stylesheet">
+  <link href="/css/comment_lidi.css" rel="stylesheet"/>
   <script
           src="https://code.jquery.com/jquery-3.6.3.js"
           integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
@@ -138,10 +139,16 @@
 <div class = "post_background_wrapper">
   <div class = "post_background">
     <div class = "post_profile_info">
-      <div class = "post_profile_photo"></div>
-      <div class = "post_profile_wrapper">
-        <div class ="post_profile_name" th:text="${post.getUsers().getEmail()}">작성자 : </div>
-        <div class ="post_profile_time" th:text="${@mainpageController.getTimeDiffAndReturnElapsedTime(post.getDates().getUploadedTime(),time)}">작성 시간 : </div>
+      <div class="post_profile_left">
+        <div class = "post_profile_photo"></div>
+        <div class = "post_profile_wrapper">
+          <div class ="post_profile_name" th:text="${post.getUsers().getEmail()}">작성자 : </div>
+          <div class ="post_profile_time" th:text="${@mainpageController.getTimeDiffAndReturnElapsedTime(post.getDates().getUploadedTime(),time)}">작성 시간 : </div>
+        </div>
+      </div>
+      <div class="cash_wrapper">
+        <div class ="cash">500 Point</div>
+        <div class ="cash_emoji">&#x1F4B0;</div>
       </div>
     </div>
     <div class = "post_content">
@@ -176,12 +183,20 @@
 <!-- post2.css-->
 <hr class = "hr1_class">
 
-  <div class="lidiWrap">
-    <img class="likeButton" onclick="buttonFunc('like')">
-    <div class="likeCount" th:text="${post.getPostLikeAndDislikeDto().getLikedUser().size()}">123</div>
-    <img class="disLikeButton" onclick="buttonFunc('dislike')">
-    <div class="disLikeCount" th:text="${post.getPostLikeAndDislikeDto().getDisLikedUser().size()}">123</div>
+<div class="lidiAndDeleteModifyWrapper">
+  <div class="lidiWrapWrapper">
+    <div class="lidiWrap">
+      <img class="likeButton" onclick="buttonFunc('like')">
+      <div class="likeCount" th:text="${post.getPostLikeAndDislikeDto().getLikedUser().size()}">123</div>
+      <img class="disLikeButton" onclick="buttonFunc('dislike')">
+      <div class="disLikeCount" th:text="${post.getPostLikeAndDislikeDto().getDisLikedUser().size()}">123</div>
+    </div>
   </div>
+  <div class="deleteButtonWrapper">
+    <button type="button" class="btn btn-warning"id="button_custom1">게시글 수정</button>
+    <button type="button" class="btn btn-danger" id="button_custom2">게시글 삭제</button>
+  </div>
+</div>
 
 <script th:inline="javascript">
   function buttonFunc(param1) {
@@ -265,11 +280,18 @@
     <img class = "reply_profile_img" src = "https://mblogthumb-phinf.pstatic.net/MjAyMTA1MjhfMjUg/MDAxNjIyMTk3NzUyMTAz.JgBnXWFplrlgwuGvVqlosma8FFPXqfGwVApVvMeP3vQg.LRmquqydeYieBEwyF9jWhljRvcd37HQf5dMa_AXxB1Ag.JPEG.mykpoint/Screenshot%EF%BC%BF20210528%EF%BC%8D192632%EF%BC%BFSamsung_Internet.jpg?type=w800">
     <div class = "reply_profile_name" th:text="${value.getPostCommentedUsersEmail()}">작성자</div>
     <div class = "reply_profile_time" th:text="${@mainpageController.getTimeDiffAndReturnElapsedTime(value.getDates().getUploadedTime(),time)}">작성 시간</div>
+    <div class = "gold_medal">&#x1F947;</div>
+    <div class = "silver_medal">&#x1F948;</div>
+    <div class = "bronze_medal">&#x1F949;</div>
     <div class = "reply_profile_content" th:text="${value.getPostCommentsContents()}">카리나에 대한 댓글 카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글</div>
 
-      <button class="material-symbols-outlined">
-        thumb_up thumb_down
-      </button>
+      <div class="comment_lidiWrap">
+        <img class="comment_likeButton">
+        <div class="comment_likeCount">123</div>
+        <img class="comment_disLikeButton">
+        <div class="comment_disLikeCount">123</div>
+        <a href="" class="comment_addBigComments">댓글 달기</a>
+      </div>
   </div>
 </div>
 

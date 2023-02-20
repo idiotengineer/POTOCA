@@ -174,5 +174,14 @@ public class PostController {
             return "not_logined";
         }
     }
+
+    /*@GetMapping("/find_post/delete")
+    public String deletePost(@CookieValue("users")Optional<Cookie> cookie,
+                             Long id,
+                             RedirectAttributes redirectAttributes) {
+        if (cookie.isPresent()) {
+
+        }
+    }*/
 }
 
