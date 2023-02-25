@@ -292,4 +292,9 @@ public class PostService {
             return false;
         }
     }
+
+    @Transactional
+    public void deletePost(Long id) {
+        postRepository.deleteById(id);
+    }
 }

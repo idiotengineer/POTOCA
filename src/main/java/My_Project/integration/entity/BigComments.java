@@ -17,6 +17,14 @@ public class BigComments {
     @Column(name = "big_comments_content",nullable = false)
     private String content;
 
+    @OneToOne(
+            orphanRemoval = true,
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn
+    private PostLikeAndDislike postLikeAndDislike;
+
     @Embedded
     private Dates dates;
 }

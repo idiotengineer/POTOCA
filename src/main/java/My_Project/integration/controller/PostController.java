@@ -3,22 +3,26 @@ package My_Project.integration.controller;
 import My_Project.integration.entity.Dto.CommentDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
+import My_Project.integration.entity.PostComments;
 import My_Project.integration.entity.PostInfo;
 import My_Project.integration.entity.PostLikeAndDislike;
 import My_Project.integration.entity.ResponseDto.PhotoResponseDto;
 import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.service.PhotoService;
+import My_Project.integration.service.PostCommentsService;
 import My_Project.integration.service.PostService;
 import My_Project.integration.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -33,6 +37,9 @@ public class PostController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    PostCommentsService postCommentsService;
 
     @PostMapping("/post_execute2")
     public String create(
@@ -133,7 +140,7 @@ public class PostController {
     @ResponseBody
     public String likeAndDisLike(@RequestBody HashMap<String, Object> data,
                                  @CookieValue(name = "users") Optional<Cookie> cookie,
-                                 RedirectAttributes redirectAttributes){
+                                 RedirectAttributes redirectAttributes) {
         if (cookie.isPresent()) {
             Long id = Long.parseLong(data.get("id").toString());
 
@@ -169,19 +176,94 @@ public class PostController {
 
                 return sizeOfDislikeList;
             }
-        }
-        else { // 로그인이 안 되어 있을 시
+        } else { // 로그인이 안 되어 있을 시
             return "not_logined";
         }
     }
 
-    /*@GetMapping("/find_post/delete")
-    public String deletePost(@CookieValue("users")Optional<Cookie> cookie,
-                             Long id,
+    @RequestMapping(value = "/find_post/deletePost", method = {RequestMethod.POST})
+    public String deletePost(@CookieValue("users") Optional<Cookie> cookie,
+                             @RequestBody HashMap<String, Object> data,
                              RedirectAttributes redirectAttributes) {
-        if (cookie.isPresent()) {
-
+        try {
+            Long id = Long.parseLong(data.get("id").toString());
+            postService.deletePost(id);
+            redirectAttributes.addAttribute("string", "게시글이 삭제 되었습니다");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addAttribute("string", "에러 발생");
         }
-    }*/
+        return "redirect:/find_post/deletePost/alert";
+    }
+
+    @GetMapping("/find_post/deletePost/alert")
+    public String deleteResultAlert(@RequestParam("string") String s, Model model) {
+        model.addAttribute("string", s);
+        return "secondAlert";
+    }
+
+
+    // 댓글 좋아요 기능 API
+    @PostMapping("/find_post/commentLikeAndDisLike")
+    @ResponseBody
+    public String commentLikeAndDisLike(@RequestBody HashMap<String, Object> data,
+                                        @CookieValue(name = "users") Optional<Cookie> cookie,
+                                        RedirectAttributes redirectAttributes) {
+        if (cookie.isPresent()) {
+            try {
+                Long postNumber = Long.parseLong(data.get("id").toString());
+                Long commentNumber = Long.parseLong(data.get("commentNumber").toString());
+
+                //해당 댓글과 PostLikeAndDisLike Fetch 조인 해 가져오기
+                Optional<PostComments> postCommentsById = postCommentsService.findPostCommentsById(commentNumber);
+                Users users = userService.findById(cookie.get().getValue()).get();
+
+                PostLikeAndDislike postLikeAndDislike = postCommentsById.get().getPostLikeAndDislike();
+                if (data.get("type").equals("like")) { // Like 일 때
+                    boolean anyMatch = postLikeAndDislike
+                            .getLikedUser().contains(users);
+
+                    String sizeOfDislikeList;
+                    if (anyMatch) { // 이미 Like 했을 때
+                        sizeOfDislikeList = postService.removeUsersSet(postLikeAndDislike, users, "like");
+//                    postService.AddUserListValue(postLikeAndDislikeDto.getLikedUser(),users);
+//                    postService.RemoveUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(), users);// PostLikeAndDislike의 likedUser에서 User 제거
+                    } else { // Like 하지 않았을 때
+//                    postService.AddUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(),users);
+                        sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "like");
+                    }
+
+                    return sizeOfDislikeList;
+                } else { // DisLike 일 때
+                    boolean anyMatch = postLikeAndDislike
+                            .getDisLikedUser().contains(users);
+
+                    String sizeOfDislikeList;
+                    if (anyMatch) { // 이미 DisLike 했을 때
+                        sizeOfDislikeList = postService.removeUsersSet(postLikeAndDislike, users, "dislike");
+                    } else { // DisLike 하지 않았을 때
+                        sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "dislike");
+                    }
+
+                    return sizeOfDislikeList;
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                System.out.println("JSON 데이터 형식 변환 오류");
+                return "0";
+            } catch (NoSuchElementException e) {
+                e.printStackTrace();
+                System.out.println("PostLikeAndDisLike 조회 실패 or 로그인된 정보 조회 (Users) 실패");
+                return "0";
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "0";
+            }
+        } else { // 로그인이 안 되어 있을 시
+            return "not_logined";
+        }
+    }
+
+    
 }
 

@@ -101,6 +101,40 @@
       return ;
     });
     /*]]>*/
+
+    function deletePost() {
+      let email = getCookie('users')?.valueOf();
+
+      /*<![CDATA[*/
+      let postedUserEmail = [[${post.getUsers().getEmail()}]];
+      let postNumber = [[${post.getPostNumber()}]];
+      /*]]*/
+
+      var dataMap = {
+        id: postNumber,
+        postedUserEmail: postedUserEmail
+      }
+
+      if (email != null) {
+        if (email == postedUserEmail) {
+          $.ajax({
+            url: "/find_post/deletePost",
+            type: 'POST',
+            async: true,
+            data: JSON.stringify(dataMap),
+            contentType: "application/json",
+            dataType: 'html',
+            success: function(response) {
+              window.location.href = "/find_post/deletePost/alert?string=게시글이 삭제 되었습니다";
+            },
+            error: function(xhr) {
+              console.log(xhr.responseText);
+            }
+          });
+        }
+      }
+    }
+  </script>
   </script>
 </head>
 <body>
@@ -192,9 +226,11 @@
       <div class="disLikeCount" th:text="${post.getPostLikeAndDislikeDto().getDisLikedUser().size()}">123</div>
     </div>
   </div>
+
+
   <div class="deleteButtonWrapper">
     <button type="button" class="btn btn-warning"id="button_custom1">게시글 수정</button>
-    <button type="button" class="btn btn-danger" id="button_custom2">게시글 삭제</button>
+    <button type="button" class="btn btn-danger" id="button_custom2" th:onclick="deletePost()">게시글 삭제</button>
   </div>
 </div>
 
@@ -265,6 +301,73 @@
       }
     });
   }
+
+  function commentLidiButton(param1,param2) {
+    let attr = $('.comment_likeButton').css('background-position');
+    let attr1 = $('.comment_disLikeButton').css('background-position');
+
+    /*<![CDATA[*/
+    let number = [[${post.getPostNumber()}]];
+    /*]]*/
+
+    let addNumber = 0;
+    let className;
+
+    if(param1=='like') {
+      className = '.likeCount';
+
+      if (attr == '0% 0%') {
+        $('.comment_likeButton').css('background-position','-24px');
+        $('.comment_disLikeButton').css('pointer-events','none');
+        addNumber = 1;
+      } else {
+        $('.comment_likeButton').css('background-position', '0% 0%');
+        $('.comment_disLikeButton').css('pointer-events','auto');
+        addNumber = -1;
+      }
+    }
+
+    else if(param1=='dislike') {
+      className = '.disLikeCount';
+      if(attr1 == '-48px 50%'){
+        $('.comment_disLikeButton').css('background-position','-72px');
+        $('.comment_likeButton').css('pointer-events','none');
+        addNumber = 1;
+      } else {
+        $('.comment_disLikeButton').css('background-position', '-48px 50%');
+        $('.comment_likeButton').css('pointer-events','auto');
+        addNumber = -1;
+      }
+    }
+
+    var dataMap = {
+      type: param1,
+      id: number,
+      commentNumber: param2
+    }
+
+    let ajax = $.ajax({
+      url: "/find_post/commentLikeAndDisLike",
+      type: 'POST',
+      dataType: "json",
+      timeout: 3000,
+      async: false,
+      data: JSON.stringify(dataMap),
+      contentType: "application/json",
+
+      success: function(resp){
+        if(resp == "not_logined"){
+          let ajax = $.ajax({
+            url: "/alert?string=" + '로그인 되지 않았습니다',
+            type: 'GET',
+            async: false,
+          });
+        } else {
+          $(className).text(resp);
+        }
+      }
+    });
+  }
 </script>
 
 <div class = "reply_head">
@@ -286,10 +389,10 @@
     <div class = "reply_profile_content" th:text="${value.getPostCommentsContents()}">카리나에 대한 댓글 카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글</div>
 
       <div class="comment_lidiWrap">
-        <img class="comment_likeButton">
-        <div class="comment_likeCount">123</div>
-        <img class="comment_disLikeButton">
-        <div class="comment_disLikeCount">123</div>
+        <img class="comment_likeButton" th:onclick="|commentLidiButton('like','${value.getCommentNumber()}')|">
+        <div class="comment_likeCount" th:text="${value.getPostLikeAndDislike().getLikedUser().size()}">123</div>
+        <img class="comment_disLikeButton" th:onclick="|commentLidiButton('dislike','${value.getCommentNumber()}')|">
+        <div class="comment_disLikeCount" th:text="${value.getPostLikeAndDislike().getDisLikedUser().size()}">123</div>
         <a href="" class="comment_addBigComments">댓글 달기</a>
       </div>
   </div>

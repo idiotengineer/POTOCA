@@ -1,6 +1,8 @@
 package My_Project.integration.entity;
 
 import My_Project.integration.entity.Dto.CommentDto;
+import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class PostComments {
 
     @Id
@@ -35,11 +38,20 @@ public class PostComments {
     @JoinColumn(name = "post_comments_number")
     private List<BigComments> bigCommentsList;
 
+    @OneToOne(
+            orphanRemoval = true,
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn
+    private PostLikeAndDislike postLikeAndDislike;
+
     public PostComments(CommentDto commentDto) {
         this.postNumber = commentDto.getPost_number();
         this.postCommentedUsersEmail = commentDto.getUsers_email();
         this.postCommentsContents = commentDto.getComment();
         this.bigCommentsList = new ArrayList<>();
+        this.postLikeAndDislike = new PostLikeAndDislike();
 
         Dates dates1 = new Dates(LocalDateTime.now(),LocalDateTime.now());
         this.dates = dates1;

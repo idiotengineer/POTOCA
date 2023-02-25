@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+  <script th:inline = "javascript">
+
+      /*<![CDATA[*/
+      let value = [[${string}]];
+      /*]]*/
+
+        window.location.replace("listpage");
+
+        if (value == "게시글이 삭제 되었습니다") {
+            alert("게시글이 삭제 되었습니다");
+            window.location.replace("/listpage");
+        }
+
+        if (value == "에러 발생") {
+            alert("에러 발생");
+            history.back();
+        }
+  </script>
+</head>
+<body>
+
+</body>
+</html>
