@@ -3,19 +3,27 @@ package My_Project.integration.service;
 //https://velog.io/@yu-jin-song/SpringBoot-%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B5%AC%ED%98%84-4-MultipartFile-%EB%8B%A4%EC%A4%91-%ED%8C%8C%EC%9D%BC%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C
 import My_Project.integration.entity.Dto.PhotoDto;
 import My_Project.integration.entity.Photo;
+import My_Project.integration.entity.PostInfo;
+import My_Project.integration.repository.PhotoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class FileHandler {
+
+    @Autowired
+    PhotoRepository photoRepository;
 
     public List<Photo> parseFileInfo(
             List<MultipartFile> multipartFiles
@@ -99,5 +107,26 @@ public class FileHandler {
         }
 
         return fileList;
+    }
+
+    @Transactional
+    public void deleteFile(PostInfo postInfo) {
+        if (postInfo.getPhoto().isEmpty()) {
+            return;
+        }
+
+        Set<Photo> set = postInfo.getPhoto();
+        String ProjectPath = new File("").getAbsolutePath() + File.separator + File.separator;
+
+        set.stream().forEach(
+                photo ->
+                {
+                    String filePath = photo.getFilePath();
+                    File file = new File(ProjectPath + File.separator + filePath);
+
+                    file.delete();
+                }
+        );
+        boolean b = photoRepository.deletePhotoByPostInfo(postInfo.getPostNumber());
     }
 }

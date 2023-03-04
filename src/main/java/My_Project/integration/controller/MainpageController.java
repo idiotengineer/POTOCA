@@ -18,12 +18,14 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.Cookie;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -47,7 +49,7 @@ public class MainpageController {
         if (cookie.isPresent()) {
             model.addAttribute("users", cookie.get().getValue());
         } else {
-            model.addAttribute("users",null);
+            model.addAttribute("users", null);
         }
         return "practice";
         /*
@@ -76,22 +78,22 @@ public class MainpageController {
     @ApiOperation(value = "일반 게시글 페이지")
     @GetMapping("/post")
     public String post(Model model,
-            @RequestParam("photoPath") List<String> photoPath,
-            @RequestParam("time") LocalDateTime time,
-            @RequestParam("postDtoEmail") String postDtoEmail,
-            @RequestParam("postDtoGetPostContent") String postDtoGetPostContent,
-            @ModelAttribute PostDto postDto) {
+                       @RequestParam("photoPath") List<String> photoPath,
+                       @RequestParam("time") LocalDateTime time,
+                       @RequestParam("postDtoEmail") String postDtoEmail,
+                       @RequestParam("postDtoGetPostContent") String postDtoGetPostContent,
+                       @ModelAttribute PostDto postDto) {
         LOGGER.info("일반 게시글 페이지 접속");
-        model.addAttribute("postDtoEmail",postDtoEmail);
-        model.addAttribute("postDtoGetPostContent",postDtoGetPostContent);
-        model.addAttribute("time", getTimeDiffAndReturnElapsedTime(time,LocalDateTime.now()));
-        model.addAttribute("photoPath",photoPath);
-        model.addAttribute("postDto",postDto);
+        model.addAttribute("postDtoEmail", postDtoEmail);
+        model.addAttribute("postDtoGetPostContent", postDtoGetPostContent);
+        model.addAttribute("time", getTimeDiffAndReturnElapsedTime(time, LocalDateTime.now()));
+        model.addAttribute("photoPath", photoPath);
+        model.addAttribute("postDto", postDto);
         return "post";
     }
 
     @GetMapping("/find_post")
-    public String findPost(@RequestParam("id") Long id,Model model,@CookieValue("users")Optional<Cookie> cookie) {
+    public String findPost(@RequestParam("id") Long id, Model model, @CookieValue("users") Optional<Cookie> cookie) {
         try {
             PostInfo postInfo = postService.findPost(id);
             PostLikeAndDislikeDto postLikeAndDislikeDto = postService.findPostlidiDtoByPostNumber(id);
@@ -99,14 +101,14 @@ public class MainpageController {
 
             if (cookie.isPresent()) { // 로그인 되어 있을 시
                 Optional<Users> usersOptional = userService.findById(cookie.get().getValue());
-                model.addAttribute("checked",post.checkLikeAndDisLike(usersOptional));
+                model.addAttribute("checked", post.checkLikeAndDisLike(usersOptional));
             }
 
             model.addAttribute("post", post);
-            model.addAttribute("time",LocalDateTime.now());
+            model.addAttribute("time", LocalDateTime.now());
             return "copy_post";
         } catch (NoSuchElementException e) {
-            model.addAttribute("string",e.toString());
+            model.addAttribute("string", e.toString());
             return "alert";
         }
     }
@@ -136,28 +138,28 @@ public class MainpageController {
 
     @ApiOperation(value = "투표 게시글 리스팅 페이지")
     @GetMapping("/votelistpage")
-    public String voteListPage(){
+    public String voteListPage() {
         LOGGER.info("투표 게시글 리스팅 페이지 접속");
         return "votelistpage";
     }
 
     @ApiOperation(value = "로그인 페이지")
     @GetMapping("/login")
-    public String loginPage(){
+    public String loginPage() {
         LOGGER.info("로그인 페이지 접속");
         return "loginpage";
     }
 
     @ApiOperation(value = "회원가입 페이지")
     @GetMapping("/signup")
-    public String signUpPage(){
+    public String signUpPage() {
         LOGGER.info("회원가입 페이지 접속");
         return "signup";
     }
 
     @ApiOperation(value = "비밀번호/아이디 찾기 페이지")
     @GetMapping("/forgotpassword")
-    public String forgotPasswordPage(){
+    public String forgotPasswordPage() {
         LOGGER.info("비밀번호/아이디 찾기 페이지 접속");
         return "forgot_password";
     }

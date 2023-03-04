@@ -1,10 +1,7 @@
 package My_Project.integration.service;
 
 import My_Project.integration.entity.*;
-import My_Project.integration.entity.Dto.CommentDto;
-import My_Project.integration.entity.Dto.ListingPostDto;
-import My_Project.integration.entity.Dto.PostDto;
-import My_Project.integration.entity.Dto.PostInfoDto;
+import My_Project.integration.entity.Dto.*;
 import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
 import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.repository.*;
@@ -146,17 +143,7 @@ public class PostService {
                 new Exception("PostLikeAndDislike 객체 생성 실패");
             }
             PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto, postLikeAndDislike);
-            List<Photo> photoList = fileHandler.parseFileInfo(files);
-
-            // 파일이 존재할 때에만 처리
-            if (!photoList.isEmpty()) {
-                for (Photo photo : photoList) {
-                    // 파일을 DB에 저장
-                    postInfo.addPhoto(photoRepository.save(photo));
-                }
-            }
-
-            postRepository.save(postInfo);
+            savePhoto(files, postInfo);
 
             PostDto postDto = new PostDto(postInfo);
             return postDto;
@@ -164,6 +151,20 @@ public class PostService {
         } catch (NoSuchElementException e) {
             throw new Exception("존재하지 않는 회원입니다");
         }
+    }
+
+    private void savePhoto(List<MultipartFile> files, PostInfo postInfo) throws Exception {
+        List<Photo> photoList = fileHandler.parseFileInfo(files);
+
+        // 파일이 존재할 때에만 처리
+        if (!photoList.isEmpty()) {
+            for (Photo photo : photoList) {
+                // 파일을 DB에 저장
+                postInfo.addPhoto(photoRepository.save(photo));
+            }
+        }
+
+        postRepository.save(postInfo);
     }
 
 
@@ -296,5 +297,25 @@ public class PostService {
     @Transactional
     public void deletePost(Long id) {
         postRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deletePhoto(PostInfo postInfo) {
+        fileHandler.deleteFile(postInfo);
+    }
+
+    @Transactional
+    public void modifyingPost(PostInfo postInfo, ModifyDto modifyDto) {
+        try {
+            deletePhoto(postInfo);
+
+            postInfo.getPhoto().clear();
+            postInfo.setPostTitle(modifyDto.getPostTitle());
+            postInfo.setPostContent(modifyDto.getPostContent());
+
+            savePhoto(modifyDto.getFiles(), postInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

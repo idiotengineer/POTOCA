@@ -9,4 +9,6 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     List<Photo> findAllByPostInfo_PostNumber(Long postNumber);
 
     List<Photo> findAllByPostInfoPostNumber(Long postNumber);
+
+    boolean deletePhotoByPostInfo(Long postNumber);
 }

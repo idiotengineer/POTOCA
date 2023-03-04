@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -17,4 +18,18 @@ public class PostInfoDto {
     private String postTitle;
     private String postContent;
     private List<MultipartFile> files;
+
+    public PostInfoDto(ModifyDto modifyDto,Users users) {
+        this.setUsers(users);
+        this.setPostTitle(modifyDto.getPostTitle());
+        this.setPostContent(modifyDto.getPostContent());
+
+        if (!modifyDto.getFiles().isEmpty()) {
+            files = new ArrayList<>(modifyDto.getFiles());
+        } else {
+            files = new ArrayList<>();
+        }
+
+    }
+
 }

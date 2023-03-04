@@ -74,3 +74,4 @@ public class ForgotController {
         return "redirect:/alert";
     }
 }
+

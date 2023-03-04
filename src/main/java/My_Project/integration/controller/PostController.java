@@ -1,28 +1,31 @@
 package My_Project.integration.controller;
 
 import My_Project.integration.entity.Dto.CommentDto;
+import My_Project.integration.entity.Dto.ModifyDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.Dto.PostInfoDto;
 import My_Project.integration.entity.PostComments;
 import My_Project.integration.entity.PostInfo;
 import My_Project.integration.entity.PostLikeAndDislike;
+import My_Project.integration.entity.ResponseDto.ModiyingPostResponseDto;
 import My_Project.integration.entity.ResponseDto.PhotoResponseDto;
-import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.entity.Users;
+import My_Project.integration.exception.NotSameStringException;
 import My_Project.integration.service.PhotoService;
 import My_Project.integration.service.PostCommentsService;
 import My_Project.integration.service.PostService;
 import My_Project.integration.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -264,6 +267,70 @@ public class PostController {
         }
     }
 
-    
+    @RequestMapping(value = "/moveToModifyingPage", method = {RequestMethod.POST})
+    public ResponseEntity<ModiyingPostResponseDto> modifyingPost(
+            @RequestBody HashMap<String, Object> data,
+            @CookieValue("users") Optional<Cookie> cookie
+    ) {
+        try {
+            Long postNumber = Long.parseLong(data.get("id").toString());
+            ModiyingPostResponseDto ResponseDto = ModiyingPostResponseDto.builder()
+                    .value(postNumber.toString())
+                    .build();
+
+            return new ResponseEntity<>(ResponseDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            ModiyingPostResponseDto ResponseDto = ModiyingPostResponseDto.builder()
+                    .value("error")
+                    .build();
+
+            return new ResponseEntity<>(ResponseDto, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/modifyingPage{id}", method = {RequestMethod.GET})
+    public String modifyingPage(
+            @RequestParam(value = "id") Long postNumber,
+            @CookieValue("users") Cookie cookie,
+            Model model) {
+        PostInfo post = postService.findPost(postNumber);
+        PostDto postDto = new PostDto(post);
+
+        if (cookie.getValue().equals(postDto.getUsers().getEmail())) {
+            model.addAttribute(postDto);
+            return "modifying";
+        } else {
+            model.addAttribute("string", "Not logined");
+            return "alert";
+        }
+    }
+
+    @PostMapping(value = "/modifyingRequest", consumes = "multipart/form-data")
+    public String modifyingRequest(
+            @RequestPart(value = "image", required = false) List<MultipartFile> files,
+            ModifyDto modifyDto,
+            @CookieValue(name = "users") Cookie cookie) {
+
+        try {
+            PostInfo post = postService.findPost(modifyDto.getPostNumber());
+
+            if (!modifyDto.getUsers().equals(cookie.getValue())) {
+                throw new NotSameStringException();
+            }
+
+            modifyDto.setFiles(files);
+            Optional<Users> users = userService.findById(cookie.getValue());
+            postService.modifyingPost(post, modifyDto);
+
+            return "redirect:/find_post?id=" + modifyDto.getPostNumber();
+        } catch (NotSameStringException notSameStringException) {
+            notSameStringException.printStackTrace();
+            return "redirect:/alert?string=" + notSameStringException.getMessage();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/alert?string='Failed Modifying'";
+        }
+    }
 }
 

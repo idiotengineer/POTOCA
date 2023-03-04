@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<PostInfo,Long>, PostInfoCustomRepository {
 
     @EntityGraph(
-            attributePaths = {"photo", "postLikeAndDislike","comments"}
+            attributePaths = {"photo", "postLikeAndDislike","comments","postedUser"}
     )
     Optional<PostInfo> findPostInfoByPostNumber(Long id);
 
