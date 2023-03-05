@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Optional;
 
 @SpringBootTest
-@Transactional
+@Transactional()
 public class PostControllerTest {
     @Autowired
     private PostController postController;

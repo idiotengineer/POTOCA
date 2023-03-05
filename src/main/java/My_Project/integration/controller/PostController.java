@@ -320,7 +320,6 @@ public class PostController {
             }
 
             modifyDto.setFiles(files);
-            Optional<Users> users = userService.findById(cookie.getValue());
             postService.modifyingPost(post, modifyDto);
 
             return "redirect:/find_post?id=" + modifyDto.getPostNumber();

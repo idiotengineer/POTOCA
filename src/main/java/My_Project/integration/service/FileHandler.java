@@ -127,6 +127,7 @@ public class FileHandler {
                     file.delete();
                 }
         );
-        boolean b = photoRepository.deletePhotoByPostInfo(postInfo.getPostNumber());
+
+        photoRepository.deletePhotoSetByPostInfoId(postInfo.getPostNumber());
     }
 }

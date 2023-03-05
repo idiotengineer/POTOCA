@@ -299,7 +299,6 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
-    @Transactional
     public void deletePhoto(PostInfo postInfo) {
         fileHandler.deleteFile(postInfo);
     }
@@ -310,10 +309,13 @@ public class PostService {
             deletePhoto(postInfo);
 
             postInfo.getPhoto().clear();
-            postInfo.setPostTitle(modifyDto.getPostTitle());
-            postInfo.setPostContent(modifyDto.getPostContent());
+            em.clear();
 
-            savePhoto(modifyDto.getFiles(), postInfo);
+            PostInfo post = findPost(postInfo.getPostNumber());
+            post.setPostTitle(modifyDto.getPostTitle());
+            post.setPostContent(modifyDto.getPostContent());
+
+            savePhoto(modifyDto.getFiles(), post);
         } catch (Exception e) {
             e.printStackTrace();
         }
