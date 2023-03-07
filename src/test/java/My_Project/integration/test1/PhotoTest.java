@@ -1,23 +1,28 @@
 package My_Project.integration.test1;
 
 import My_Project.integration.entity.*;
-import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.repository.PhotoRepository;
 import My_Project.integration.repository.PostRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import static My_Project.integration.entity.QBigComments.*;
+import static My_Project.integration.entity.QPhoto.photo;
+import static My_Project.integration.entity.QPostComments.postComments;
 import static My_Project.integration.entity.QPostInfo.postInfo;
+import static My_Project.integration.entity.QPostLikeAndDislike.postLikeAndDislike;
+import static My_Project.integration.entity.QUsers.users;
 
 @SpringBootTest
 @Transactional
@@ -98,9 +103,9 @@ public class PhotoTest {
                 .where(postInfo.postTitle.eq("test123"))
                 .fetchOne();
 
-        Photo photo1 = new Photo("name1","path1",1L);
-        Photo photo2 = new Photo("name2","path2",2L);
-        Photo photo3 = new Photo("name3","path3",3L);
+        Photo photo1 = new Photo("name1", "path1", 1L);
+        Photo photo2 = new Photo("name2", "path2", 2L);
+        Photo photo3 = new Photo("name3", "path3", 3L);
 
         test.addPhoto(photo1);
         test.addPhoto(photo2);
@@ -111,5 +116,146 @@ public class PhotoTest {
         em.persist(photo3);
 
         photoRepository.deletePhotoSetByPostInfoId(test.getPostNumber());
+    }
+
+    @Test
+    public void PostlidiFetch조인테스트() {
+        Long id = 236L;
+
+        List<PostInfo> fetch = jpaQueryFactory
+                .selectFrom(postInfo)
+                .join(postInfo.photo, photo)
+                .fetchJoin()
+                .join(postInfo.postedUser, users)
+                .fetchJoin()
+                .join(postInfo.postLikeAndDislike, postLikeAndDislike)
+                .fetchJoin()
+                .fetch();
+
+        List<PostComments> fetch1 = jpaQueryFactory
+                .selectFrom(postComments)
+                .join(postComments.postLikeAndDislike, postLikeAndDislike)
+                .fetchJoin()
+                .join(postLikeAndDislike.LikedUser)
+                .fetchJoin()
+                .join(postLikeAndDislike.DisLikedUser)
+                .fetchJoin()
+                .where(postComments.postNumber.in(fetch.stream().map(
+                        postInfo1 -> postInfo1.getPostNumber()
+                ).collect(Collectors.toList())))
+                .fetch();
+
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    @Test
+    public void PostlidiFetch조인테스트2() {
+        Long id = 236L;
+        List<PostInfo> fetch = jpaQueryFactory.selectFrom(postInfo)
+                .join(postInfo.postedUser, users)
+                .fetchJoin()
+                .join(postInfo.photo, photo)
+                .fetchJoin()
+                .join(postInfo.postLikeAndDislike, postLikeAndDislike)
+                .fetchJoin()
+                .join(postInfo.comments, postComments)
+                .fetchJoin()
+                .where(postInfo.postNumber.eq(id))
+                .fetch();
+
+
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        List<PostInfo> fetch2 = jpaQueryFactory.selectFrom(postInfo)
+                .join(postInfo.postedUser, users)
+                .fetchJoin()
+                .join(postInfo.photo, photo)
+                .fetchJoin()
+                .join(postInfo.postLikeAndDislike, postLikeAndDislike)
+                .fetchJoin()
+                .join(postInfo.comments, postComments)
+                .fetchJoin()
+                .where(postInfo.postNumber.eq(id))
+                .fetch();
+    }
+
+    @Test
+    public void PostlidiFetch조인테스트3() {
+        Long id = 236L;
+        PostInfo postInfo1 = jpaQueryFactory.selectFrom(postInfo)
+                .join(postInfo.postedUser, users)
+                .fetchJoin()
+                .join(postInfo.photo, photo)
+                .fetchJoin()
+                .join(postInfo.postLikeAndDislike, postLikeAndDislike)
+                .fetchJoin()
+                .join(postLikeAndDislike.LikedUser)
+                .fetchJoin()
+                .join(postLikeAndDislike.DisLikedUser)
+                .fetchJoin()
+                .where(postInfo.postNumber.eq(id))
+                .fetchOne();
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        List<PostComments> fetch = jpaQueryFactory
+                .selectFrom(postComments)
+                .join(postComments.postLikeAndDislike, postLikeAndDislike)
+                .fetchJoin()
+                .join(postLikeAndDislike.LikedUser)
+                .fetchJoin()
+                .join(postLikeAndDislike.DisLikedUser)
+                .fetchJoin()
+                .where(postComments.postNumber.eq(id))
+                .fetch();
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    @Test
+    public void PostlidiFetch조인테스트4() {
+        Long id = 236L;
+
+        PostInfo postInfo1 = jpaQueryFactory
+                .selectFrom(postInfo)
+                .join(postInfo.photo, photo).fetchJoin()
+                .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.LikedUser).fetchJoin()
+                .leftJoin(postLikeAndDislike.DisLikedUser).fetchJoin()
+                .join(postInfo.comments, postComments).fetchJoin()
+                .join(postInfo.postedUser,users).fetchJoin()
+                .where(postInfo.postNumber.eq(id))
+                .fetchOne();
+
+
+        List<PostComments> fetch = jpaQueryFactory
+                .selectFrom(postComments)
+                .join(postComments.postLikeAndDislike, postLikeAndDislike)
+                .fetchJoin()
+                .leftJoin(postLikeAndDislike.LikedUser)
+                .fetchJoin()
+                .leftJoin(postLikeAndDislike.DisLikedUser)
+                .fetchJoin()
+                .leftJoin(postLikeAndDislike.postInfo)
+                .fetchJoin()
+                .where(postComments.postNumber.eq(postInfo1.getPostNumber()))
+                .fetch();
+
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        fetch.stream()
+                .forEach(
+                        postComments1 -> {
+                            System.out.println(postComments1.getPostLikeAndDislike().getLikedUser().size());
+                            System.out.println(postComments1.getPostLikeAndDislike().getDisLikedUser().size());
+                        });
+
+
+        System.out.println(postInfo1.getPostedUser().getEmail());
+        System.out.println(postInfo1.getComments().size());
+        System.out.println(postInfo1.getPostLikeAndDislike().getLikedUser().size());
+        System.out.println(postInfo1.getPostLikeAndDislike().getDisLikedUser().size());
+        postInfo1.getPhoto()
+                .stream().forEach(
+                        photo1 -> System.out.println(photo1.getId())
+                );
+
     }
 }

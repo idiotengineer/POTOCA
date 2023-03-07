@@ -96,8 +96,9 @@ public class MainpageController {
     public String findPost(@RequestParam("id") Long id, Model model, @CookieValue("users") Optional<Cookie> cookie) {
         try {
             PostInfo postInfo = postService.findPost(id);
-            PostLikeAndDislikeDto postLikeAndDislikeDto = postService.findPostlidiDtoByPostNumber(id);
-            PostDto post = new PostDto(postInfo, postLikeAndDislikeDto);
+//            PostLikeAndDislikeDto postLikeAndDislikeDto = postService.findPostlidiDtoByPostNumber(id);
+//            PostDto post = new PostDto(postInfo, postLikeAndDislikeDto);
+            PostDto post = new PostDto(postInfo);
 
             if (cookie.isPresent()) { // 로그인 되어 있을 시
                 Optional<Users> usersOptional = userService.findById(cookie.get().getValue());
