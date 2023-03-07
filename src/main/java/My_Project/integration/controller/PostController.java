@@ -299,9 +299,11 @@ public class PostController {
 
         if (cookie.getValue().equals(postDto.getUsers().getEmail())) {
             model.addAttribute(postDto);
+            System.out.println("---------------------------------------------------------------------------------------------------------------");
             return "modifying";
         } else {
             model.addAttribute("string", "Not logined");
+            System.out.println("---------------------------------------------------------------------------------------------------------------");
             return "alert";
         }
     }
