@@ -51,12 +51,12 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
     public Optional<PostInfo> findPostByIdWithFetchJoinUsedQueryDSL(Long id){
         PostInfo postInfo1 = jpaQueryFactory
                 .selectFrom(postInfo)
-                .join(postInfo.photo, photo).fetchJoin()
-                .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postInfo.photo, photo).fetchJoin()
+                .leftJoin(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.LikedUser).fetchJoin()
                 .leftJoin(postLikeAndDislike.DisLikedUser).fetchJoin()
-                .join(postInfo.comments, postComments).fetchJoin()
-                .join(postInfo.postedUser,users).fetchJoin()
+                .leftJoin(postInfo.comments, postComments).fetchJoin()
+                .leftJoin(postInfo.postedUser,users).fetchJoin()
                 .where(postInfo.postNumber.eq(id))
                 .fetchOne();
 
@@ -71,7 +71,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .fetchJoin()
                 .leftJoin(postLikeAndDislike.postInfo)
                 .fetchJoin()
-                .where(postComments.postNumber.eq(postInfo1.getPostNumber()))
+                .where(postComments.postNumber.eq(id))
                 .fetch();
 
         return Optional.of(postInfo1);
