@@ -41,3 +41,5 @@ images/
 D:WorkspaceLogFiles/
 *.jpg
 *.png
+!resources/static/
+!resources/resource/
