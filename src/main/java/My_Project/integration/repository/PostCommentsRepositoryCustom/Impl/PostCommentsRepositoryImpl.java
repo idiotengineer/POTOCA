@@ -44,9 +44,9 @@ public class PostCommentsRepositoryImpl implements PostCommentsRepositoryCustom 
         return jpaQueryFactory
                 .selectFrom(postComments)
                 .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
-                .join(postLikeAndDislike.postInfo).fetchJoin()
-                .join(postLikeAndDislike.LikedUser).fetchJoin()
-                .join(postLikeAndDislike.DisLikedUser).fetchJoin()
+                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+                .leftJoin(postLikeAndDislike.LikedUser).fetchJoin()
+                .leftJoin(postLikeAndDislike.DisLikedUser).fetchJoin()
                 .where(postComments.commentNumber.eq(id))
                 .fetchOne();
     }

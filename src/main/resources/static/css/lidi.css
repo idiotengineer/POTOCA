@@ -8,6 +8,7 @@
     align-items: center;
     justify-content: space-between;
     display:flex;
+    border-radius: 7.5%;
 }
 
 .likeButton{
@@ -34,12 +35,13 @@
 }
 
 .lidiAndDeleteModifyWrapper{
-    align-items: center;
+    display: flex;
     justify-content: space-between;
 }
 
 .deleteButtonWrapper{
     display: inline-block;
+    margin-right: 2.5vw
 }
 
 .lidiWrapWrapper{

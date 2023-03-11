@@ -136,6 +136,9 @@ public class MainpageController {
         }
     }
 
+//    public String commentsLidiCheckedSearch(String LoginedEmail, Long commentsNumber) {
+//        postService.
+//    }
 
     @ApiOperation(value = "투표 게시글 리스팅 페이지")
     @GetMapping("/votelistpage")

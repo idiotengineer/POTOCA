@@ -50,11 +50,14 @@
 #validationCustom03{
     display: inline-block;
     width:75%;
+    margin-right: 10px;
 }
 
 #h5_style{
     width: 10%;
     display: inline-block;
+    margin-bottom: 0;
+    text-align: center;
 }
 
 #search_button{
@@ -68,11 +71,31 @@
     }
 
     #h5_style{
-        font-size: 0.5em;
+        display: none;
+    }
+
+    .addComments{
+        align-content: center;
+    }
+
+    .cash_wrapper{
+        font-size: 1em;
+    }
+
+    .post_profile_photo{
+        display:none;
+    }
+
+    #bigCommentsRegisterButton{
+        font-size: 0.3em;
     }
 }
 
 .gold_medal,.silver_medal, .bronze_medal{
     display: inline-block;
     font-size: 2em;
+}
+
+.addComments{
+    display: flex;
 }

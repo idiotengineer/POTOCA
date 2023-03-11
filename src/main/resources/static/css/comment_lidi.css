@@ -31,4 +31,48 @@
     background-position: -72px;
 }
 
+.comment_addBigComments{
+    display:block;
+}
+
+.comment_addBigComments, .comment_Report{
+    color: black;
+    text-decoration: none;
+}
+
+.comment_BigCommentsCount{
+    text-decoration: none;
+}
+
+.bigCommentsTextareaTags{
+    width: 80%;
+    min-height: 50px;
+    resize: none;
+    overflow-y: hidden;
+}
+
+.addBigCommentsWrapper {
+    margin-left: 10%;
+    display: flex;
+    padding-bottom: 2.5%;
+}
+
+#bigCommentsProfileImg{
+    margin-right: 10px;
+}
+
+#validationCustom04{
+    margin-right: 10px;
+}
+
+.bigCommentsWrapper{
+    margin-left: 10%;
+}
+
+#bigCommentsProfileContent{
+    margin-top : 0%;
+    margin-bottom : 0%;
+}
+
+
 

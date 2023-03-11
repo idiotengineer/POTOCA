@@ -214,7 +214,7 @@ public class PostController {
                                         RedirectAttributes redirectAttributes) {
         if (cookie.isPresent()) {
             try {
-                Long postNumber = Long.parseLong(data.get("id").toString());
+//                Long postNumber = Long.parseLong(data.get("id").toString());
                 Long commentNumber = Long.parseLong(data.get("commentNumber").toString());
 
                 //해당 댓글과 PostLikeAndDisLike Fetch 조인 해 가져오기
