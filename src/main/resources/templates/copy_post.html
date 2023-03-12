@@ -173,7 +173,7 @@
 
         // 현재 로그인된 아이디가 댓글에 좋아요/싫어요 체크 여부로 CSS 수정하는 메서드
         /*<![CDATA[*/
-        $(document).ready(function (commentNumber,isLike) {
+        $(document).ready(function (commentNumber, isLike) {
             let loginedID = getCookie('users')?.valueOf();
 
 
@@ -245,7 +245,7 @@
 
 <!-- post.css-->
 <div class="post_background_wrapper">
-<!--    <div class="post_background2"></div>-->
+    <!--    <div class="post_background2"></div>-->
     <div class="post_background">
         <div class="post_profile_info" id="postTitle" th:text="${post.getPostTitle()}"></div>
         <div class="post_profile_info">
@@ -445,17 +445,66 @@
     }
 </script>
 
+<style>
+    textarea.autosize {
+        min-height: 10px;
+        width: 80%;
+    }
+</style>
+<script>
+    function resize(obj) {
+        obj.style.height = "1px";
+        obj.style.height = (12 + obj.scrollHeight) + "px";
+    }
+</script>
+
 <div class="reply_head">
     <form method="post" name="postForm" class="addComments">
         <h5 id="h5_style">댓글 목록</h5>
-        <textarea class="autosize" id="validationCustom03" rows="1" onkeydown="resize(this)" onkeyup="resize(this)" placeholder="댓글 추가..."></textarea>
+        <textarea class="autosize" id="validationCustom03" rows="1" onkeydown="resize(this)" onkeyup="resize(this)"
+                  placeholder="댓글 추가..."></textarea>
         <button type="button" class="btn btn-success" onclick="register_comments()">작성</button>
     </form>
 </div>
 
+
+<script th:inline="javascript">
+    function openAndCloseAddBigCommentsWrapper(param1) {
+        let elementById = document.getElementById('addBigCommentsWrapper' + param1);
+
+        if (elementById.style.display == 'block') {
+            document.getElementById('addBigCommentsWrapper' + param1).style.display = 'none';
+        } else {
+            document.getElementById('addBigCommentsWrapper' + param1).style.display = 'block';
+        }
+        console.log('addBigCommentsWrapper' + param1);
+    }
+
+    function openAndCloseBigCommentsListWrapper(param1) {
+        let bigCommentsListWrapper = document.getElementById('bigCommentsWrapper' + param1);
+        let upDownArrow = document.getElementById('comment_BigCommentsSymbol' + param1);
+
+
+        if (upDownArrow.style != 'none') {
+            if (upDownArrow.text == '&#9660;') {
+                upDownArrow.innerText = '&#9650;'
+                bigCommentsListWrapper.style.display = 'block';
+            } else {
+                upDownArrow.innerText = '&#9660;'
+                bigCommentsListWrapper.style.display = 'none';
+            }
+        }
+
+        else {
+            alert('잘못된 요청입니다.');
+        }
+    }
+</script>
+
 <div class="reply_list">
     <div class="reply" th:each="value,i: ${post.getComments()}">
-        <img class="reply_profile_img" src="https://mblogthumb-phinf.pstatic.net/MjAyMTA1MjhfMjUg/MDAxNjIyMTk3NzUyMTAz.JgBnXWFplrlgwuGvVqlosma8FFPXqfGwVApVvMeP3vQg.LRmquqydeYieBEwyF9jWhljRvcd37HQf5dMa_AXxB1Ag.JPEG.mykpoint/Screenshot%EF%BC%BF20210528%EF%BC%8D192632%EF%BC%BFSamsung_Internet.jpg?type=w800">
+        <img class="reply_profile_img"
+             src="https://mblogthumb-phinf.pstatic.net/MjAyMTA1MjhfMjUg/MDAxNjIyMTk3NzUyMTAz.JgBnXWFplrlgwuGvVqlosma8FFPXqfGwVApVvMeP3vQg.LRmquqydeYieBEwyF9jWhljRvcd37HQf5dMa_AXxB1Ag.JPEG.mykpoint/Screenshot%EF%BC%BF20210528%EF%BC%8D192632%EF%BC%BFSamsung_Internet.jpg?type=w800">
         <div class="reply_profile_name" th:text="${value.getPostCommentedUsersEmail()}">작성자</div>
         <div class="reply_profile_time"
              th:text="${@mainpageController.getTimeDiffAndReturnElapsedTime(value.getDates().getUploadedTime(),time)}">
@@ -470,19 +519,6 @@
             댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글
         </div>
 
-        <style>
-            textarea.autosize {
-                min-height: 10px;
-                width: 80%;
-            }
-        </style>
-        <script>
-            function resize(obj) {
-                obj.style.height = "1px";
-                obj.style.height = (12+obj.scrollHeight)+"px";
-            }
-        </script>
-
         <div class="comment_lidiWrap">
             <img th:id="'comment_likeButton' + ${i.index}" class="comment_likeButton"
                  th:onclick="|commentLidiButton('like','${value.getCommentNumber()}','${i.index}')|">
@@ -494,35 +530,47 @@
             <div th:id="'comment_disLikeCount' + ${i.index}" class="comment_disLikeCount"
                  th:text="${value.getPostLikeAndDislike().getDisLikedUser().size()}">123
             </div>
-            <a href="" class="comment_addBigComments">답글</a>
-            <a href="" class="comment_Report">신고</a>
+            <span th:onclick="|openAndCloseAddBigCommentsWrapper(${i.index})|"
+                  th:id="'comment_addBigCommentsButton' + ${i.index}" class="comment_addBigCommentsButton">답글</span>
+            <span class="comment_ReportButton">신고</span>
         </div>
-        <div class="addBigCommentsWrapper">
-            <img class="reply_profile_img" id="bigCommentsProfileImg" src="https://mblogthumb-phinf.pstatic.net/MjAyMTA1MjhfMjUg/MDAxNjIyMTk3NzUyMTAz.JgBnXWFplrlgwuGvVqlosma8FFPXqfGwVApVvMeP3vQg.LRmquqydeYieBEwyF9jWhljRvcd37HQf5dMa_AXxB1Ag.JPEG.mykpoint/Screenshot%EF%BC%BF20210528%EF%BC%8D192632%EF%BC%BFSamsung_Internet.jpg?type=w800">
-            <textarea id="validationCustom04" class="autosize" rows="1" onkeydown="resize(this)" onkeyup="resize(this)" placeholder="댓글 추가..."></textarea>
-            <button class="btn btn-success" type="button" id="bigCommentsRegisterButton">작성</button>
-            <h5 class="line"></h5>
-        </div>
-        <a href="" class="comment_BigCommentsCount"> &#9660;	 답글 x개 &#9650;</a>
 
-            <div class="bigCommentsWrapper">
-                <img class="reply_profile_img" src="https://mblogthumb-phinf.pstatic.net/MjAyMTA1MjhfMjUg/MDAxNjIyMTk3NzUyMTAz.JgBnXWFplrlgwuGvVqlosma8FFPXqfGwVApVvMeP3vQg.LRmquqydeYieBEwyF9jWhljRvcd37HQf5dMa_AXxB1Ag.JPEG.mykpoint/Screenshot%EF%BC%BF20210528%EF%BC%8D192632%EF%BC%BFSamsung_Internet.jpg?type=w800">
-                <div class="reply_profile_name">작성자</div>
-                <div class="reply_profile_time">작성 시간</div>
-                <div class="reply_profile_content" id="bigCommentsProfileContent">카리나에 대한 댓글 카리나에 대한 댓글카리나에 대한
-                    댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에
-                    대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한
-                    댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글
-                </div>
-                <div class="comment_lidiWrap">
-                    <img class="comment_likeButton">
-                    <div class="comment_likeCount">123</div>
-                    <img class="comment_disLikeButton">
-                    <div class="comment_disLikeCount">123</div>
-                    <a href="" class="comment_addBigComments">답글</a>
-                    <a href="" class="comment_Report">신고</a>
-                </div>
+        <div class="addBigCommentsWrapper" th:id="'addBigCommentsWrapper' + ${i.index}" style="display: none">
+            <img class="reply_profile_img" id="bigCommentsProfileImg"
+                 src="https://mblogthumb-phinf.pstatic.net/MjAyMTA1MjhfMjUg/MDAxNjIyMTk3NzUyMTAz.JgBnXWFplrlgwuGvVqlosma8FFPXqfGwVApVvMeP3vQg.LRmquqydeYieBEwyF9jWhljRvcd37HQf5dMa_AXxB1Ag.JPEG.mykpoint/Screenshot%EF%BC%BF20210528%EF%BC%8D192632%EF%BC%BFSamsung_Internet.jpg?type=w800">
+            <textarea id="validationCustom04" class="autosize" rows="1" onkeydown="resize(this)" onkeyup="resize(this)"
+                      placeholder="댓글 추가..."></textarea>
+            <button class="btn btn-success" type="button" id="bigCommentsRegisterButton">작성</button>
+        </div>
+        <span th:id="'comment_BigCommentsSymbol' + ${i.index}"
+              th:if="${value.getBigCommentsList().size()}" > 0 ? text="&#9660;" : text="" style="display: none"
+              th:onclick="openAndCloseBigCommentsListWrapper(${i.index})"></span>
+        <span th:id="'comment_BigCommentsCount' + ${i.index}" class="comment_BigCommentsCount"
+              th:if="${value.getBigCommentsList().size()}" > 0 ?
+              style="display: none"
+              th:onclick="openAndCloseBigCommentsListWrapper(${i.index})"> 답글 x개</span>
+
+        <div th:id="'bigCommentsWrapper' + ${i.index}"
+                class="bigCommentsWrapper" style="display: none">
+            <img class="reply_profile_img"
+                 src="https://mblogthumb-phinf.pstatic.net/MjAyMTA1MjhfMjUg/MDAxNjIyMTk3NzUyMTAz.JgBnXWFplrlgwuGvVqlosma8FFPXqfGwVApVvMeP3vQg.LRmquqydeYieBEwyF9jWhljRvcd37HQf5dMa_AXxB1Ag.JPEG.mykpoint/Screenshot%EF%BC%BF20210528%EF%BC%8D192632%EF%BC%BFSamsung_Internet.jpg?type=w800">
+            <div class="reply_profile_name">작성자</div>
+            <div class="reply_profile_time">작성 시간</div>
+            <div class="reply_profile_content" id="bigCommentsProfileContent">카리나에 대한 댓글 카리나에 대한 댓글카리나에 대한
+                댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한
+                댓글카리나에
+                대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한
+                댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글카리나에 대한 댓글
             </div>
+            <div class="comment_lidiWrap">
+                <img class="comment_likeButton">
+                <div class="comment_likeCount">123</div>
+                <img class="comment_disLikeButton">
+                <div class="comment_disLikeCount">123</div>
+                <span class="comment_addBigComments">답글</span>
+                <span class="comment_Report">신고</span>
+            </div>
+        </div>
     </div>
 </div>
 
