@@ -146,8 +146,6 @@ public class PostController {
                                  RedirectAttributes redirectAttributes) {
         if (cookie.isPresent()) {
             Long id = Long.parseLong(data.get("id").toString());
-
-            PostInfo postInfo = postService.findPost(id);
             PostLikeAndDislike postLikeAndDislike = postService.findPostlidiByPostNumber(id);
 
             Users users = userService.findById(cookie.get().getValue()).get();
@@ -183,28 +181,6 @@ public class PostController {
             return "not_logined";
         }
     }
-
-    @RequestMapping(value = "/find_post/deletePost", method = {RequestMethod.POST})
-    public String deletePost(@CookieValue("users") Optional<Cookie> cookie,
-                             @RequestBody HashMap<String, Object> data,
-                             RedirectAttributes redirectAttributes) {
-        try {
-            Long id = Long.parseLong(data.get("id").toString());
-            postService.deletePost(id);
-            redirectAttributes.addAttribute("string", "게시글이 삭제 되었습니다");
-        } catch (Exception e) {
-            e.printStackTrace();
-            redirectAttributes.addAttribute("string", "에러 발생");
-        }
-        return "redirect:/find_post/deletePost/alert";
-    }
-
-    @GetMapping("/find_post/deletePost/alert")
-    public String deleteResultAlert(@RequestParam("string") String s, Model model) {
-        model.addAttribute("string", s);
-        return "secondAlert";
-    }
-
 
     // 댓글 좋아요 기능 API
     @PostMapping("/find_post/commentLikeAndDisLike")
@@ -265,6 +241,27 @@ public class PostController {
         } else { // 로그인이 안 되어 있을 시
             return "not_logined";
         }
+    }
+
+    @RequestMapping(value = "/find_post/deletePost", method = {RequestMethod.POST})
+    public String deletePost(@CookieValue("users") Optional<Cookie> cookie,
+                             @RequestBody HashMap<String, Object> data,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            Long id = Long.parseLong(data.get("id").toString());
+            postService.deletePost(id);
+            redirectAttributes.addAttribute("string", "게시글이 삭제 되었습니다");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addAttribute("string", "에러 발생");
+        }
+        return "redirect:/find_post/deletePost/alert";
+    }
+
+    @GetMapping("/find_post/deletePost/alert")
+    public String deleteResultAlert(@RequestParam("string") String s, Model model) {
+        model.addAttribute("string", s);
+        return "secondAlert";
     }
 
     @RequestMapping(value = "/moveToModifyingPage", method = {RequestMethod.POST})

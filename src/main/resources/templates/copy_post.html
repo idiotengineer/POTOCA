@@ -86,17 +86,17 @@
             let checked = [[${checked}]];
 
             if (checked == 'likeChecked') {
-                $('.likeButton').css('background-position', '-24px');
-                $('.disLikeButton').css('pointer-events', 'none');
+                $('#post_likeButton').css('background-position', '-24px');
+                $('#post_disLikeButton').css('pointer-events', 'none');
             } else if (checked == 'dislikeChecked') {
-                $('.disLikeButton').css('background-position', '-72px');
-                $('.likeButton').css('pointer-events', 'none');
+                $('#post_disLikeButton').css('background-position', '-72px');
+                $('#post_likeButton').css('pointer-events', 'none');
             } else if (checked == 'noneChecked') {
-                $('.likeButton').css('pointer-events', 'auto');
-                $('.disLikeButton').css('pointer-events', 'auto');
+                $('#post_likeButton').css('pointer-events', 'auto');
+                $('#post_disLikeButton').css('pointer-events', 'auto');
             } else {
-                $('.likeButton').css('pointer-events', 'none');
-                $('.disLikeButton').css('pointer-events', 'none');
+                $('#post_likeButton').css('pointer-events', 'none');
+                $('#post_disLikeButton').css('pointer-events', 'none');
             }
 
 
@@ -173,27 +173,27 @@
 
         // 현재 로그인된 아이디가 댓글에 좋아요/싫어요 체크 여부로 CSS 수정하는 메서드
         /*<![CDATA[*/
-        $(document).ready(function (commentNumber, isLike) {
-            let loginedID = getCookie('users')?.valueOf();
-
-
-            if (loginedID.valueOf()) {
-                if (checked == 'likeChecked') {
-                    $('.likeButton').css('background-position', '-24px');
-                    $('.disLikeButton').css('pointer-events', 'none');
-                } else if (checked == 'dislikeChecked') {
-                    $('.disLikeButton').css('background-position', '-72px');
-                    $('.likeButton').css('pointer-events', 'none');
-                } else if (checked == 'noneChecked') {
-                    $('.likeButton').css('pointer-events', 'auto');
-                    $('.disLikeButton').css('pointer-events', 'auto');
-                } else {
-                    $('.likeButton').css('pointer-events', 'none');
-                    $('.disLikeButton').css('pointer-events', 'none');
-                }
-                return;
-            }
-        });
+        // $(document).ready(function (commentNumber, isLike) {
+        //     let loginedID = getCookie('users')?.valueOf();
+        //
+        //
+        //     if (loginedID.valueOf()) {
+        //         if (checked == 'likeChecked') {
+        //             $('#post_likeButton').css('background-position', '-24px');
+        //             $('#post_disLikeButton').css('pointer-events', 'none');
+        //         } else if (checked == 'dislikeChecked') {
+        //             $('#post_disLikeButton').css('background-position', '-72px');
+        //             $('#post_likeButton').css('pointer-events', 'none');
+        //         } else if (checked == 'noneChecked') {
+        //             $('#post_likeButton').css('pointer-events', 'auto');
+        //             $('#post_disLikeButton').css('pointer-events', 'auto');
+        //         } else {
+        //             $('#post_likeButton').css('pointer-events', 'none');
+        //             $('#post_disLikeButton').css('pointer-events', 'none');
+        //         }
+        //         return;
+        //     }
+        // });
 
         /*]]>*/
     </script>
@@ -299,10 +299,10 @@
 <div class="lidiAndDeleteModifyWrapper">
     <div class="lidiWrapWrapper">
         <div class="lidiWrap">
-            <img class="likeButton" onclick="buttonFunc('like')">
-            <div class="likeCount" th:text="${post.getPostLikeAndDislikeDto().getLikedUser().size()}">123</div>
-            <img class="disLikeButton" onclick="buttonFunc('dislike')">
-            <div class="disLikeCount" th:text="${post.getPostLikeAndDislikeDto().getDisLikedUser().size()}">123</div>
+            <img class="likeButton" id="post_likeButton" onclick="buttonFunc('like')">
+            <div class="likeCount" id="post_likeCount" th:text="${post.getPostLikeAndDislikeDto().getLikedUser().size()}">123</div>
+            <img class="disLikeButton" id="post_disLikeButton" onclick="buttonFunc('dislike')">
+            <div class="disLikeCount" id="post_disLikeCount" th:text="${post.getPostLikeAndDislikeDto().getDisLikedUser().size()}">123</div>
         </div>
     </div>
 
@@ -315,8 +315,8 @@
 
 <script th:inline="javascript">
     function buttonFunc(param1) {
-        let attr = $('.likeButton').css('background-position');
-        let attr1 = $('.disLikeButton').css('background-position');
+        let attr = $('#post_likeButton').css('background-position');
+        let attr1 = $('#post_disLikeButton').css('background-position');
 
         /*<![CDATA[*/
         let number = [[${post.getPostNumber()}]];
@@ -326,26 +326,26 @@
         let className;
 
         if (param1 == 'like') {
-            className = '.likeCount';
+            className = '#post_likeCount';
 
             if (attr == '0% 0%') {
-                $('.likeButton').css('background-position', '-24px');
-                $('.disLikeButton').css('pointer-events', 'none');
+                $('#post_likeButton').css('background-position', '-24px');
+                $('#post_disLikeButton').css('pointer-events', 'none');
                 addNumber = 1;
             } else {
-                $('.likeButton').css('background-position', '0% 0%');
-                $('.disLikeButton').css('pointer-events', 'auto');
+                $('#post_likeButton').css('background-position', '0% 0%');
+                $('#post_disLikeButton').css('pointer-events', 'auto');
                 addNumber = -1;
             }
         } else if (param1 == 'dislike') {
-            className = '.disLikeCount';
+            className = '#post_disLikeCount';
             if (attr1 == '-48px 50%') {
-                $('.disLikeButton').css('background-position', '-72px');
-                $('.likeButton').css('pointer-events', 'none');
+                $('#post_disLikeButton').css('background-position', '-72px');
+                $('#post_likeButton').css('pointer-events', 'none');
                 addNumber = 1;
             } else {
-                $('.disLikeButton').css('background-position', '-48px 50%');
-                $('.likeButton').css('pointer-events', 'auto');
+                $('#post_disLikeButton').css('background-position', '-48px 50%');
+                $('#post_likeButton').css('pointer-events', 'auto');
                 addNumber = -1;
             }
         }
@@ -391,7 +391,7 @@
         let className;
 
         if (param1 == 'like') {
-            className = '#likeCount';
+            className = '#comment_likeCount';
 
             if (attr == '0% 0%') {
                 $('#comment_likeButton' + param3).css('background-position', '-24px');
@@ -403,7 +403,7 @@
                 addNumber = -1;
             }
         } else if (param1 == 'dislike') {
-            className = '#disLikeCount';
+            className = '#comment_disLikeCount';
             if (attr1 == '-48px 50%') {
                 $('#comment_disLikeButton' + param3).css('background-position', '-72px');
                 $('#comment_likeButton' + param3).css('pointer-events', 'none');
@@ -438,7 +438,7 @@
                         async: false,
                     });
                 } else {
-                    $(className).text(resp);
+                    $(className + param3).text(resp);
                 }
             }
         });
@@ -523,12 +523,12 @@
             <img th:id="'comment_likeButton' + ${i.index}" class="comment_likeButton"
                  th:onclick="|commentLidiButton('like','${value.getCommentNumber()}','${i.index}')|">
             <div th:id="'comment_likeCount' + ${i.index}" class="comment_likeCount"
-                 th:text="${value.getPostLikeAndDislike().getLikedUser().size()}">123
+                 th:text="${value.getPostLikeAndDislike().getLikedUser().size()}">
             </div>
             <img th:id="'comment_disLikeButton' + ${i.index}" class="comment_disLikeButton"
                  th:onclick="|commentLidiButton('dislike','${value.getCommentNumber()}','${i.index}')|">
             <div th:id="'comment_disLikeCount' + ${i.index}" class="comment_disLikeCount"
-                 th:text="${value.getPostLikeAndDislike().getDisLikedUser().size()}">123
+                 th:text="${value.getPostLikeAndDislike().getDisLikedUser().size()}">
             </div>
             <span th:onclick="|openAndCloseAddBigCommentsWrapper(${i.index})|"
                   th:id="'comment_addBigCommentsButton' + ${i.index}" class="comment_addBigCommentsButton">답글</span>

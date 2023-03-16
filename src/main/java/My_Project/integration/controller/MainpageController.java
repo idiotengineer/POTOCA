@@ -2,8 +2,6 @@ package My_Project.integration.controller;
 
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.PostInfo;
-import My_Project.integration.entity.PostLikeAndDislike;
-import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.service.PostService;
 import My_Project.integration.service.UserService;
@@ -18,14 +16,11 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.Cookie;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
