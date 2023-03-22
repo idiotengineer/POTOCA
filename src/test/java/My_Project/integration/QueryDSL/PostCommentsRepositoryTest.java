@@ -30,7 +30,7 @@ public class PostCommentsRepositoryTest {
     @Autowired
     PostCommentsRepository postCommentsRepository;
 
-    @Test
+    @org.junit.Test
     public void PostCommentsRepository테스트() {
         postCommentsRepository.findAll();
     }

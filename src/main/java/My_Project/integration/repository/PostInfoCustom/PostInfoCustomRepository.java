@@ -12,4 +12,6 @@ public interface PostInfoCustomRepository {
     List<PostDto> searchByTitle(String title);
 
     Optional<PostInfo> findPostByIdWithFetchJoinUsedQueryDSL(Long id);
+
+    Optional<PostInfo> findPostByIdWithFetchJoinUsedQueryDSLV2(Long id);
 }

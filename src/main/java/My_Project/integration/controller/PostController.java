@@ -147,11 +147,13 @@ public class PostController {
         if (cookie.isPresent()) {
             Long id = Long.parseLong(data.get("id").toString());
             PostLikeAndDislike postLikeAndDislike = postService.findPostlidiByPostNumber(id);
+            // PostInfo post = postService.findPost(id);
 
             Users users = userService.findById(cookie.get().getValue()).get();
             if (data.get("type").equals("like")) { // Like 일 때
-                boolean anyMatch = postLikeAndDislike
-                        .getLikedUser().contains(users);
+                boolean anyMatch = postService
+                        .findLikedByUsersAndPostLidi(postLikeAndDislike, users)
+                        .isPresent();
 
                 String sizeOfDislikeList;
                 if (anyMatch) { // 이미 Like 했을 때
@@ -165,8 +167,9 @@ public class PostController {
 
                 return sizeOfDislikeList;
             } else { // DisLike 일 때
-                boolean anyMatch = postLikeAndDislike
-                        .getDisLikedUser().contains(users);
+                boolean anyMatch = postService
+                        .findDisLikedByUsersAndPostLidi(postLikeAndDislike, users)
+                        .isPresent();
 
                 String sizeOfDislikeList;
                 if (anyMatch) { // 이미 DisLike 했을 때
@@ -190,7 +193,7 @@ public class PostController {
                                         RedirectAttributes redirectAttributes) {
         if (cookie.isPresent()) {
             try {
-//                Long postNumber = Long.parseLong(data.get("id").toString());
+                Long postNumber = Long.parseLong(data.get("id").toString());
                 Long commentNumber = Long.parseLong(data.get("commentNumber").toString());
 
                 //해당 댓글과 PostLikeAndDisLike Fetch 조인 해 가져오기
@@ -200,7 +203,7 @@ public class PostController {
                 PostLikeAndDislike postLikeAndDislike = postCommentsById.get().getPostLikeAndDislike();
                 if (data.get("type").equals("like")) { // Like 일 때
                     boolean anyMatch = postLikeAndDislike
-                            .getLikedUser().contains(users);
+                            .getLiked().contains(users);
 
                     String sizeOfDislikeList;
                     if (anyMatch) { // 이미 Like 했을 때
@@ -212,10 +215,11 @@ public class PostController {
                         sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "like");
                     }
 
+                    PostInfo post = postService.findPost(postNumber);
                     return sizeOfDislikeList;
                 } else { // DisLike 일 때
                     boolean anyMatch = postLikeAndDislike
-                            .getDisLikedUser().contains(users);
+                            .getDisLiked().contains(users);
 
                     String sizeOfDislikeList;
                     if (anyMatch) { // 이미 DisLike 했을 때
@@ -223,7 +227,7 @@ public class PostController {
                     } else { // DisLike 하지 않았을 때
                         sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "dislike");
                     }
-
+                    PostInfo post = postService.findPost(postNumber);
                     return sizeOfDislikeList;
                 }
             } catch (NumberFormatException e) {

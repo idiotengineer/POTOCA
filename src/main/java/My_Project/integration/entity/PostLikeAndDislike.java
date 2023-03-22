@@ -3,6 +3,7 @@ package My_Project.integration.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostLikeAndDislike {
@@ -23,28 +25,18 @@ public class PostLikeAndDislike {
             mappedBy = "postLikeAndDislike")
     PostInfo postInfo;
 
-    @OneToMany
-    @JoinColumn
-    private Set<Users> LikedUser = new HashSet<>();
+    @OneToMany(
+            mappedBy = "postLikeAndDislike"
+    )
+    private Set<Liked> liked = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn
-    private Set<Users> DisLikedUser = new HashSet<>();
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @OneToMany(
+            mappedBy = "postLikeAndDislike"
+    )
+    private Set<DisLiked> disLiked = new HashSet<>();
 
     public void setPostInfo(PostInfo postInfo) {
         this.postInfo = postInfo;
         postInfo.setPostLikeAndDislike(this);
-    }
-
-    public void setLikedUser(Set<Users> LikedUser) {
-        this.LikedUser = LikedUser;
-    }
-
-    public void setDisLikedUser(Set<Users> DisLikedUser) {
-        this.DisLikedUser = DisLikedUser;
     }
 }

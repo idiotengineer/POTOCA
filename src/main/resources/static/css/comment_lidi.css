@@ -9,18 +9,29 @@
 }
 
 .comment_likeButton{
-    width: 24px;
+    width: 36px;
     height: 24px;
-    background-image: url("../lidi.png");
+
+    background-color: #EFEFEF; /* Green background */
+    color: white; /* White text */
+    border: none; /* Remove borders */
+    font-size: 16px; /* Set a font size */
+    border-radius: 5px;
     cursor: pointer;
+    align-items: center;
+    justify-items: center;
 }
 
 .comment_disLikeButton{
-    width: 24px;
+    width: 36px;
     height: 24px;
-    background-image: url("../lidi.png");
-    cursor: pointer;
-    background-position: -48px;
+
+    background-color: #EFEFEF; /* Red background */
+    color: white; /* White text */
+    border: none; /* Remove borders */
+    font-size: 16px; /* Set a font size */
+    cursor: pointer; /* Change mouse pointer on hover */
+    border-radius: 5px;
 }
 
 .comment_setLikeButton{

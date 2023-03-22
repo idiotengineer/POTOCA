@@ -1,12 +1,9 @@
 package My_Project.integration.repository.PostLikeAndDislikeCustom.Impl;
 
 import My_Project.integration.entity.PostLikeAndDislike;
-import My_Project.integration.entity.QPostLikeAndDislike;
 import My_Project.integration.repository.PostLikeAndDislikeCustom.PostLikeAndDislikeRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 import static My_Project.integration.entity.QPostLikeAndDislike.postLikeAndDislike;
 
@@ -29,8 +26,8 @@ public class PostLikeAndDislikeRepositoryImpl implements PostLikeAndDislikeRepos
     public PostLikeAndDislike findPostLidiByIdWithFetch(Long id) {
         return jpaQueryFactory
                 .selectFrom(postLikeAndDislike)
-                .join(postLikeAndDislike.LikedUser).fetchJoin()
-                .join(postLikeAndDislike.DisLikedUser).fetchJoin()
+                .join(postLikeAndDislike.liked).fetchJoin()
+                .join(postLikeAndDislike.disLiked).fetchJoin()
                 .fetchOne();
     }
 }

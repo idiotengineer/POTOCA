@@ -16,6 +16,7 @@
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <link href="/css/lidi.css" rel="stylesheet">
     <link href="/css/comment_lidi.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" crossorigin="anonymous" />
     <script
             src="https://code.jquery.com/jquery-3.6.3.js"
             integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
@@ -380,8 +381,8 @@
     }
 
     function commentLidiButton(param1, param2, param3) {
-        let attr = $('#comment_likeButton' + param3).css('background-position');
-        let attr1 = $('#comment_disLikeButton' + param3).css('background-position');
+        let attr = $('#comment_likeButton' + param3).css('background-color');
+        let attr1 = $('#comment_disLikeButton' + param3).css('background-color');
 
         /*<![CDATA[*/
         let number = [[${post.getPostNumber()}]];
@@ -393,23 +394,27 @@
         if (param1 == 'like') {
             className = '#comment_likeCount';
 
-            if (attr == '0% 0%') {
-                $('#comment_likeButton' + param3).css('background-position', '-24px');
+            if (attr == 'rgb(239, 239, 239)') {
+                // 이전에 좋아요 버튼을 누르지 않았을 때
+                $('#comment_likeButton' + param3).css('background-color', '#4CAF50');
                 $('#comment_disLikeButton' + param3).css('pointer-events', 'none');
                 addNumber = 1;
             } else {
-                $('#comment_likeButton' + param3).css('background-position', '0% 0%');
+                // 이전에 좋아요 버튼을 눌렀을 때
+                $('#comment_likeButton' + param3).css('background-color', '#EFEFEF');
                 $('#comment_disLikeButton' + param3).css('pointer-events', 'auto');
                 addNumber = -1;
             }
         } else if (param1 == 'dislike') {
             className = '#comment_disLikeCount';
-            if (attr1 == '-48px 50%') {
-                $('#comment_disLikeButton' + param3).css('background-position', '-72px');
+            if (attr1 == 'rgb(239, 239, 239)') {
+                // 이전에 싫어요 버튼을 누르지 않았을 때
+                $('#comment_disLikeButton' + param3).css('background-color', '#f44336');
                 $('#comment_likeButton' + param3).css('pointer-events', 'none');
                 addNumber = 1;
             } else {
-                $('#comment_disLikeButton' + param3).css('background-position', '-48px 50%');
+                // 이전에 싫어요 버튼을 눌렀을 때
+                $('#comment_disLikeButton' + param3).css('background-color', '#EFEFEF');
                 $('#comment_likeButton' + param3).css('pointer-events', 'auto');
                 addNumber = -1;
             }
@@ -520,15 +525,19 @@
         </div>
 
         <div class="comment_lidiWrap">
-            <img th:id="'comment_likeButton' + ${i.index}" class="comment_likeButton"
+            <button th:id="'comment_likeButton' + ${i.index}" class="comment_likeButton"
                  th:onclick="|commentLidiButton('like','${value.getCommentNumber()}','${i.index}')|">
+                <i class="fa fa-thumbs-up"></i>
+            </button>
             <div th:id="'comment_likeCount' + ${i.index}" class="comment_likeCount"
-                 th:text="${value.getPostLikeAndDislike().getLikedUser().size()}">
+                 th:text="${value.getPostLikeAndDislike().getLiked().size()}">
             </div>
-            <img th:id="'comment_disLikeButton' + ${i.index}" class="comment_disLikeButton"
+            <button th:id="'comment_disLikeButton' + ${i.index}" class="comment_disLikeButton"
                  th:onclick="|commentLidiButton('dislike','${value.getCommentNumber()}','${i.index}')|">
+                <i class="fa fa-thumbs-down"></i>
+            </button>
             <div th:id="'comment_disLikeCount' + ${i.index}" class="comment_disLikeCount"
-                 th:text="${value.getPostLikeAndDislike().getDisLikedUser().size()}">
+                 th:text="${value.getPostLikeAndDislike().getDisLiked().size()}">
             </div>
             <span th:onclick="|openAndCloseAddBigCommentsWrapper(${i.index})|"
                   th:id="'comment_addBigCommentsButton' + ${i.index}" class="comment_addBigCommentsButton">답글</span>

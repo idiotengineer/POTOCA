@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityManager;
 import javax.persistence.Transient;
 import javax.servlet.http.Cookie;
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,9 +47,20 @@ public class PostService {
     @Autowired
     private final PhotoRepository photoRepository;
 
+    @Autowired
+    private final LikedRepository likedRepository;
+
+    @Autowired
+    private final DisLikedRepository disLikedRepository;
+
     public PostInfo findPost(Long id) throws NoSuchElementException {
 //        Optional<PostInfo> postInfo = postRepository.findPostInfoByPostNumber(id);
         Optional<PostInfo> postInfo = postRepository.findPostByIdWithFetchJoinUsedQueryDSL(id);
+        return postInfo.get();
+    }
+
+    public PostInfo findPostV2(Long id) throws NoSuchElementException {
+        Optional<PostInfo> postInfo = postRepository.findPostByIdWithFetchJoinUsedQueryDSLV2(id);
         return postInfo.get();
     }
 
@@ -137,8 +149,8 @@ public class PostService {
         try {
             // 파일 처리를 위한 Board 객체 생성
             Optional<Users> usersByEmail = usersRepository.findUsersByEmail(cookie.getValue());
-
             PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
+
             if (!savePostLikeAndDislike(postLikeAndDislike)) {
                 new Exception("PostLikeAndDislike 객체 생성 실패");
             }
@@ -261,38 +273,35 @@ public class PostService {
     }
 
     @Transactional
-    public String addUsersSet(PostLikeAndDislike postLikeAndDislike,Users users,String s) {
+    public String addUsersSet(PostLikeAndDislike postLikeAndDislike, Users users, String s) {
         if (likeOrNot(s)) {
-            Set<Users> likedUser = postLikeAndDislike.getLikedUser();
-            likedUser.add(users);
-            return String.valueOf(likedUser.size());
+            Liked liked = new Liked();
+            liked.setUsers(users);
+            liked.setPostLikeAndDislike(postLikeAndDislike);
+
+            likedRepository.save(liked);
+            return String.valueOf(postLikeAndDislike.getLiked().size() + 1);
         } else {
-            Set<Users> disLikedUser = postLikeAndDislike.getDisLikedUser();
-            disLikedUser.add(users);
-            return String.valueOf(disLikedUser.size());
+            DisLiked disLiked = new DisLiked();
+            disLiked.setUsers(users);
+            disLiked.setPostLikeAndDislike(postLikeAndDislike);
+
+            disLikedRepository.save(disLiked);
+            return String.valueOf(postLikeAndDislike.getDisLiked().size() + 1);
         }
     }
 
     @Transactional
-    public String removeUsersSet(PostLikeAndDislike postLikeAndDislike,Users users,String s) {
+    public String removeUsersSet(PostLikeAndDislike postLikeAndDislike, Users users, String s) {
         if (likeOrNot(s)) {
-            Set<Users> likedUser = postLikeAndDislike.getLikedUser();
-            likedUser.remove(users);
-            return String.valueOf(likedUser.size());
+            likedRepository.deleteByPostLidiAndUsers(postLikeAndDislike, users);
+            return String.valueOf(postLikeAndDislike.getLiked().size() - 1);
         } else {
-            Set<Users> disLikedUser = postLikeAndDislike.getDisLikedUser();
-            disLikedUser.remove(users);
-            return String.valueOf(disLikedUser.size());
+            disLikedRepository.deleteByPostLidiAndUsers(postLikeAndDislike, users);
+            return String.valueOf(postLikeAndDislike.getDisLiked().size() - 1);
         }
     }
 
-    public boolean likeOrNot(String s) {
-        if (s == "like") {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     @Transactional
     public void deletePost(Long id) {
@@ -320,4 +329,40 @@ public class PostService {
             e.printStackTrace();
         }
     }
+
+    @Transactional
+    public void clear() {
+        em.flush();
+        em.clear();
+    }
+
+
+
+    @Transactional
+    public Optional<Liked> findLikedByUsersAndPostLidi(PostLikeAndDislike postLikeAndDislike, Users users) {
+        return likedRepository.findLikedByUsers(postLikeAndDislike, users);
+    }
+
+    @Transactional
+    public Optional<DisLiked> findDisLikedByUsersAndPostLidi(PostLikeAndDislike postLikeAndDislike, Users users) {
+        return disLikedRepository.findDisLikedByUsers(postLikeAndDislike, users);
+    }
+
+    public boolean likeOrNot(String s) {
+        return s.equals("like") ? true : false;
+    }
+
+//    @Transactional
+//    public boolean deleteLiked(Liked liked) {
+//        try {
+//            likedRepository.delete(liked);
+//        } catch (Exception e) {
+//
+//        }
+//    }
+//
+//    @Transactional
+//    public boolean deleteDisLiked() {
+//
+//    }
 }

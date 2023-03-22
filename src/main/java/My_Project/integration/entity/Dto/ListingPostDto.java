@@ -43,12 +43,12 @@ public class ListingPostDto {
         }
 
         public boolean checkLike(Users users) {
-            return getPostLikeAndDislike().getLikedUser().stream()
+            return getPostLikeAndDislike().getLiked().stream()
                     .anyMatch(users1 -> users1.equals(users));
         }
 
         public boolean checkDisLike(Users users) {
-            return getPostLikeAndDislike().getDisLikedUser().stream()
+            return getPostLikeAndDislike().getDisLiked().stream()
                     .anyMatch(users1 -> users1.equals(users));
         }
     }

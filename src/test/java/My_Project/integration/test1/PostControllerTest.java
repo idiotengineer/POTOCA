@@ -60,7 +60,9 @@ public class PostControllerTest {
                 0L,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                dates
+                dates,
+                new HashSet<>(),
+                new HashSet<>()
         );
 
         PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike(

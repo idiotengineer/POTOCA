@@ -65,7 +65,9 @@ public class PhotoTest {
                 0L,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                dates
+                dates,
+                new HashSet<>(),
+                new HashSet<>()
         );
 
 
@@ -136,9 +138,9 @@ public class PhotoTest {
                 .selectFrom(postComments)
                 .join(postComments.postLikeAndDislike, postLikeAndDislike)
                 .fetchJoin()
-                .join(postLikeAndDislike.LikedUser)
+                .join(postLikeAndDislike.liked)
                 .fetchJoin()
-                .join(postLikeAndDislike.DisLikedUser)
+                .join(postLikeAndDislike.disLiked)
                 .fetchJoin()
                 .where(postComments.postNumber.in(fetch.stream().map(
                         postInfo1 -> postInfo1.getPostNumber()
@@ -188,9 +190,9 @@ public class PhotoTest {
                 .fetchJoin()
                 .join(postInfo.postLikeAndDislike, postLikeAndDislike)
                 .fetchJoin()
-                .join(postLikeAndDislike.LikedUser)
+                .join(postLikeAndDislike.liked)
                 .fetchJoin()
-                .join(postLikeAndDislike.DisLikedUser)
+                .join(postLikeAndDislike.disLiked)
                 .fetchJoin()
                 .where(postInfo.postNumber.eq(id))
                 .fetchOne();
@@ -200,9 +202,9 @@ public class PhotoTest {
                 .selectFrom(postComments)
                 .join(postComments.postLikeAndDislike, postLikeAndDislike)
                 .fetchJoin()
-                .join(postLikeAndDislike.LikedUser)
+                .join(postLikeAndDislike.liked)
                 .fetchJoin()
-                .join(postLikeAndDislike.DisLikedUser)
+                .join(postLikeAndDislike.disLiked)
                 .fetchJoin()
                 .where(postComments.postNumber.eq(id))
                 .fetch();
@@ -217,8 +219,8 @@ public class PhotoTest {
                 .selectFrom(postInfo)
                 .join(postInfo.photo, photo).fetchJoin()
                 .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
-                .leftJoin(postLikeAndDislike.LikedUser).fetchJoin()
-                .leftJoin(postLikeAndDislike.DisLikedUser).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
                 .join(postInfo.comments, postComments).fetchJoin()
                 .join(postInfo.postedUser,users).fetchJoin()
                 .where(postInfo.postNumber.eq(id))
@@ -229,9 +231,9 @@ public class PhotoTest {
                 .selectFrom(postComments)
                 .join(postComments.postLikeAndDislike, postLikeAndDislike)
                 .fetchJoin()
-                .leftJoin(postLikeAndDislike.LikedUser)
+                .leftJoin(postLikeAndDislike.liked)
                 .fetchJoin()
-                .leftJoin(postLikeAndDislike.DisLikedUser)
+                .leftJoin(postLikeAndDislike.disLiked)
                 .fetchJoin()
                 .leftJoin(postLikeAndDislike.postInfo)
                 .fetchJoin()
@@ -243,15 +245,15 @@ public class PhotoTest {
         fetch.stream()
                 .forEach(
                         postComments1 -> {
-                            System.out.println(postComments1.getPostLikeAndDislike().getLikedUser().size());
-                            System.out.println(postComments1.getPostLikeAndDislike().getDisLikedUser().size());
+                            System.out.println(postComments1.getPostLikeAndDislike().getLiked().size());
+                            System.out.println(postComments1.getPostLikeAndDislike().getDisLiked().size());
                         });
 
 
         System.out.println(postInfo1.getPostedUser().getEmail());
         System.out.println(postInfo1.getComments().size());
-        System.out.println(postInfo1.getPostLikeAndDislike().getLikedUser().size());
-        System.out.println(postInfo1.getPostLikeAndDislike().getDisLikedUser().size());
+        System.out.println(postInfo1.getPostLikeAndDislike().getLiked().size());
+        System.out.println(postInfo1.getPostLikeAndDislike().getDisLiked().size());
         postInfo1.getPhoto()
                 .stream().forEach(
                         photo1 -> System.out.println(photo1.getId())

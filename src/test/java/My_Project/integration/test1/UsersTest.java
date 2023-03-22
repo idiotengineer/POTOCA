@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 
 @SpringBootTest
 @Transactional
@@ -34,7 +35,7 @@ public class UsersTest {
         //given
         Address address = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users = new Users("abc123", "1234", "홍길동", "01012345678", "0010063912631", address, 1L, null, null, dates);
+        Users users = new Users("abc123", "1234", "홍길동", "01012345678", "0010063912631", address, 1L, null, null, dates,new HashSet<>(),new HashSet<>());
         //when
      /*   Users user1 = userService.addUsers(users);
         //then
@@ -46,11 +47,11 @@ public class UsersTest {
         //given id, ssn, phoneNumber가 중복되는 insert
         Address address1 = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates1 = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users1 = new Users("abc123", "1234", "홍길동", "01012345678", "0010063912631", address1, 1L, null, null, dates1);
+        Users users1 = new Users("abc123", "1234", "홍길동", "01012345678", "0010063912631", address1, 1L, null, null, dates1,new HashSet<>(),new HashSet<>());
 
         Address address2 = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates2 = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users2 = new Users("abc123", "1234", "홍길동", "01012345678", "0010063912631", address2, 1L, null, null, dates2);
+        Users users2 = new Users("abc123", "1234", "홍길동", "01012345678", "0010063912631", address2, 1L, null, null, dates2,new HashSet<>(),new HashSet<>());
 
         //when
         try {
@@ -70,11 +71,11 @@ public class UsersTest {
         //given id값만 같은 User 등록 시도
         Address address1 = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates1 = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users1 = new Users("abc123", "1234", "홍길동", "01011111111", "0123456789012", address1, 1L, null, null, dates1);
+        Users users1 = new Users("abc123", "1234", "홍길동", "01011111111", "0123456789012", address1, 1L, null, null, dates1,new HashSet<>(),new HashSet<>());
 
         Address address2 = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates2 = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users2 = new Users("abc123", "1234", "홍길동", "01012345678", "0111111111111", address2, 1L, null, null, dates2);
+        Users users2 = new Users("abc123", "1234", "홍길동", "01012345678", "0111111111111", address2, 1L, null, null, dates2,new HashSet<>(),new HashSet<>());
 
         //when 등록시도
         try {
@@ -98,11 +99,11 @@ public class UsersTest {
         //given ssn값만 같은 User 등록 시도
         Address address1 = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates1 = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users1 = new Users("abc1234", "1234", "홍길동", "01011111111", "123456", address1, 1L, null, null, dates1);
+        Users users1 = new Users("abc1234", "1234", "홍길동", "01011111111", "123456", address1, 1L, null, null, dates1,new HashSet<>(),new HashSet<>());
 
         Address address2 = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates2 = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users2 = new Users("abc123", "1234", "홍길동", "01012345678", "123456", address2, 1L, null, null, dates2);
+        Users users2 = new Users("abc123", "1234", "홍길동", "01012345678", "123456", address2, 1L, null, null, dates2,new HashSet<>(),new HashSet<>());
 
         //when 등록시도
         try {
@@ -126,11 +127,11 @@ public class UsersTest {
         //given phoneNumber값만 같은 User 등록 시도
         Address address1 = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates1 = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users1 = new Users("abc1234", "1234", "홍길동", "01012345678", "123456", address1, 1L, null, null, dates1);
+        Users users1 = new Users("abc1234", "1234", "홍길동", "01012345678", "123456", address1, 1L, null, null, dates1,new HashSet<>(),new HashSet<>());
 
         Address address2 = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates2 = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users2 = new Users("abc123", "1234", "홍길동", "01012345678", "123423456", address2, 1L, null, null, dates2);
+        Users users2 = new Users("abc123", "1234", "홍길동", "01012345678", "123423456", address2, 1L, null, null, dates2,new HashSet<>(),new HashSet<>());
 
         //when 등록시도
         try {
@@ -154,11 +155,11 @@ public class UsersTest {
         //given 중복되는 값이 없는 객체삽입
         Address address1 = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates1 = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users1 = new Users("abc1234", "1234", "홍길동", "01012345678", "123456", address1, 1L, null, null, dates1);
+        Users users1 = new Users("abc1234", "1234", "홍길동", "01012345678", "123456", address1, 1L, null, null, dates1,new HashSet<>(),new HashSet<>());
 
         Address address2 = new Address("서울시", "강남구", "테헤란로", "129", "5층");
         Dates dates2 = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users2 = new Users("abc123", "1234", "홍길동", "01066666666", "123456421", address2, 1L, null, null, dates2);
+        Users users2 = new Users("abc123", "1234", "홍길동", "01066666666", "123456421", address2, 1L, null, null, dates2,new HashSet<>(),new HashSet<>());
 
         //when 등록시도
         try {
@@ -172,10 +173,5 @@ public class UsersTest {
             Assertions.fail("실패");
         }
         return;
-    }
-
-    @Test
-    public void view_controller사용_로그인테스트() {
-
     }
 }

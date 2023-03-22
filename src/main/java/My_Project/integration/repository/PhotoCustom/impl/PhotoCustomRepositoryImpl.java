@@ -1,13 +1,9 @@
 package My_Project.integration.repository.PhotoCustom.impl;
 
-import My_Project.integration.entity.Photo;
-import My_Project.integration.entity.QPhoto;
 import My_Project.integration.repository.PhotoCustom.PhotoCustomRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import java.util.List;
-
-import static My_Project.integration.entity.QPhoto.*;
+import static My_Project.integration.entity.QPhoto.photo;
 
 public class PhotoCustomRepositoryImpl implements PhotoCustomRepository {
 

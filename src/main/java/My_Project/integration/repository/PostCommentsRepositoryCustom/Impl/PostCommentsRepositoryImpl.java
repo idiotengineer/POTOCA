@@ -2,15 +2,12 @@ package My_Project.integration.repository.PostCommentsRepositoryCustom.Impl;
 
 import My_Project.integration.entity.PostComments;
 import My_Project.integration.entity.PostLikeAndDislike;
-import My_Project.integration.entity.QPostInfo;
 import My_Project.integration.repository.PostCommentsRepositoryCustom.PostCommentsRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 import static My_Project.integration.entity.QPostComments.postComments;
-import static My_Project.integration.entity.QPostInfo.*;
+import static My_Project.integration.entity.QPostInfo.postInfo;
 import static My_Project.integration.entity.QPostLikeAndDislike.postLikeAndDislike;
 
 @Repository
@@ -24,7 +21,7 @@ public class PostCommentsRepositoryImpl implements PostCommentsRepositoryCustom 
     public PostComments findPostCommentsByIdWithFetch(Long id) {
         return jpaQueryFactory
                 .selectFrom(postComments)
-                .join(postComments.postLikeAndDislike,postLikeAndDislike).fetchJoin()
+                .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .join(postLikeAndDislike.postInfo, postInfo).fetchJoin()
                 .where(postComments.commentNumber.eq(id))
                 .fetchOne();
@@ -33,8 +30,8 @@ public class PostCommentsRepositoryImpl implements PostCommentsRepositoryCustom 
     public PostLikeAndDislike findPostLikeAndDisLikeByIdWithFetch(Long id) {
         return jpaQueryFactory
                 .selectFrom(postLikeAndDislike)
-                .leftJoin(postLikeAndDislike.DisLikedUser).fetchJoin()
-                .leftJoin(postLikeAndDislike.LikedUser).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked).fetchJoin()
                 .where(postLikeAndDislike.id.eq(id))
                 .fetchOne();
     }
@@ -45,8 +42,8 @@ public class PostCommentsRepositoryImpl implements PostCommentsRepositoryCustom 
                 .selectFrom(postComments)
                 .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
-                .leftJoin(postLikeAndDislike.LikedUser).fetchJoin()
-                .leftJoin(postLikeAndDislike.DisLikedUser).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked).fetchJoin()
                 .where(postComments.commentNumber.eq(id))
                 .fetchOne();
     }

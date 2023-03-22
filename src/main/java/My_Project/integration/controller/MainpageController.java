@@ -7,6 +7,7 @@ import My_Project.integration.service.PostService;
 import My_Project.integration.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,5 +176,10 @@ public class MainpageController {
     public String postingPage() {
         LOGGER.info("일반 게시글 작성 페이지 접속");
         return "posting";
+    }
+
+    @GetMapping("/test")
+    public String sdf() {
+        return "test";
     }
 }

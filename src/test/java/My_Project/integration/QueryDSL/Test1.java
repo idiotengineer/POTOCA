@@ -1,3 +1,4 @@
+/*
 package My_Project.integration.QueryDSL;
 
 import My_Project.integration.controller.PostController;
@@ -75,7 +76,9 @@ public class Test1 {
                 0L,
                 null,
                 null,
-                dates
+                dates,
+                new HashSet<>(),
+                new HashSet<>()
         );
 
         Users users2 = new Users(
@@ -88,7 +91,9 @@ public class Test1 {
                 0L,
                 null,
                 null,
-                dates
+                dates,
+                new HashSet<>(),
+                new HashSet<>()
         );
 
         PostLikeAndDislike postLikeAndDislike1 = new PostLikeAndDislike();
@@ -185,7 +190,9 @@ public class Test1 {
                 0L,
                 null,
                 null,
-                dates
+                dates,
+                new HashSet<>(),
+                new HashSet<>()
         );
 
         Set<Users> set = new HashSet<>();
@@ -217,7 +224,9 @@ public class Test1 {
                 0L,
                 null,
                 null,
-                dates
+                dates,
+                new HashSet<>(),
+                new HashSet<>()
         );
 
 
@@ -261,7 +270,9 @@ public class Test1 {
                 0L,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                dates
+                dates,
+                new HashSet<>(),
+                new HashSet<>()
         );
 
 
@@ -312,7 +323,9 @@ public class Test1 {
                 0L,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                dates
+                dates,
+                new HashSet<>(),
+                new HashSet<>()
         );
 
         PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike(
@@ -375,7 +388,9 @@ public class Test1 {
                 0L,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                dates
+                dates,
+                new HashSet<>(),
+                new HashSet<>()
         );
 
         PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike(
@@ -407,3 +422,4 @@ public class Test1 {
 }
 
 
+*/

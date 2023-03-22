@@ -5,13 +5,17 @@ import My_Project.integration.entity.Dto.UserInfoDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+@Setter
 @Entity
 @Getter
 @NoArgsConstructor
@@ -50,6 +54,17 @@ public class Users {
     @Embedded
     private Dates dates;
 
+    @OneToMany(
+            mappedBy = "users"
+    )
+    private Set<Liked> liked = new HashSet<>();
+
+    @OneToMany(
+            mappedBy = "users"
+    )
+    private Set<DisLiked> disLiked = new HashSet<>();
+
+
     public Users(UserInfoDto userInfoDto){
         this.setEmail(userInfoDto.getEmail());
         this.setPassword(userInfoDto.getPassword());
@@ -79,43 +94,4 @@ public class Users {
         this.setDates(dates);
     }
 
-    public void setEmail(String id) {
-        this.email = id;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void setSsn(String ssn) {
-        this.ssn = ssn;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public void setPoint(Long point) {
-        this.point = point;
-    }
-
-    public void setUploadedPost(List<PostInfo> uploadedPost) {
-        this.uploadedPost = uploadedPost;
-    }
-
-    public void setPointHistories(List<PointHistory> pointHistories) {
-        this.pointHistories = pointHistories;
-    }
-
-    public void setDates(Dates dates) {
-        this.dates = dates;
-    }
 }
