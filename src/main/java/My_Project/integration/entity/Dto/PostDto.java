@@ -56,13 +56,22 @@ public class PostDto {
     }
 
     public boolean checkLike(Users users) {
+//        return getPostLikeAndDislikeDto().getLikedUser().stream()
+//                .anyMatch(users1 -> users1.equals(users));
         return getPostLikeAndDislikeDto().getLikedUser().stream()
-                .anyMatch(users1 -> users1.equals(users));
+                .anyMatch(
+                        liked -> liked.getUsers().equals(users)
+                );
     }
 
     public boolean checkDisLike(Users users) {
+//        return getPostLikeAndDislikeDto().getDisLikedUser().stream()
+//                .anyMatch(users1 -> users1.equals(users));
+
         return getPostLikeAndDislikeDto().getDisLikedUser().stream()
-                .anyMatch(users1 -> users1.equals(users));
+                .anyMatch(
+                        disLiked -> disLiked.getUsers().equals(users)
+                );
     }
 
     public PostDto(PostInfo postInfo, PostLikeAndDislikeDto postLikeAndDislikeDto) {
