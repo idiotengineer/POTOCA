@@ -3,6 +3,7 @@ package My_Project.integration.repository.PostInfoCustom;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.PostInfo;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,4 +15,6 @@ public interface PostInfoCustomRepository {
     Optional<PostInfo> findPostByIdWithFetchJoinUsedQueryDSL(Long id);
 
     Optional<PostInfo> findPostByIdWithFetchJoinUsedQueryDSLV2(Long id);
+
+    public Optional<PostInfo> findPostInfo(Long id);
 }

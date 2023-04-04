@@ -1,10 +1,12 @@
 package My_Project.integration.entity;
 
 import My_Project.integration.entity.Dto.CommentDto;
+import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
 import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostComments {
@@ -22,8 +25,9 @@ public class PostComments {
     @Column(name = "post_comments_number")
     private Long commentNumber;
 
-    @Column(name = "post_number")
-    private Long postNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private PostInfo postInfo;
 
     @Column(name = "post_commented_users_email")
     private String postCommentedUsersEmail;
@@ -34,9 +38,12 @@ public class PostComments {
     @Embedded
     private Dates dates;
 
-    @OneToMany
-    @JoinColumn(name = "post_comments_number")
-    private List<BigComments> bigCommentsList;
+    @OneToMany(
+            mappedBy = "bigCommentsNumber",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<BigComments> bigCommentsList = new ArrayList<>();
 
     @OneToOne(
             orphanRemoval = true,
@@ -46,8 +53,8 @@ public class PostComments {
     @JoinColumn
     private PostLikeAndDislike postLikeAndDislike;
 
-    public PostComments(CommentDto commentDto) {
-        this.postNumber = commentDto.getPost_number();
+    public PostComments(CommentDto commentDto,PostInfo postInfo,PostLikeAndDislike postLikeAndDislike) {
+        this.postInfo = postInfo;
         this.postCommentedUsersEmail = commentDto.getUsers_email();
         this.postCommentsContents = commentDto.getComment();
         this.bigCommentsList = new ArrayList<>();
@@ -55,5 +62,14 @@ public class PostComments {
 
         Dates dates1 = new Dates(LocalDateTime.now(),LocalDateTime.now());
         this.dates = dates1;
+    }
+
+    public Integer bigCommentSize() {
+        return getBigCommentsList().size();
+    }
+
+    public void addBigComments(BigComments bigComments) {
+        this.getBigCommentsList().add(bigComments);
+        bigComments.setPostComments(this);
     }
 }

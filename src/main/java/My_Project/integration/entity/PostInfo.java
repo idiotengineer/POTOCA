@@ -45,10 +45,9 @@ public class PostInfo {
 
     @OneToMany(
             orphanRemoval = true,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+            cascade = CascadeType.ALL,
+            mappedBy = "postInfo"
     )
-
-    @JoinColumn(name = "id")
     @BatchSize(size = 1000)
 //    private List<PostComments> comments;
     private Set<PostComments> comments;
@@ -93,6 +92,11 @@ public class PostInfo {
 //        this.comments = new ArrayList<>();
         this.comments = new HashSet<>();
         setPostLikeAndDislike(postLikeAndDislike);
+    }
+
+    public void addComments(PostComments postComments) {
+        this.comments.add(postComments);
+        postComments.setPostInfo(this);
     }
 }
 

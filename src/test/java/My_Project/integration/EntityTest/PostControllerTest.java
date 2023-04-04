@@ -1,9 +1,8 @@
-package My_Project.integration.test1;
+package My_Project.integration.EntityTest;
 
 import My_Project.integration.controller.PostController;
 import My_Project.integration.entity.*;
 import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

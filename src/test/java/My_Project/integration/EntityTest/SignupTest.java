@@ -1,4 +1,4 @@
-package My_Project.integration.test1;
+package My_Project.integration.EntityTest;
 
 import My_Project.integration.entity.Dto.UserInfoDto;
 import My_Project.integration.entity.Users;

@@ -4,17 +4,21 @@ import My_Project.integration.entity.BigComments;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.PostComments;
 import My_Project.integration.entity.PostInfo;
+import My_Project.integration.entity.QPostInfo;
 import My_Project.integration.repository.PostInfoCustom.PostInfoCustomRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static My_Project.integration.entity.QBigComments.bigComments;
+import static My_Project.integration.entity.QDisLiked.disLiked;
+import static My_Project.integration.entity.QLiked.liked;
 import static My_Project.integration.entity.QPhoto.photo;
 import static My_Project.integration.entity.QPostComments.postComments;
 import static My_Project.integration.entity.QPostInfo.postInfo;
@@ -67,14 +71,17 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .selectFrom(postComments)
                 .join(postComments.postLikeAndDislike, postLikeAndDislike)
                 .fetchJoin()
+                .leftJoin(postComments.postInfo, postInfo)
+                .fetchJoin()
                 .leftJoin(postLikeAndDislike.liked)
                 .fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked)
                 .fetchJoin()
                 .leftJoin(postLikeAndDislike.postInfo)
                 .fetchJoin()
-                .where(postComments.postNumber.eq(id))
+                .where(postComments.postInfo.postNumber.eq(id))
                 .fetch();
+
 
         return Optional.of(postInfo1);
     }
@@ -95,11 +102,12 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
 
         List<PostComments> fetch = jpaQueryFactory.selectFrom(postComments)
                 .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .join(postComments.postInfo, postInfo).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
                 .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .join(postComments.bigCommentsList, bigComments).fetchJoin()
-                .where(postComments.postNumber.eq(id))
+                .where(postComments.postInfo.postNumber.eq(id))
                 .fetch();
 
         List<List<BigComments>> collect = fetch.stream().map(
@@ -116,5 +124,21 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
 
 
         return Optional.of(postInfo1);
+    }
+    @Override
+    public Optional<PostInfo> findPostInfo(Long id) {
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .selectFrom(postInfo)
+                        .join(postInfo.postedUser, users).fetchJoin()
+                        .join(postInfo.photo, photo).fetchJoin()
+                        .leftJoin(photo.postInfo).fetchJoin()
+                        .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                        .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                        .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                        .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+                        .where(postInfo.postNumber.eq(id))
+                        .fetchOne()
+        );
     }
 }

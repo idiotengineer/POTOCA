@@ -51,10 +51,6 @@
     text-decoration: none;
 }
 
-.comment_BigCommentsCount{
-    text-decoration: none;
-}
-
 .bigCommentsTextareaTags{
     width: 80%;
     min-height: 50px;
@@ -78,11 +74,18 @@
 
 .bigCommentsWrapper{
     margin-left: 10%;
+    display: none;
 }
 
 #bigCommentsProfileContent{
     margin-top : 0%;
     margin-bottom : 0%;
+}
+
+.comment_BigCommentSymbol{
+    color: blue;
+    text-decoration: underline;
+    display: inline-block;
 }
 
 

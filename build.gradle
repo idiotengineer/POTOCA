@@ -46,6 +46,9 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
 	implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+	//p6spy
+	implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${version}")
 }
 
 tasks.named('test') {

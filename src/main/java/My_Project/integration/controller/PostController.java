@@ -1,15 +1,9 @@
 package My_Project.integration.controller;
 
-import My_Project.integration.entity.Dto.CommentDto;
-import My_Project.integration.entity.Dto.ModifyDto;
-import My_Project.integration.entity.Dto.PostDto;
-import My_Project.integration.entity.Dto.PostInfoDto;
-import My_Project.integration.entity.PostComments;
-import My_Project.integration.entity.PostInfo;
-import My_Project.integration.entity.PostLikeAndDislike;
+import My_Project.integration.entity.*;
+import My_Project.integration.entity.Dto.*;
 import My_Project.integration.entity.ResponseDto.ModiyingPostResponseDto;
 import My_Project.integration.entity.ResponseDto.PhotoResponseDto;
-import My_Project.integration.entity.Users;
 import My_Project.integration.exception.NotSameStringException;
 import My_Project.integration.service.PhotoService;
 import My_Project.integration.service.PostCommentsService;
@@ -197,10 +191,15 @@ public class PostController {
                 Long commentNumber = Long.parseLong(data.get("commentNumber").toString());
 
                 //해당 댓글과 PostLikeAndDisLike Fetch 조인 해 가져오기
-                Optional<PostComments> postCommentsById = postCommentsService.findPostCommentsById(commentNumber);
+//                Optional<PostComments> postCommentsById = postCommentsService.findPostCommentsById(commentNumber);
+                PostLikeAndDislike postLikeAndDislike = postCommentsService
+                        .findPostCommentsById(commentNumber)
+                        .get()
+                        .getPostLikeAndDislike();
+
                 Users users = userService.findById(cookie.get().getValue()).get();
 
-                PostLikeAndDislike postLikeAndDislike = postCommentsById.get().getPostLikeAndDislike();
+//                PostLikeAndDislike postLikeAndDislike = postCommentsById.get().getPostLikeAndDislike();
                 if (data.get("type").equals("like")) { // Like 일 때
                     boolean anyMatch = postLikeAndDislike
                             .getLiked().contains(users);
@@ -333,6 +332,19 @@ public class PostController {
             e.printStackTrace();
             return "redirect:/alert?string='Failed Modifying'";
         }
+    }
+
+    @PostMapping("/find_post/addBigComments")
+    @ResponseBody
+    public String addBigComments(
+            @RequestBody addBigCommentsDto addBigCommentsDto,
+            @CookieValue("users") Optional<Cookie> cookie) {
+        if (!cookie.isPresent()) {
+            return "not_logined";
+        }
+
+        postService.addBigComments(addBigCommentsDto, cookie.get().getValue());
+        return "success";
     }
 }
 

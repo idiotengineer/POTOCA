@@ -1,4 +1,4 @@
-package My_Project.integration.QueryDSL;
+package My_Project.integration.RepositoryTest;
 
 import My_Project.integration.entity.Liked;
 import My_Project.integration.entity.PostLikeAndDislike;

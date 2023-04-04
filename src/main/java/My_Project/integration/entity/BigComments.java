@@ -1,8 +1,15 @@
 package My_Project.integration.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Setter
 public class BigComments {
 
     @Id
@@ -10,9 +17,13 @@ public class BigComments {
     @Column(name = "big_comments_number")
     private Long bigCommentsNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID")
     private Users bigCommentedUser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private PostComments postComments;
 
     @Column(name = "big_comments_content",nullable = false)
     private String content;
@@ -27,4 +38,8 @@ public class BigComments {
 
     @Embedded
     private Dates dates;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private PostInfo postInfo;
 }

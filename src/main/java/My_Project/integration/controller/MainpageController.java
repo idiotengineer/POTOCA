@@ -2,6 +2,7 @@ package My_Project.integration.controller;
 
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.PostInfo;
+import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.service.PostService;
 import My_Project.integration.service.UserService;
@@ -11,6 +12,8 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -91,9 +94,10 @@ public class MainpageController {
     @GetMapping("/find_post")
     public String findPost(@RequestParam("id") Long id, Model model, @CookieValue("users") Optional<Cookie> cookie) {
         try {
-            PostInfo postInfo = postService.findPost(id);
-//            PostLikeAndDislikeDto postLikeAndDislikeDto = postService.findPostlidiDtoByPostNumber(id);
-//            PostDto post = new PostDto(postInfo, postLikeAndDislikeDto);
+            PageRequest of = PageRequest.of(0, 10);
+
+            PostInfo postInfo = postService.findPostV2(id).get();
+            Slice<PostCommentsResponseDto> commentsV2 = postService.findCommentsV2(postInfo, of);
             PostDto post = new PostDto(postInfo);
 
             if (cookie.isPresent()) { // 로그인 되어 있을 시
@@ -182,4 +186,5 @@ public class MainpageController {
     public String sdf() {
         return "test";
     }
+
 }

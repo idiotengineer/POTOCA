@@ -1,4 +1,4 @@
-package My_Project.integration.test1;
+package My_Project.integration.EntityTest;
 
 import My_Project.integration.entity.*;
 import My_Project.integration.repository.PhotoRepository;
@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static My_Project.integration.entity.QBigComments.*;
 import static My_Project.integration.entity.QPhoto.photo;
 import static My_Project.integration.entity.QPostComments.postComments;
 import static My_Project.integration.entity.QPostInfo.postInfo;
@@ -142,7 +141,7 @@ public class PhotoTest {
                 .fetchJoin()
                 .join(postLikeAndDislike.disLiked)
                 .fetchJoin()
-                .where(postComments.postNumber.in(fetch.stream().map(
+                .where(postComments.postInfo.postNumber.in(fetch.stream().map(
                         postInfo1 -> postInfo1.getPostNumber()
                 ).collect(Collectors.toList())))
                 .fetch();
@@ -206,7 +205,7 @@ public class PhotoTest {
                 .fetchJoin()
                 .join(postLikeAndDislike.disLiked)
                 .fetchJoin()
-                .where(postComments.postNumber.eq(id))
+                .where(postComments.postInfo.postNumber.eq(id))
                 .fetch();
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
@@ -237,7 +236,7 @@ public class PhotoTest {
                 .fetchJoin()
                 .leftJoin(postLikeAndDislike.postInfo)
                 .fetchJoin()
-                .where(postComments.postNumber.eq(postInfo1.getPostNumber()))
+                .where(postComments.postInfo.postNumber.eq(postInfo1.getPostNumber()))
                 .fetch();
 
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");

@@ -2,14 +2,17 @@ package My_Project.integration.service;
 
 import My_Project.integration.entity.*;
 import My_Project.integration.entity.Dto.*;
+import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
 import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
 import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.repository.*;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +22,8 @@ import javax.persistence.Transient;
 import javax.servlet.http.Cookie;
 import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
+import javax.xml.stream.events.Comment;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,16 +58,27 @@ public class PostService {
     @Autowired
     private final DisLikedRepository disLikedRepository;
 
+    @Autowired
+    private final BigCommentsRepository bigCommentsRepository;
+
+    @Transactional
     public PostInfo findPost(Long id) throws NoSuchElementException {
 //        Optional<PostInfo> postInfo = postRepository.findPostInfoByPostNumber(id);
         Optional<PostInfo> postInfo = postRepository.findPostByIdWithFetchJoinUsedQueryDSL(id);
         return postInfo.get();
     }
 
-    public PostInfo findPostV2(Long id) throws NoSuchElementException {
-        Optional<PostInfo> postInfo = postRepository.findPostByIdWithFetchJoinUsedQueryDSLV2(id);
-        return postInfo.get();
+    @Transactional
+    public Optional<PostInfo> findPostV2(Long id) throws NoSuchElementException {
+        return postRepository.findPostInfo(id);
     }
+
+    @Transactional
+    public Slice<PostCommentsResponseDto> findCommentsV2(PostInfo postInfo,Pageable pageable) throws NoSuchElementException{
+
+        return postCommentsRepository.findCommentsWithPaging(postInfo, pageable);
+    }
+
 
     public PostDto getPostDto(Optional<PostInfo> postInfo) {
         if (postInfo.isPresent()) {
@@ -190,18 +206,35 @@ public class PostService {
 
 
     @Transactional
-    public Boolean registerComments(CommentDto commentDto, Optional<Cookie> cookie) {
-        if (cookie.isPresent()) {
-            PostComments postComments = new PostComments(commentDto);
-            postCommentsRepository.save(postComments);
-            Optional<PostInfo> post = postRepository.findById(commentDto.getPost_number());
-            post.get().getComments().add(postComments);
+    public Boolean registerComments(CommentDto commentDto, Optional<Cookie> cookie) throws Exception{
+//        if (cookie.isPresent()) {
+//            PostComments postComments = new PostComments(commentDto);
+//            postCommentsRepository.save(postComments);
+//            Optional<PostInfo> post = postRepository.findById(commentDto.getPost_number());
+//            post.get().getComments().add(postComments);
+//
+//            em.flush();
+//            em.clear();
+//            return true;
+//        } else {
+//            throw new NoSuchElementException("로그인 되어있지 않습니다");
+//        }
 
-            em.flush();
-            em.clear();
+        try {
+            Optional<PostInfo> post = findPostV2(commentDto.getPost_number());
+            PostLikeAndDislike postLikeAndDislike = PostLikeAndDislike.builder().postInfo(post.get()).build();
+            postLikeAndDislikeRepository.save(postLikeAndDislike);
+
+            PostComments postComments = new PostComments(commentDto, post.get(),postLikeAndDislike);
+            postCommentsRepository.save(postComments);
+
             return true;
-        } else {
-            throw new NoSuchElementException("로그인 되어있지 않습니다");
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("로그인 되어있지 않습니다 or 조회 불가능");
+        } catch (NullPointerException e) {
+            throw new NullPointerException("NPE 발생");
+        } catch (Exception e) {
+            throw new Exception("에러 발생");
         }
     }
 
@@ -352,17 +385,52 @@ public class PostService {
         return s.equals("like") ? true : false;
     }
 
-//    @Transactional
-//    public boolean deleteLiked(Liked liked) {
-//        try {
-//            likedRepository.delete(liked);
-//        } catch (Exception e) {
+
+    @Transactional
+    public void addBigComments(addBigCommentsDto addBigCommentsDto, String s) {
+        try {
+//            Users users = usersRepository.findUsersByEmail(s).get();
+//            PostComments postCommentsByIdWithFetch = postCommentsRepository.findPostCommentsV2(addBigCommentsDto.getPost_number()).get();
+//            Dates dates = new Dates(LocalDateTime.now(), LocalDateTime.now());
 //
-//        }
-//    }
+//            PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
+//            postLikeAndDislike.setPostInfo(postCommentsByIdWithFetch.getPostInfo());
 //
-//    @Transactional
-//    public boolean deleteDisLiked() {
+//            BigComments bigComments = BigComments.builder()
+//                    .bigCommentedUser(users)
+//                    .content(addBigCommentsDto.getComment())
+//                    .postLikeAndDislike(postLikeAndDislike)
+//                    .dates(dates)
+//                    .postInfo(postCommentsByIdWithFetch.getPostInfo())
+//                    .postComments(postCommentsByIdWithFetch)
+//                    .build();
 //
-//    }
+//            em.flush();
+//            em.clear();
+
+            PostComments postCommentsV3 = postCommentsRepository.findPostCommentsV3(addBigCommentsDto.getComment_number()).get();
+            Users users = usersRepository.findUsersByEmail(s).get();
+            PostLikeAndDislike postLikeAndDislike = PostLikeAndDislike.builder().postInfo(postCommentsV3.getPostInfo()).build();
+
+            postLikeAndDislikeRepository.save(postLikeAndDislike);
+
+            BigComments build = BigComments.builder()
+                    .dates(new Dates(LocalDateTime.now(), LocalDateTime.now()))
+                    .bigCommentedUser(users)
+                    .postComments(postCommentsV3)
+                    .content(addBigCommentsDto.getComment())
+                    .postLikeAndDislike(postLikeAndDislike)
+                    .postInfo(postCommentsV3.getPostInfo())
+                    .build();
+            postCommentsV3.addBigComments(build);
+
+            bigCommentsRepository.save(build);
+            postCommentsRepository.save(postCommentsV3);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            System.out.println("NPE 발생, 회원 조회 or 댓글 조회 실패");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
