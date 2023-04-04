@@ -1,9 +1,6 @@
 package My_Project.integration.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +8,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Setter
 public class Photo {
 
     @Id
@@ -37,7 +35,7 @@ public class Photo {
         this.fileSize = fileSize;
     }
 
-    public void setPostInfo(PostInfo postInfo) {
+    public void setPostInfoByPostInfo(PostInfo postInfo) {
         this.postInfo = postInfo;
         // 게시글에 현재 파일이 존재하지 않는다면
         if (!postInfo.getPhoto().contains(this))

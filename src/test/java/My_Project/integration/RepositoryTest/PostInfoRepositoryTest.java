@@ -14,6 +14,7 @@ import org.springframework.data.domain.Slice;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.Set;
 
 import static My_Project.integration.entity.QBigComments.*;
 import static My_Project.integration.entity.QPostComments.postComments;
@@ -40,10 +41,15 @@ public class PostInfoRepositoryTest {
     public void postInfo조회Fetch조인테스트V2() throws Exception {
         //given
         PageRequest of = PageRequest.of(0, 5);
-        Optional<PostInfo> postInfo = postRepository.findPostInfo(236L);
+        Optional<PostInfo> postInfo = postRepository.findPostInfo(2L);
 //        Slice<PostCommentsResponseDto> commentsWithPaging = postCommentsRepository.findCommentsWithPaging(236L, of);
         //when
 
+        Set<Photo> photo = postInfo.get().getPhoto();
+
+        for (Photo photo1 : photo) {
+            System.out.println(photo1.getPostInfo().getPostedUser());
+        }
         //then
         System.out.println();
     }

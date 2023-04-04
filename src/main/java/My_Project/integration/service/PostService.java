@@ -188,6 +188,7 @@ public class PostService {
         if (!photoList.isEmpty()) {
             for (Photo photo : photoList) {
                 // 파일을 DB에 저장
+                photo.setPostInfoByPostInfo(postInfo); // added
                 postInfo.addPhoto(photoRepository.save(photo));
             }
         }
@@ -337,8 +338,20 @@ public class PostService {
 
 
     @Transactional
-    public void deletePost(Long id) {
-        postRepository.deleteById(id);
+    public void deletePost(Long id) throws Exception {
+        PostInfo postInfo = postRepository.findPostInfo(id).orElseThrow(() -> new IllegalArgumentException("Invalid post number"));
+
+        Set<PostComments> comments = postInfo.getComments();
+        for (PostComments comment : comments) {
+            comment.setPostInfo(null);
+        }
+
+        Set<Photo> photo = postInfo.getPhoto();
+        for (Photo photo1 : photo) {
+            photo1.setPostInfo(null);
+        }
+
+        em.remove(postInfo);
     }
 
     public void deletePhoto(PostInfo postInfo) {

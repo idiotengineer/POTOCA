@@ -37,7 +37,7 @@ public class PostInfo {
     @OneToMany(
             mappedBy = "postInfo",
             orphanRemoval = true,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+            cascade = CascadeType.ALL
     )
     @BatchSize(size = 100)
 //    private List<Photo> photo = new ArrayList<>();
@@ -52,7 +52,9 @@ public class PostInfo {
 //    private List<PostComments> comments;
     private Set<PostComments> comments;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JoinColumn
     @JsonIgnore
     private PostLikeAndDislike postLikeAndDislike;
@@ -78,7 +80,7 @@ public class PostInfo {
         // 게시글에 파일이 저장되어있지 않은 경우
         if(photo.getPostInfo() != this)
             // 파일 저장`
-            photo.setPostInfo(this);
+            photo.setPostInfoByPostInfo(this);
     }
 
     public PostInfo(Users users, PostInfoDto postInfo,PostLikeAndDislike postLikeAndDislike) {
