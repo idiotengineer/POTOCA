@@ -1,11 +1,7 @@
 package My_Project.integration.entity;
 
 import My_Project.integration.entity.Dto.CommentDto;
-import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
-import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -16,8 +12,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class PostComments {
 
     @Id
@@ -39,7 +33,7 @@ public class PostComments {
     private Dates dates;
 
     @OneToMany(
-            mappedBy = "bigCommentsNumber",
+            mappedBy = "postComments",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
@@ -57,11 +51,23 @@ public class PostComments {
         this.postInfo = postInfo;
         this.postCommentedUsersEmail = commentDto.getUsers_email();
         this.postCommentsContents = commentDto.getComment();
-        this.bigCommentsList = new ArrayList<>();
-        this.postLikeAndDislike = new PostLikeAndDislike();
+        this.postLikeAndDislike = postLikeAndDislike;
 
         Dates dates1 = new Dates(LocalDateTime.now(),LocalDateTime.now());
         this.dates = dates1;
+    }
+
+    public PostComments(Long commentNumber, PostInfo postInfo, String postCommentedUsersEmail, String postCommentsContents, Dates dates, List<BigComments> bigCommentsList, PostLikeAndDislike postLikeAndDislike) {
+        this.commentNumber = commentNumber;
+        this.postInfo = postInfo;
+        this.postCommentedUsersEmail = postCommentedUsersEmail;
+        this.postCommentsContents = postCommentsContents;
+        this.dates = dates;
+        this.bigCommentsList = new ArrayList<>(bigCommentsList);
+        this.postLikeAndDislike = postLikeAndDislike;
+    }
+
+    public PostComments() {
     }
 
     public Integer bigCommentSize() {
@@ -69,7 +75,7 @@ public class PostComments {
     }
 
     public void addBigComments(BigComments bigComments) {
-        this.getBigCommentsList().add(bigComments);
+        this.bigCommentsList.add(bigComments);
         bigComments.setPostComments(this);
     }
 }

@@ -8,7 +8,9 @@ import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -99,6 +101,13 @@ public class PostInfo {
     public void addComments(PostComments postComments) {
         this.comments.add(postComments);
         postComments.setPostInfo(this);
+    }
+
+    public void setPostCommentsList(Set<PostComments> postComments) {
+        this.comments = postComments;
+        for (PostComments postComment : postComments) {
+            postComment.setPostInfo(this);
+        }
     }
 }
 

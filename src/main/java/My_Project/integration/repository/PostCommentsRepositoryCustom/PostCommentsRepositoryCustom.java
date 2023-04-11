@@ -25,4 +25,6 @@ public interface PostCommentsRepositoryCustom{
     public Optional<PostComments> findPostCommentsV2(Long id);
 
     public Optional<PostComments> findPostCommentsV3(Long id);
+
+    public Optional<PostComments> findPostComments(Long commentNumber1);
 }

@@ -75,4 +75,5 @@ public class PostInfoRepositoryTest {
         //then
         Assertions.assertThat(postComments1).isNotNull();
     }
+
 }

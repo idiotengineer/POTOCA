@@ -81,9 +81,9 @@ public class PostCommentsRepositoryImpl implements PostCommentsRepositoryCustom 
                 .leftJoin(bigComments.postInfo).fetchJoin()
                 .leftJoin(bigComments.postLikeAndDislike).fetchJoin()
                 .where(postComments.postInfo.eq(postInfo1))
-                .distinct()
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1)
+//                .distinct()
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         return checkEndPage(pageable,fetch);
@@ -124,6 +124,25 @@ public class PostCommentsRepositoryImpl implements PostCommentsRepositoryCustom 
                 .leftJoin(bigComments.postComments).fetchJoin()
                 .leftJoin(bigComments.bigCommentedUser, users).fetchJoin()
                 .where(postComments.commentNumber.eq(id))
+                .fetchOne());
+    }
+
+
+    public Optional<PostComments> findPostComments(Long commentNumber1) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(postComments)
+                .from(postComments)
+                .leftJoin(postComments.postInfo, postInfo).fetchJoin()
+                .leftJoin(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+                .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
+                .leftJoin(bigComments.bigCommentedUser).fetchJoin()
+                .leftJoin(bigComments.postComments).fetchJoin()
+                .leftJoin(bigComments.postInfo).fetchJoin()
+                .leftJoin(bigComments.postLikeAndDislike).fetchJoin()
+                .where(postComments.commentNumber.eq(commentNumber1))
                 .fetchOne());
     }
 }

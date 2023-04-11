@@ -20,7 +20,9 @@ public class Liked {
     @JoinColumn
     private Users users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(
+            fetch = FetchType.LAZY
+    )
     @JoinColumn
     private PostLikeAndDislike postLikeAndDislike;
 }

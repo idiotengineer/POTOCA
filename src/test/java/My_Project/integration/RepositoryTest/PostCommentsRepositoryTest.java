@@ -4,6 +4,7 @@ import My_Project.integration.entity.*;
 import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
 import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.repository.PostCommentsRepository;
+import My_Project.integration.repository.PostRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
@@ -53,6 +54,9 @@ public class PostCommentsRepositoryTest {
 
     @PersistenceUnit
     EntityManagerFactory emf;
+
+    @Autowired
+    PostRepository postRepository;
 
 
     @Autowired
@@ -223,7 +227,7 @@ public class PostCommentsRepositoryTest {
     @Test
     public void postCommentsFindTest2() throws Exception {
         //given
-        Long id = 2L;
+        Long id = 1L;
         PageRequest pageable = PageRequest.of(0, 10);
 
         //when

@@ -340,10 +340,24 @@ public class PostService {
     @Transactional
     public void deletePost(Long id) throws Exception {
         PostInfo postInfo = postRepository.findPostInfo(id).orElseThrow(() -> new IllegalArgumentException("Invalid post number"));
+        PostLikeAndDislike postLikeAndDislike = postInfo.getPostLikeAndDislike();
+
+        if (postLikeAndDislike != null) {
+            postLikeAndDislike.setPostInfo(null);
+            for (Liked liked : postLikeAndDislike.getLiked()) {
+                liked.setPostLikeAndDislike(null);
+            }
+            for (DisLiked disLiked : postLikeAndDislike.getDisLiked()) {
+                disLiked.setPostLikeAndDislike(null);
+            }
+        }
+        postInfo.setPostLikeAndDislike(null);
+
 
         Set<PostComments> comments = postInfo.getComments();
         for (PostComments comment : comments) {
             comment.setPostInfo(null);
+            comment.setPostLikeAndDislike(null);
         }
 
         Set<Photo> photo = postInfo.getPhoto();
@@ -402,43 +416,48 @@ public class PostService {
     @Transactional
     public void addBigComments(addBigCommentsDto addBigCommentsDto, String s) {
         try {
+//            PostComments postCommentsV3 = postCommentsRepository.findPostCommentsV3(addBigCommentsDto.getComment_number()).get();
 //            Users users = usersRepository.findUsersByEmail(s).get();
-//            PostComments postCommentsByIdWithFetch = postCommentsRepository.findPostCommentsV2(addBigCommentsDto.getPost_number()).get();
-//            Dates dates = new Dates(LocalDateTime.now(), LocalDateTime.now());
+//            PostLikeAndDislike postLikeAndDislike =
+//                    PostLikeAndDislike
+//                            .builder()
+//                            .postInfo(postCommentsV3.getPostInfo())
+//                            .disLiked(new HashSet<>())
+//                            .liked(new HashSet<>())
+//                            .build();
 //
-//            PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
-//            postLikeAndDislike.setPostInfo(postCommentsByIdWithFetch.getPostInfo());
+//            postLikeAndDislikeRepository.save(postLikeAndDislike);
 //
-//            BigComments bigComments = BigComments.builder()
+//            BigComments build = BigComments.builder()
+//                    .dates(new Dates(LocalDateTime.now(), LocalDateTime.now()))
 //                    .bigCommentedUser(users)
+//                    .postComments(postCommentsV3)
 //                    .content(addBigCommentsDto.getComment())
 //                    .postLikeAndDislike(postLikeAndDislike)
-//                    .dates(dates)
-//                    .postInfo(postCommentsByIdWithFetch.getPostInfo())
-//                    .postComments(postCommentsByIdWithFetch)
+//                    .postInfo(postCommentsV3.getPostInfo())
 //                    .build();
+//            postCommentsV3.addBigComments(build);
 //
-//            em.flush();
-//            em.clear();
-
-            PostComments postCommentsV3 = postCommentsRepository.findPostCommentsV3(addBigCommentsDto.getComment_number()).get();
+//            bigCommentsRepository.save(build);
             Users users = usersRepository.findUsersByEmail(s).get();
-            PostLikeAndDislike postLikeAndDislike = PostLikeAndDislike.builder().postInfo(postCommentsV3.getPostInfo()).build();
+            PostInfo postInfo = postRepository.findPostInfo(addBigCommentsDto.getPost_number()).get();
+            PostComments postComments = postCommentsRepository.findPostComments(addBigCommentsDto.getComment_number()).get();
 
-            postLikeAndDislikeRepository.save(postLikeAndDislike);
+            BigComments bigComments = new BigComments();
+            PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
 
-            BigComments build = BigComments.builder()
-                    .dates(new Dates(LocalDateTime.now(), LocalDateTime.now()))
-                    .bigCommentedUser(users)
-                    .postComments(postCommentsV3)
-                    .content(addBigCommentsDto.getComment())
-                    .postLikeAndDislike(postLikeAndDislike)
-                    .postInfo(postCommentsV3.getPostInfo())
-                    .build();
-            postCommentsV3.addBigComments(build);
+            postLikeAndDislike.setPostInfo(postInfo);
 
-            bigCommentsRepository.save(build);
-            postCommentsRepository.save(postCommentsV3);
+            bigComments.setPostLikeAndDislike(postLikeAndDislike);
+            bigComments.setPostComments(postComments);
+            bigComments.setBigCommentedUser(users);
+            bigComments.setDates(new Dates(LocalDateTime.now(),LocalDateTime.now()));
+            bigComments.setContent(addBigCommentsDto.getComment());
+            bigComments.setPostInfo(postInfo);
+
+            postComments.addBigComments(bigComments);
+
+            em.flush();
         } catch (NullPointerException e) {
             e.printStackTrace();
             System.out.println("NPE 발생, 회원 조회 or 댓글 조회 실패");

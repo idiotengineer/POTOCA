@@ -24,16 +24,20 @@ public class PostLikeAndDislike {
     PostInfo postInfo;
 
     @OneToMany(
-            mappedBy = "postLikeAndDislike"
+            mappedBy = "postLikeAndDislike",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private Set<Liked> liked = new HashSet<>();
 
     @OneToMany(
-            mappedBy = "postLikeAndDislike"
+            mappedBy = "postLikeAndDislike",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private Set<DisLiked> disLiked = new HashSet<>();
 
-    public void setPostInfo(PostInfo postInfo) {
+    public void setPostInfo1(PostInfo postInfo) {
         this.postInfo = postInfo;
         postInfo.setPostLikeAndDislike(this);
     }
