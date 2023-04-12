@@ -18,7 +18,6 @@ public class PostCommentsService {
 
     @Transactional
     public Optional<PostComments> findPostCommentsById(Long id) {
-        PostComments postCommentsByIdWithFetchAll = postCommentsRepository.findPostCommentsByIdWithFetchAll(id);
-        return Optional.of(postCommentsByIdWithFetchAll);
+        return Optional.of(postCommentsRepository.findPostCommentsByIdWithFetchAll(id));
     }
 }

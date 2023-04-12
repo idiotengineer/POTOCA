@@ -570,6 +570,10 @@
     .noneCSS{
         display: none;
     }
+
+    .inline-blockCSS{
+        display: inline-block;
+    }
 </style>
 <div class="reply_list">
     <div class="reply" th:each="value,i: ${post.getComments()}">
@@ -581,9 +585,9 @@
             작성 시간
         </div>
 
-        <div class="gold_medal">&#x1F947;</div>
-        <div class="silver_medal">&#x1F948;</div>
-        <div class="bronze_medal">&#x1F949;</div>
+        <div class="gold_medal" th:classappend="${post.getBestPostCommentsList().get(2) == value.getPostLikeAndDislike().getLiked().size()} ? 'inline-blockCSS' : 'noneCSS'">&#x1F947;</div>
+        <div class="silver_medal" th:classappend="${post.getBestPostCommentsList().get(1) == value.getPostLikeAndDislike().getLiked().size()} ? 'inline-blockCSS' : 'noneCSS'">&#x1F948;</div>
+        <div class="bronze_medal" th:classappend="${post.getBestPostCommentsList().get(0) == value.getPostLikeAndDislike().getLiked().size()} ? 'inline-blockCSS' : 'noneCSS'">&#x1F949;</div>
         <div class="reply_profile_content" th:text="${value.getPostCommentsContents()}"></div>
 
         <div class="comment_lidiWrap">

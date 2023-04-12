@@ -1,5 +1,6 @@
 package My_Project.integration.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,5 +23,6 @@ public class DisLiked {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
+    @JsonIgnore
     private PostLikeAndDislike postLikeAndDislike;
 }

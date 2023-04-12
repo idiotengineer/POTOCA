@@ -51,7 +51,7 @@ public class PostInfo {
             mappedBy = "postInfo"
     )
     @BatchSize(size = 1000)
-//    private List<PostComments> comments;
+    @JsonIgnore
     private Set<PostComments> comments;
 
     @OneToOne(fetch = FetchType.LAZY,
@@ -60,6 +60,9 @@ public class PostInfo {
     @JoinColumn
     @JsonIgnore
     private PostLikeAndDislike postLikeAndDislike;
+
+    @ElementCollection
+    private List<Integer> bestPostCommentsList = new ArrayList<>(3);
 
     public PostInfo(Long postNumber, Users postedUser, String postTitle, String postContent, Dates dates, Set<Photo> photo, Set<PostComments> comments, PostLikeAndDislike postLikeAndDislike) {
         this.postNumber = postNumber;
@@ -70,9 +73,16 @@ public class PostInfo {
         this.photo = photo;
         this.comments = comments;
         this.postLikeAndDislike = postLikeAndDislike;
+
+        this.bestPostCommentsList.add(0,1);
+        this.bestPostCommentsList.add(1,2);
+        this.bestPostCommentsList.add(2,3);
     }
 
     public PostInfo() {
+        this.bestPostCommentsList.add(0,1);
+        this.bestPostCommentsList.add(1,2);
+        this.bestPostCommentsList.add(2,3);
     }
 
     // Board에서 파일 처리 위함
@@ -93,9 +103,12 @@ public class PostInfo {
         this.postTitle = postInfo.getPostTitle();
         this.postContent = postInfo.getPostContent();
         this.dates = dates;
-//        this.comments = new ArrayList<>();
         this.comments = new HashSet<>();
-        setPostLikeAndDislike(postLikeAndDislike);
+        this.postLikeAndDislike = postLikeAndDislike;
+
+        this.bestPostCommentsList.add(0,1);
+        this.bestPostCommentsList.add(1,2);
+        this.bestPostCommentsList.add(2,3);
     }
 
     public void addComments(PostComments postComments) {

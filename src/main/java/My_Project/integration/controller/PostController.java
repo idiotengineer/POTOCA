@@ -190,8 +190,6 @@ public class PostController {
                 Long postNumber = Long.parseLong(data.get("id").toString());
                 Long commentNumber = Long.parseLong(data.get("commentNumber").toString());
 
-                //해당 댓글과 PostLikeAndDisLike Fetch 조인 해 가져오기
-//                Optional<PostComments> postCommentsById = postCommentsService.findPostCommentsById(commentNumber);
                 PostLikeAndDislike postLikeAndDislike = postCommentsService
                         .findPostCommentsById(commentNumber)
                         .get()
@@ -199,7 +197,6 @@ public class PostController {
 
                 Users users = userService.findById(cookie.get().getValue()).get();
 
-//                PostLikeAndDislike postLikeAndDislike = postCommentsById.get().getPostLikeAndDislike();
                 if (data.get("type").equals("like")) { // Like 일 때
                     boolean anyMatch = postLikeAndDislike
                             .getLiked().contains(users);
@@ -207,14 +204,11 @@ public class PostController {
                     String sizeOfDislikeList;
                     if (anyMatch) { // 이미 Like 했을 때
                         sizeOfDislikeList = postService.removeUsersSet(postLikeAndDislike, users, "like");
-//                    postService.AddUserListValue(postLikeAndDislikeDto.getLikedUser(),users);
-//                    postService.RemoveUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(), users);// PostLikeAndDislike의 likedUser에서 User 제거
                     } else { // Like 하지 않았을 때
-//                    postService.AddUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(),users);
                         sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "like");
                     }
 
-                    PostInfo post = postService.findPost(postNumber);
+                    extracted(postLikeAndDislike,Integer.parseInt(sizeOfDislikeList));
                     return sizeOfDislikeList;
                 } else { // DisLike 일 때
                     boolean anyMatch = postLikeAndDislike
@@ -226,7 +220,7 @@ public class PostController {
                     } else { // DisLike 하지 않았을 때
                         sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "dislike");
                     }
-                    PostInfo post = postService.findPost(postNumber);
+
                     return sizeOfDislikeList;
                 }
             } catch (NumberFormatException e) {
@@ -245,6 +239,28 @@ public class PostController {
             return "not_logined";
         }
     }
+
+    private static void extracted(PostLikeAndDislike postLikeAndDislike,int x) {
+        List<Integer> bestPostCommentsList = postLikeAndDislike.getPostInfo().getBestPostCommentsList();
+
+        if (x > bestPostCommentsList.get(2)) {
+            int temp = bestPostCommentsList.get(1);
+
+            bestPostCommentsList.set(1,bestPostCommentsList.get(2));
+            bestPostCommentsList.set(0,temp);
+            bestPostCommentsList.set(2,x);
+        }
+
+        else if (x > bestPostCommentsList.get(1) && x != bestPostCommentsList.get(2)) {
+            bestPostCommentsList.set(0, bestPostCommentsList.get(1));
+            bestPostCommentsList.set(1,x);
+        }
+
+        else if (x > bestPostCommentsList.get(0) && x != bestPostCommentsList.get(1) && x != bestPostCommentsList.get(2)) {
+            bestPostCommentsList.set(0,x);
+        }
+    }
+
 
     @RequestMapping(value = "/find_post/deletePost", method = {RequestMethod.POST})
     public String deletePost(@CookieValue("users") Optional<Cookie> cookie,

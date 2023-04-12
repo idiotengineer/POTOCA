@@ -1,6 +1,7 @@
 package My_Project.integration.entity;
 
 import My_Project.integration.entity.Dto.CommentDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,6 +38,7 @@ public class PostComments {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonIgnore
     private List<BigComments> bigCommentsList = new ArrayList<>();
 
     @OneToOne(

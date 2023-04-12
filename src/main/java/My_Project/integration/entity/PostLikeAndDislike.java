@@ -1,5 +1,6 @@
 package My_Project.integration.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class PostLikeAndDislike {
     @OneToOne(
             fetch = FetchType.LAZY,
             mappedBy = "postLikeAndDislike")
+            @JsonIgnore
     PostInfo postInfo;
 
     @OneToMany(
