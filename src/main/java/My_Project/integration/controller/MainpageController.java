@@ -97,14 +97,19 @@ public class MainpageController {
             PageRequest of = PageRequest.of(0, 10);
 
             PostInfo postInfo = postService.findPostV2(id).get();
-            Slice<PostCommentsResponseDto> commentsV2 = postService.findCommentsV2(postInfo, of);
+//            Slice<PostCommentsResponseDto> commentsV2 = postService.findCommentsV2(postInfo, of);
             PostDto post = new PostDto(postInfo);
+            boolean logined = true;
 
             if (cookie.isPresent()) { // 로그인 되어 있을 시
                 Optional<Users> usersOptional = userService.findById(cookie.get().getValue());
                 model.addAttribute("checked", post.checkLikeAndDisLike(usersOptional));
+                model.addAttribute("cookie",usersOptional);
+            } else {
+                logined = false;
             }
 
+            model.addAttribute("logined",logined);
             model.addAttribute("post", post);
             model.addAttribute("time", LocalDateTime.now());
             return "copy_post";

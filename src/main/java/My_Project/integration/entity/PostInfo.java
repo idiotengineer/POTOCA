@@ -1,17 +1,13 @@
 package My_Project.integration.entity;
 
 import My_Project.integration.entity.Dto.PostInfoDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -51,18 +47,16 @@ public class PostInfo {
             mappedBy = "postInfo"
     )
     @BatchSize(size = 1000)
-    @JsonIgnore
     private Set<PostComments> comments;
 
     @OneToOne(fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @JoinColumn
-    @JsonIgnore
     private PostLikeAndDislike postLikeAndDislike;
 
     @ElementCollection
-    private List<Integer> bestPostCommentsList = new ArrayList<>(3);
+    private List<Integer> bestPostCommentsList = new ArrayList<>(Arrays.asList(1, 2, 3));
 
     public PostInfo(Long postNumber, Users postedUser, String postTitle, String postContent, Dates dates, Set<Photo> photo, Set<PostComments> comments, PostLikeAndDislike postLikeAndDislike) {
         this.postNumber = postNumber;
@@ -73,16 +67,9 @@ public class PostInfo {
         this.photo = photo;
         this.comments = comments;
         this.postLikeAndDislike = postLikeAndDislike;
-
-        this.bestPostCommentsList.add(0,1);
-        this.bestPostCommentsList.add(1,2);
-        this.bestPostCommentsList.add(2,3);
     }
 
     public PostInfo() {
-        this.bestPostCommentsList.add(0,1);
-        this.bestPostCommentsList.add(1,2);
-        this.bestPostCommentsList.add(2,3);
     }
 
     // Board에서 파일 처리 위함
@@ -105,10 +92,6 @@ public class PostInfo {
         this.dates = dates;
         this.comments = new HashSet<>();
         this.postLikeAndDislike = postLikeAndDislike;
-
-        this.bestPostCommentsList.add(0,1);
-        this.bestPostCommentsList.add(1,2);
-        this.bestPostCommentsList.add(2,3);
     }
 
     public void addComments(PostComments postComments) {

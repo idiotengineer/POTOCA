@@ -450,6 +450,77 @@
     }
 </script>
 
+<script th:inline="javascript">
+    function bigCommentLidiButton(param1,param2,param3,param4) {
+    let attr = $('#comment_likeButton' + param3 + '_' + param4).css('background-color');
+    let attr1 = $('#comment_disLikeButton' + param3 + '_' + param4).css('background-color');
+
+    /*<![CDATA[*/
+    let number = [[${post.getPostNumber()}]];
+    /*]]*/
+
+    let addNumber = 0;
+    let className;
+
+    if (param1 == 'like') {
+        className = '#comment_likeCount';
+
+        if (attr == 'rgb(239, 239, 239)') {
+            // 이전에 좋아요 버튼을 누르지 않았을 때
+            $('#comment_likeButton' + param3 + '_' + param4).css('background-color', '#4CAF50');
+            $('#comment_disLikeButton' + param3 + '_' + param4).css('pointer-events', 'none');
+            addNumber = 1;
+        } else {
+            // 이전에 좋아요 버튼을 눌렀을 때
+            $('#comment_likeButton' + param3 + '_' + param4).css('background-color', '#EFEFEF');
+            $('#comment_disLikeButton' + param3 + '_' + param4).css('pointer-events', 'auto');
+            addNumber = -1;
+        }
+    } else if (param1 == 'dislike') {
+        className = '#comment_disLikeCount';
+        if (attr1 == 'rgb(239, 239, 239)') {
+            // 이전에 싫어요 버튼을 누르지 않았을 때
+            $('#comment_disLikeButton' + param3 + '_' + param4).css('background-color', '#f44336');
+            $('#comment_likeButton' + param3 + '_' + param4).css('pointer-events', 'none');
+            addNumber = 1;
+        } else {
+            // 이전에 싫어요 버튼을 눌렀을 때
+            $('#comment_disLikeButton' + param3 + '_' + param4).css('background-color', '#EFEFEF');
+            $('#comment_likeButton' + param3 + '_' + param4).css('pointer-events', 'auto');
+            addNumber = -1;
+        }
+    }
+
+    var dataMap = {
+        type: param1,
+        id: number,
+        bigCommentNumber: param2
+    }
+
+    let ajax = $.ajax({
+        url: "/find_post/bigCommentLikeAndDisLike",
+        type: 'POST',
+        dataType: "json",
+        timeout: 3000,
+        async: false,
+        data: JSON.stringify(dataMap),
+        contentType: "application/json",
+
+        success: function (resp) {
+            if (resp == "not_logined") {
+                let ajax = $.ajax({
+                    url: "/alert?string=" + '로그인 되지 않았습니다',
+                    type: 'GET',
+                    async: false,
+                });
+            } else {
+                $(className + param3 + '_' + param4).text(resp);
+            }
+        }
+    });
+}
+</script>
+
 <style>
     textarea.autosize {
         min-height: 10px;
@@ -574,6 +645,19 @@
     .inline-blockCSS{
         display: inline-block;
     }
+
+    .checked_LikeButtonCSS{
+        background-color: #4CAF50;
+    }
+
+    .checked_DislikeButtonCSS{
+        background-color: #f44336;
+    }
+
+    .unChecked_ButtonCSS{
+        background-color: #EFEFEF;
+    }
+
 </style>
 <div class="reply_list">
     <div class="reply" th:each="value,i: ${post.getComments()}">
@@ -592,14 +676,16 @@
 
         <div class="comment_lidiWrap">
             <button th:id="'comment_likeButton' + ${i.index}" class="comment_likeButton"
-                 th:onclick="|commentLidiButton('like','${value.getCommentNumber()}','${i.index}')|">
+                 th:onclick="|commentLidiButton('like','${value.getCommentNumber()}','${i.index}')|"
+                    th:classappend="${logined} and ${@postController.likedButtonCheckedWhether(value.getPostLikeAndDislike().getLiked(),cookie)} ? 'checked_LikeButtonCSS' : 'unChecked_ButtonCSS'">
                 <i class="fa fa-thumbs-up"></i>
             </button>
             <div th:id="'comment_likeCount' + ${i.index}" class="comment_likeCount"
                  th:text="${value.getPostLikeAndDislike().getLiked().size()}">
             </div>
             <button th:id="'comment_disLikeButton' + ${i.index}" class="comment_disLikeButton"
-                 th:onclick="|commentLidiButton('dislike','${value.getCommentNumber()}','${i.index}')|">
+                 th:onclick="|commentLidiButton('dislike','${value.getCommentNumber()}','${i.index}')|"
+                    th:classappend="${logined} and ${@postController.disLikedButtonCheckedWhether(value.getPostLikeAndDislike().getDisLiked(),cookie)} ? 'checked_DislikeButtonCSS' : 'unChecked_ButtonCSS'">
                 <i class="fa fa-thumbs-down"></i>
             </button>
             <div th:id="'comment_disLikeCount' + ${i.index}" class="comment_disLikeCount"
@@ -634,14 +720,14 @@
                 <div class="reply_profile_content" id="bigCommentsProfileContent" th:text="${bigComment.getContent()}"></div>
                 <div class="comment_lidiWrap">
                     <button th:id="'comment_likeButton' + ${i.index} + '_' + ${j.index}" class="comment_likeButton"
-                            th:onclick="|commentLidiButton('like','${value.getCommentNumber()}','${i.index}')|">
+                            th:onclick="|bigCommentLidiButton('like','${bigComment.getBigCommentsNumber()}','${i.index}','${j.index}')|">
                         <i class="fa fa-thumbs-up"></i>
                     </button>
                     <div th:id="'comment_likeCount' + ${i.index} + '_' + ${j.index}" class="comment_likeCount"
                          th:text="${bigComment.getPostLikeAndDislike().getLiked().size()}">
                     </div>
                     <button th:id="'comment_disLikeButton' + ${i.index} + '_' + ${j.index}" class="comment_disLikeButton"
-                            th:onclick="|commentLidiButton('dislike','${value.getCommentNumber()}','${i.index}')|">
+                            th:onclick="|bigCommentLidiButton('dislike','${bigComment.getBigCommentsNumber()}','${i.index}','${j.index}')|">
                         <i class="fa fa-thumbs-down"></i>
                     </button>
                     <div th:id="'comment_disLikeCount' + ${i.index} + '_' + ${j.index}" class="comment_disLikeCount"

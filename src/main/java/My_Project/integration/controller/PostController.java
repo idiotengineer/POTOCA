@@ -5,10 +5,7 @@ import My_Project.integration.entity.Dto.*;
 import My_Project.integration.entity.ResponseDto.ModiyingPostResponseDto;
 import My_Project.integration.entity.ResponseDto.PhotoResponseDto;
 import My_Project.integration.exception.NotSameStringException;
-import My_Project.integration.service.PhotoService;
-import My_Project.integration.service.PostCommentsService;
-import My_Project.integration.service.PostService;
-import My_Project.integration.service.UserService;
+import My_Project.integration.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class PostController {
@@ -37,6 +35,9 @@ public class PostController {
 
     @Autowired
     PostCommentsService postCommentsService;
+
+    @Autowired
+    BigCommentsService bigCommentsService;
 
     @PostMapping("/post_execute2")
     public String create(
@@ -199,7 +200,10 @@ public class PostController {
 
                 if (data.get("type").equals("like")) { // Like 일 때
                     boolean anyMatch = postLikeAndDislike
-                            .getLiked().contains(users);
+                            .getLiked().stream()
+                            .anyMatch(
+                                    liked -> liked.getUsers().equals(users)
+                            );
 
                     String sizeOfDislikeList;
                     if (anyMatch) { // 이미 Like 했을 때
@@ -208,12 +212,13 @@ public class PostController {
                         sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "like");
                     }
 
-                    extracted(postLikeAndDislike,Integer.parseInt(sizeOfDislikeList));
                     return sizeOfDislikeList;
                 } else { // DisLike 일 때
                     boolean anyMatch = postLikeAndDislike
-                            .getDisLiked().contains(users);
-
+                            .getDisLiked().stream()
+                            .anyMatch(
+                                    disLiked -> disLiked.getUsers().equals(users)
+                            );
                     String sizeOfDislikeList;
                     if (anyMatch) { // 이미 DisLike 했을 때
                         sizeOfDislikeList = postService.removeUsersSet(postLikeAndDislike, users, "dislike");
@@ -361,6 +366,88 @@ public class PostController {
 
         postService.addBigComments(addBigCommentsDto, cookie.get().getValue());
         return "success";
+    }
+
+    @PostMapping("/find_post/bigCommentLikeAndDisLike")
+    @ResponseBody
+    public String bigCommentLikeAndDisLike(@RequestBody HashMap<String, Object> data,
+                                        @CookieValue(name = "users") Optional<Cookie> cookie,
+                                        RedirectAttributes redirectAttributes) {
+        if (cookie.isPresent()) {
+            try {
+                Long postNumber = Long.parseLong(data.get("id").toString());
+                Long bigCommentNumber = Long.parseLong(data.get("bigCommentNumber").toString());
+
+//                PostLikeAndDislike postLikeAndDislike = postCommentsService
+//                        .findPostCommentsById(commentNumber)
+//                        .get()
+//                        .getPostLikeAndDislike();
+
+                PostLikeAndDislike postLikeAndDislike = bigCommentsService.findBigCommentsById(bigCommentNumber)
+                        .get().getPostLikeAndDislike();
+
+                Users users = userService.findById(cookie.get().getValue()).get();
+
+                if (data.get("type").equals("like")) { // Like 일 때
+                    boolean anyMatch = postLikeAndDislike
+                            .getLiked().stream()
+                            .anyMatch(liked -> liked.getUsers().equals(users)
+                            );
+
+                    String sizeOfDislikeList;
+                    if (anyMatch) { // 이미 Like 했을 때
+                        sizeOfDislikeList = postService.removeUsersSet(postLikeAndDislike, users, "like");
+                    } else { // Like 하지 않았을 때
+                        sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "like");
+                    }
+
+                    return sizeOfDislikeList;
+                } else { // DisLike 일 때
+                    boolean anyMatch = postLikeAndDislike
+                            .getDisLiked().stream()
+                            .anyMatch(disLiked -> disLiked.getUsers().equals(users)
+                            );
+                    String sizeOfDislikeList;
+                    if (anyMatch) { // 이미 DisLike 했을 때
+                        sizeOfDislikeList = postService.removeUsersSet(postLikeAndDislike, users, "dislike");
+                    } else { // DisLike 하지 않았을 때
+                        sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "dislike");
+                    }
+
+                    return sizeOfDislikeList;
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                System.out.println("JSON 데이터 형식 변환 오류");
+                return "0";
+            } catch (NoSuchElementException e) {
+                e.printStackTrace();
+                System.out.println("PostLikeAndDisLike 조회 실패 or 로그인된 정보 조회 (Users) 실패");
+                return "0";
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "0";
+            }
+        } else { // 로그인이 안 되어 있을 시
+            return "not_logined";
+        }
+    }
+
+
+    public boolean likedButtonCheckedWhether(List<Liked> list,Optional<Users> users1) throws Exception {
+        Users users = users1.get();
+
+        if (list.stream().anyMatch(liked -> liked.getUsers().equals(users))) return true;
+            else if (list.stream().noneMatch(liked -> liked.getUsers().equals(users))) return false;
+            else throw new Exception("PostController.likedButtonCheckedWhether 메서드 에러발생");
+    }
+
+    public boolean disLikedButtonCheckedWhether(List<DisLiked> list,Optional<Users> users1) throws Exception {
+        Users users = users1.get();
+
+        if (list.stream().anyMatch(disLiked -> disLiked.getUsers().equals(users))) return true;
+        else if (list.stream().noneMatch(disLiked -> disLiked.getUsers().equals(users))) return false;
+        else throw new Exception("PostController.disLikedButtonCheckedWhether 메서드 에러발생");
     }
 }
 

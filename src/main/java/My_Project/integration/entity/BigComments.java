@@ -1,6 +1,5 @@
 package My_Project.integration.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +23,6 @@ public class BigComments {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_comments_number")
-    @JsonIgnore
     private PostComments postComments;
 
     @Column(name = "big_comments_content",nullable = false)
@@ -43,7 +41,6 @@ public class BigComments {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="postInfo")
-    @JsonIgnore
     private PostInfo postInfo;
 
     public BigComments(Long bigCommentsNumber, Users bigCommentedUser, PostComments postComments, String content, PostLikeAndDislike postLikeAndDislike, Dates dates, PostInfo postInfo) {

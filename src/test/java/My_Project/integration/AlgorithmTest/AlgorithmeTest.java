@@ -13,9 +13,9 @@ public class AlgorithmeTest {
 
         int x = 9;
 
-        bestPostCommentsList.add(0,3);
-        bestPostCommentsList.add(1,6);
-        bestPostCommentsList.add(2,9);
+        bestPostCommentsList.add(0,1);
+        bestPostCommentsList.add(1,2);
+        bestPostCommentsList.add(2,3);
 
         if (x > bestPostCommentsList.get(2)) {
             int temp = bestPostCommentsList.get(1);
