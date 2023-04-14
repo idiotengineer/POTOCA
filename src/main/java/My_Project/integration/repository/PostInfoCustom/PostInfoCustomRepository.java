@@ -17,4 +17,6 @@ public interface PostInfoCustomRepository {
     Optional<PostInfo> findPostByIdWithFetchJoinUsedQueryDSLV2(Long id);
 
     public Optional<PostInfo> findPostInfo(Long id);
+
+    public Optional<PostInfo> findPostV4(Long id);
 }

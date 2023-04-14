@@ -22,7 +22,6 @@ public class PostLikeAndDislike {
     @OneToOne(
             fetch = FetchType.LAZY,
             mappedBy = "postLikeAndDislike")
-            @JsonIgnore
     PostInfo postInfo;
 
     @OneToMany(

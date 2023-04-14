@@ -96,7 +96,10 @@ public class MainpageController {
         try {
             PageRequest of = PageRequest.of(0, 10);
 
-            PostInfo postInfo = postService.findPostV2(id).get();
+//            PostInfo postInfo = postService.findPostV2(id).get();
+            PostInfo postInfo = postService.findPostV3(id).get();
+//            PostInfo postInfo = postService.findPostByIdWithSpringDataJpa(id).get();
+
 //            Slice<PostCommentsResponseDto> commentsV2 = postService.findCommentsV2(postInfo, of);
             PostDto post = new PostDto(postInfo);
             boolean logined = true;

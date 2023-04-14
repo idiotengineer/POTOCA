@@ -74,6 +74,11 @@ public class PostService {
     }
 
     @Transactional
+    public Optional<PostInfo> findPostV3(Long id) throws NoSuchElementException {
+        return postRepository.findPostV4(id);
+    }
+
+    @Transactional
     public Slice<PostCommentsResponseDto> findCommentsV2(PostInfo postInfo,Pageable pageable) throws NoSuchElementException{
 
         return postCommentsRepository.findCommentsWithPaging(postInfo, pageable);
@@ -464,5 +469,10 @@ public class PostService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Transactional
+    public Optional<PostInfo> findPostByIdWithSpringDataJpa(Long id) {
+        return postRepository.findPostInfoWithSpringDataJpaByPostNumber(id);
     }
 }

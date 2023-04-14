@@ -434,19 +434,23 @@ public class PostController {
     }
 
 
-    public boolean likedButtonCheckedWhether(List<Liked> list,Optional<Users> users1) throws Exception {
+    public boolean likedButtonCheckedWhether(Set<Liked> set,Optional<Users> users1) throws Exception {
         Users users = users1.get();
 
-        if (list.stream().anyMatch(liked -> liked.getUsers().equals(users))) return true;
-            else if (list.stream().noneMatch(liked -> liked.getUsers().equals(users))) return false;
-            else throw new Exception("PostController.likedButtonCheckedWhether 메서드 에러발생");
+        if (set == null) return false;
+        else if(set.isEmpty()) return false;
+        else if(!set.stream().anyMatch(liked -> liked.getUsers().equals(users))) return false;
+        else if (set.stream().anyMatch(liked -> liked.getUsers().equals(users))) return true;
+        else throw new Exception("PostController.likedButtonCheckedWhether 메서드 에러발생");
     }
 
-    public boolean disLikedButtonCheckedWhether(List<DisLiked> list,Optional<Users> users1) throws Exception {
+    public boolean disLikedButtonCheckedWhether(Set<DisLiked> set,Optional<Users> users1) throws Exception {
         Users users = users1.get();
 
-        if (list.stream().anyMatch(disLiked -> disLiked.getUsers().equals(users))) return true;
-        else if (list.stream().noneMatch(disLiked -> disLiked.getUsers().equals(users))) return false;
+        if (set == null) return false;
+        else if(set.isEmpty()) return false;
+        else if(!set.stream().anyMatch(disLiked -> disLiked.getUsers().equals(users))) return false;
+        else if (set.stream().anyMatch(disLiked -> disLiked.getUsers().equals(users))) return true;
         else throw new Exception("PostController.disLikedButtonCheckedWhether 메서드 에러발생");
     }
 }

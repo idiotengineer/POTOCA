@@ -720,14 +720,16 @@
                 <div class="reply_profile_content" id="bigCommentsProfileContent" th:text="${bigComment.getContent()}"></div>
                 <div class="comment_lidiWrap">
                     <button th:id="'comment_likeButton' + ${i.index} + '_' + ${j.index}" class="comment_likeButton"
-                            th:onclick="|bigCommentLidiButton('like','${bigComment.getBigCommentsNumber()}','${i.index}','${j.index}')|">
+                            th:onclick="|bigCommentLidiButton('like','${bigComment.getBigCommentsNumber()}','${i.index}','${j.index}')|"
+                            th:classappend="${logined} and ${@postController.likedButtonCheckedWhether(bigComment.getPostLikeAndDislike().getLiked(),cookie)} ? 'checked_LikeButtonCSS' : 'unChecked_ButtonCSS'">
                         <i class="fa fa-thumbs-up"></i>
                     </button>
                     <div th:id="'comment_likeCount' + ${i.index} + '_' + ${j.index}" class="comment_likeCount"
                          th:text="${bigComment.getPostLikeAndDislike().getLiked().size()}">
                     </div>
                     <button th:id="'comment_disLikeButton' + ${i.index} + '_' + ${j.index}" class="comment_disLikeButton"
-                            th:onclick="|bigCommentLidiButton('dislike','${bigComment.getBigCommentsNumber()}','${i.index}','${j.index}')|">
+                            th:onclick="|bigCommentLidiButton('dislike','${bigComment.getBigCommentsNumber()}','${i.index}','${j.index}')|"
+                            th:classappend="${logined} and ${@postController.disLikedButtonCheckedWhether(bigComment.getPostLikeAndDislike().getDisLiked(),cookie)} ? 'checked_DislikeButtonCSS' : 'unChecked_ButtonCSS'">
                         <i class="fa fa-thumbs-down"></i>
                     </button>
                     <div th:id="'comment_disLikeCount' + ${i.index} + '_' + ${j.index}" class="comment_disLikeCount"

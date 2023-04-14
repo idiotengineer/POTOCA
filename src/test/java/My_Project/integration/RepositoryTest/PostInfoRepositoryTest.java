@@ -17,6 +17,9 @@ import java.util.Optional;
 import java.util.Set;
 
 import static My_Project.integration.entity.QBigComments.*;
+import static My_Project.integration.entity.QDisLiked.disLiked;
+import static My_Project.integration.entity.QLiked.liked;
+import static My_Project.integration.entity.QPhoto.photo;
 import static My_Project.integration.entity.QPostComments.postComments;
 import static My_Project.integration.entity.QPostInfo.postInfo;
 import static My_Project.integration.entity.QPostLikeAndDislike.postLikeAndDislike;
@@ -76,4 +79,38 @@ public class PostInfoRepositoryTest {
         Assertions.assertThat(postComments1).isNotNull();
     }
 
+
+@Test
+public void findPostV4Test() throws Exception {
+    //given
+    Long id = 1L;
+
+    //when
+        PostInfo postInfo1 = jpaQueryFactory
+                .selectFrom(postInfo)
+                .leftJoin(postInfo.postedUser, users).fetchJoin()
+                .leftJoin(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
+                .leftJoin(postInfo.comments, postComments).fetchJoin()
+                .leftJoin(postComments.postInfo).fetchJoin()
+                .leftJoin(postComments.postLikeAndDislike).fetchJoin()
+//                .leftJoin(postComments.postLikeAndDislike.disLiked).fetchJoin()
+//                .leftJoin(postComments.postLikeAndDislike.liked).fetchJoin()
+//                .leftJoin(postComments.postLikeAndDislike.postInfo).fetchJoin()
+                .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
+                .leftJoin(bigComments.postComments).fetchJoin()
+                .leftJoin(bigComments.bigCommentedUser).fetchJoin()
+                .leftJoin(bigComments.postInfo).fetchJoin()
+                .leftJoin(bigComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+                .leftJoin(postInfo.photo, photo).fetchJoin()
+                .leftJoin(photo.postInfo).fetchJoin()
+                .where(postInfo.postNumber.eq(id))
+                .fetchOne();
+    //then
+    Assertions.assertThat(postInfo1).isNotNull();
+    }
 }

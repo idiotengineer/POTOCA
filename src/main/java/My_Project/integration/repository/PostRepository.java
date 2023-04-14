@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -25,4 +26,6 @@ public interface PostRepository extends JpaRepository<PostInfo,Long>, PostInfoCu
     // 스프링 데이터 JPA에서 Containing을 쓰게 되면 쿼리로 Like문을 쓸 수 있다!
 
     Page<PostInfo> findAllByOrderByPostNumber(Pageable pageable);
+
+    Optional<PostInfo> findPostInfoWithSpringDataJpaByPostNumber(Long id);
 }

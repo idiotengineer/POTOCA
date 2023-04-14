@@ -1,16 +1,14 @@
 package My_Project.integration.repository.PostInfoCustom.Impl;
 
-import My_Project.integration.entity.BigComments;
+import My_Project.integration.entity.*;
 import My_Project.integration.entity.Dto.PostDto;
-import My_Project.integration.entity.PostComments;
-import My_Project.integration.entity.PostInfo;
-import My_Project.integration.entity.QPostInfo;
 import My_Project.integration.repository.PostInfoCustom.PostInfoCustomRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
+import javax.swing.text.html.Option;
 import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
@@ -140,5 +138,34 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                         .where(postInfo.postNumber.eq(id))
                         .fetchOne()
         );
+    }
+
+    public Optional<PostInfo> findPostV4(Long id) {
+        PostInfo postInfo1 = jpaQueryFactory
+                .selectFrom(postInfo)
+                .leftJoin(postInfo.postedUser, users).fetchJoin()
+                .leftJoin(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
+                .leftJoin(postInfo.comments, postComments).fetchJoin()
+                .leftJoin(postComments.postInfo).fetchJoin()
+                .leftJoin(postComments.postLikeAndDislike).fetchJoin()
+//                .leftJoin(postComments.postLikeAndDislike.disLiked).fetchJoin()
+//                .leftJoin(postComments.postLikeAndDislike.liked).fetchJoin()
+//                .leftJoin(postComments.postLikeAndDislike.postInfo).fetchJoin()
+                .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
+                .leftJoin(bigComments.postComments).fetchJoin()
+                .leftJoin(bigComments.bigCommentedUser).fetchJoin()
+                .leftJoin(bigComments.postInfo).fetchJoin()
+                .leftJoin(bigComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+                .leftJoin(postInfo.photo, photo).fetchJoin()
+                .leftJoin(photo.postInfo).fetchJoin()
+                .where(postInfo.postNumber.eq(id))
+                .fetchOne();
+
+        return Optional.ofNullable(postInfo1);
     }
 }
