@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>listpage</title>
+  <title>lol_listpage</title>
   <link rel = "stylesheet" href ="/css/sample.css">
   <link href="/css/votelistpage.css" rel="stylesheet">
   <link href="/css/font.css" rel = "stylesheet">
@@ -100,7 +100,7 @@
 </div>
 
 
-<div class = "search_bar"s id = "search_bar_wrapper">
+<div class = "search_bar" id = "search_bar_wrapper">
   <div class="col-md-3" id = "search_condition">
     <label for="validationCustom04" class="form-label">검색 조건</label>
     <select class="form-select" id="validationCustom04" required>
@@ -122,7 +122,7 @@
 
 <nav aria-label="Page navigation example" id="list1" style="justify-content: center">
   <!--표에 사용될 변수값 초기화 -->
-  <ul class="pagination justify-content-center"
+  <ul class="pagination"
       th:with="start=${T(java.lang.Math).floor(list.number/10)*10 + 1},
                     last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
     <th:block th:with="

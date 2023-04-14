@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main Page</title>
+    <title>POTOCA</title>
 
     <link rel = "stylesheet" href ="/css/sample.css">
     <link href="/css/thumbs.css" rel="stylesheet">
@@ -24,13 +24,13 @@
             <a class="navbar-brand" href="#">
                 <img src="https://cdn-icons-png.flaticon.com/512/6815/6815258.png" alt="Bootstrap" width="30" height="24">
               </a>
-          <a class="navbar-brand" href="http://localhost:8080/">Main Page</a>
+          <a class="navbar-brand" href="http://localhost:8080/">포인트로 캐쉬를 만들자! POTOCA 갤러리</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
-              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">My Page</h5>
+              <h5 class="offcanvas-title" id="offcanvasNavbarLabel" th:text="${#strings.isEmpty(users)} ? '마이페이지를 이용하려면 로그인 해야 합니다' : ${users} + '님의 마이페이지'"></h5>
               <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -57,15 +57,27 @@
     <ul class="nav" id = "nav_custom">
         <span class = "nav_custom_inner">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="http://localhost:8080/listpage" id = "nav_link_active_custom">일반 게시글 목록 보기</a>
+          <a class="nav-link active" aria-current="page" href="http://localhost:8080/listpage">일반 갤러리</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="http://localhost:8080/votelistpage">투표 게시글 목록보기</a>
+          <a class="nav-link" href="http://localhost:8080/votelistpage">LOL 갤러리</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link" href="http://localhost:8080/votelistpage">VaLoRanT 갤러리</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link" href="http://localhost:8080/votelistpage">LostArk 갤러리</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link" href="http://localhost:8080/votelistpage">StarCraft 갤러리</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link" href="http://localhost:8080/votelistpage">MapleStory 갤러리</a>
         </li>
         </span>
       <button th:if="${#strings.isEmpty(users)}" type="button" class="btn btn-primary" id ="login_button" onclick="location.href='http://localhost:8080/login'">로그인</button>
       <span th:unless="${#strings.isEmpty(users)}">
-        로그인 되었습니다.
+        <th:block th:text="${users} + '님 어서오세요!'"></th:block>
         <button type="button" class="btn btn-warning" id ="logout_button" onclick="location.href='http://localhost:8080/logout'">로그아웃</button>
       </span>
     </ul>
@@ -80,7 +92,7 @@
 
 
   <div class ="empty">
-   <h2 class = "best_vote_list_banner">오늘의 베스트 투표글</h2>
+   <h2 class = "best_vote_list_banner">이달의 베스트 갤러리 게시글</h2>
 
 
    <section class = "thums">
@@ -137,7 +149,7 @@
 
     <section class = "Todays_Post_List">
       <div class = "Todays_Post_Background">
-        <h2 class = "Todays_Post_List_Banner">오늘의 베스트 게시물</h2>
+        <h2 class = "Todays_Post_List_Banner">오늘의 베스트 갤러리 인기글</h2>
         <table class="table" id = "practice_table" style="table-layout: fixed;">
           <thead>
           <tr onclick="location.href='http://localhost:8080/post'">

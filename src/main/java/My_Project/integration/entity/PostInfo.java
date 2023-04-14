@@ -12,6 +12,8 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "postType")
 public class PostInfo {
 
     @Id

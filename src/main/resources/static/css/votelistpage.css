@@ -62,8 +62,8 @@
 }
 
 #bb{
-    margin-right: 100%;
-    width:50%;
+    /*margin-right: 100%;*/
+    width:100%;
 }
 
 #table-th-1{
@@ -82,4 +82,10 @@
     overflow:hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+#search_bar_wrapper{
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
