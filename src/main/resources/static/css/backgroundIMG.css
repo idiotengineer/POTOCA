@@ -1,0 +1,39 @@
+#starCraftIMG{
+    background-image: url("image/starCraft.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-width:100%;
+    max-height: 100%;
+}
+
+#leagueOfLegendsIMG{
+    background-image: url("image/LeagueOfLegends.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-width:100%;
+    max-height: 100%;
+}
+
+#valorantIMG{
+    background-image: url("image/valorant.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-width:100%;
+    max-height: 100%;
+}
+
+#lostArkIMG{
+    background-image: url("image/lostArk.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-width:100%;
+    max-height: 100%;
+}
+
+#mapleStoryIMG{
+    background-image: url("image/maplestory.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-width:100%;
+    max-height: 100%;
+}

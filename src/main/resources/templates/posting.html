@@ -42,10 +42,24 @@
     </nav>
     <form action="/post_execute2" method ="post" enctype="multipart/form-data">
       <div class = "posting_background">
+
+        <div class="form-group" id = "search_condition">
+          <label for="validationCustom04" class="form-label">갤러리 선택</label>
+          <select class="form-select" id="validationCustom04" required name="dtype">
+            <option value="regular">일반 갤러리</option>
+            <option value="LEAGUEOFLEGEND">LOL 갤러리</option>
+            <option value="VALORANT">VALORANT 갤러리</option>
+            <option value="LOSTARK">LOSTARK 갤러리</option>
+            <option value="STARCRAFT">STARCRAFT 갤러리</option>
+            <option value="MAPLESTORY">MAPLESTORY 갤러리</option>
+          </select>
+        </div>
+
       <div class="form-group">
         <label for="exampleFormControlInput1" id = "title">글의 제목 입력</label>
         <input type="text" class="form-control" id="exampleFormControlInput1" name="postTitle">
       </div>
+
       <div class="form-group">
           <label for="exampleFormControlTextarea1" id = "content">글의 내용 입력</label>
         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="postContent"></textarea>
@@ -55,6 +69,7 @@
           <label for="formFileMultiple" class="form-label">업로드할 파일 선택</label>
           <input class="form-control" type="file" id="formFileMultiple" name="image" multiple >
         </div>
+
 
         <button type="submit" class="btn btn-success">작성완료</button>
       </div>

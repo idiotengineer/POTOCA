@@ -80,4 +80,107 @@ public class ListPageController {
             model.addAttribute("list",list);
         return "listpage_copy2";
     }*/
+
+    @ApiOperation(value = "LOL 갤러리 리스팅 페이지")
+    @GetMapping("/LeagueOfLegends_listpage")
+    public String lolListPage(Model model,HttpServletRequest request, @PageableDefault Pageable pageable) {
+        LOGGER.info("LOL 갤러리 리스팅 페이지 접속");
+
+        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(flashMap != null){
+//            Page<PostDto> list = (Page<PostDto>) flashMap.get("list");
+            Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
+            model.addAttribute("list",list);
+        } else {
+            LOGGER.info("리스트페이지 접속");
+//            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            model.addAttribute("list", postDtoList);
+        }
+
+        return "listpage_LeagueOfLegends";
+    }
+
+    @ApiOperation(value = "VALORANT 갤러리 리스팅 페이지")
+    @GetMapping("/Valorant_listpage")
+    public String valorantListPage(Model model,HttpServletRequest request, @PageableDefault Pageable pageable) {
+        LOGGER.info("VaLoRanT 갤러리 리스팅 페이지 접속");
+
+        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(flashMap != null){
+//            Page<PostDto> list = (Page<PostDto>) flashMap.get("list");
+            Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
+            model.addAttribute("list",list);
+        } else {
+            LOGGER.info("리스트페이지 접속");
+//            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            model.addAttribute("list", postDtoList);
+        }
+        return "listpage_valorant";
+    }
+
+    @ApiOperation(value = "lostArk 갤러리 리스팅 페이지")
+    @GetMapping("/LostArk_listpage")
+    public String lostArkListPage(Model model,HttpServletRequest request, @PageableDefault Pageable pageable) {
+        LOGGER.info("lostArk 갤러리 리스팅 페이지 접속");
+
+        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(flashMap != null){
+//            Page<PostDto> list = (Page<PostDto>) flashMap.get("list");
+            Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
+            model.addAttribute("list",list);
+        } else {
+            LOGGER.info("리스트페이지 접속");
+//            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            model.addAttribute("list", postDtoList);
+        }
+        return "listpage_lostArk";
+    }
+
+    @ApiOperation(value = "mapleStory 갤러리 리스팅 페이지")
+    @GetMapping("/MapleStory_listpage")
+    public String mapleStoryListPage(Model model,HttpServletRequest request, @PageableDefault Pageable pageable) {
+        LOGGER.info("mapleStory 갤러리 리스팅 페이지 접속");
+
+        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(flashMap != null){
+//            Page<PostDto> list = (Page<PostDto>) flashMap.get("list");
+            Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
+            model.addAttribute("list",list);
+        } else {
+            LOGGER.info("리스트페이지 접속");
+//            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            model.addAttribute("list", postDtoList);
+        }
+
+        return "listpage_mapleStory";
+    }
+
+    @ApiOperation(value = "starCraft 갤러리 리스팅 페이지")
+    @GetMapping("/StarCraft_listpage")
+    public String starCraftListPage(Model model,HttpServletRequest request, @PageableDefault Pageable pageable) {
+        LOGGER.info("starCraft 갤러리 리스팅 페이지 접속");
+
+        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(flashMap != null){
+//            Page<PostDto> list = (Page<PostDto>) flashMap.get("list");
+            Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
+            model.addAttribute("list",list);
+        } else {
+            LOGGER.info("리스트페이지 접속");
+//            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            model.addAttribute("list", postDtoList);
+        }
+        return "listpage_starCraft";
+    }
+
 }

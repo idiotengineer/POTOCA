@@ -1,6 +1,10 @@
 package My_Project.integration.service;
 
 import My_Project.integration.entity.*;
+import My_Project.integration.entity.DiscriminatedEntity.LeagueOfLegendPost;
+import My_Project.integration.entity.DiscriminatedEntity.LostArkPost;
+import My_Project.integration.entity.DiscriminatedEntity.StarcraftPost;
+import My_Project.integration.entity.DiscriminatedEntity.ValorantPost;
 import My_Project.integration.entity.Dto.*;
 import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
 import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
@@ -118,7 +122,8 @@ public class PostService {
             }
 
             PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto, postLikeAndDislike);
-            postRepository.save(postInfo);
+            em.flush();
+
             return true;
         }
         return false;
@@ -175,12 +180,33 @@ public class PostService {
             if (!savePostLikeAndDislike(postLikeAndDislike)) {
                 new Exception("PostLikeAndDislike 객체 생성 실패");
             }
-            PostInfo postInfo = new PostInfo(usersByEmail.get(), postInfoDto, postLikeAndDislike);
+
+            PostInfo postInfo;
+            PostDto postDto;
+
+            if (postInfoDto.getDtype().equals("regular")) {
+                postInfo = new PostInfo();
+            } else if(postInfoDto.getDtype().equals("LEAGUEOFLEGEND")){
+                postInfo = new LeagueOfLegendPost();
+            } else if(postInfoDto.getDtype().equals("VALORANT")){
+                postInfo = new ValorantPost();
+            } else if(postInfoDto.getDtype().equals("LOSTARK")){
+                postInfo = new LostArkPost();
+            } else if(postInfoDto.getDtype().equals("STARCRAFT")){
+                postInfo = new StarcraftPost();
+            } else if(postInfoDto.getDtype().equals("MAPLESTORY")){
+                postInfo = new LeagueOfLegendPost();
+            }else {
+                postInfo = new PostInfo();
+                postDto = new PostDto();
+            }
+
+            postInfo.setPostInfoWithNoArgsConstructor(usersByEmail.get(), postInfoDto, postLikeAndDislike);
             savePhoto(files, postInfo);
+            postDto = new PostDto(postInfo);
 
-            PostDto postDto = new PostDto(postInfo);
+            em.flush();
             return postDto;
-
         } catch (NoSuchElementException e) {
             throw new Exception("존재하지 않는 회원입니다");
         }
@@ -198,7 +224,7 @@ public class PostService {
             }
         }
 
-        postRepository.save(postInfo);
+        em.persist(postInfo);
     }
 
 
@@ -256,7 +282,9 @@ public class PostService {
 
     @Transactional
     public Page<ListingPostDto> getPostInfoList(Pageable pageable) {
-        Page<PostInfo> all = postRepository.findAllByOrderByPostNumber(pageable);
+//        Page<PostInfo> all = postRepository.findAllByOrderByPostNumber(pageable);
+
+        Page<PostInfo> all = postRepository.findAllByOrderByDatesUploadedTimeDesc(pageable);
         /*List<PostDto> collect = all.stream().map(
                 postInfo -> new PostDto(postInfo)
         ).collect(Collectors.toList());

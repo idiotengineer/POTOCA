@@ -3,29 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>copycopy</title>
+  <title>listPage_Valorant</title>
   <link rel = "stylesheet" href ="/css/sample.css">
   <link href="/css/votelistpage.css" rel="stylesheet">
   <link href="/css/font.css" rel = "stylesheet">
+  <link href="/css/backgroundIMG.css" rel="stylesheet">
 
-  <script type="text/javascript" th:inline="javascript">
+  <script th:inline="javascript">
     function search() {
       let string = document.getElementById("validationCustom03").value;
-
+      var numSelect = document.getElementById("validationCustom04");
+      let value1 = numSelect.options[document.getElementById("validationCustom04").selectedIndex].value;
       /*var data = {
         "string": string
       };
 
       let stringify = JSON.stringify(data);
 */
-      var numSelect = document.getElementById("validationCustom04");
-      let value = numSelect.options[document.getElementById("validationCustom04").selectedIndex].value;
       let request = new XMLHttpRequest();
-
-      if (value == "title") {
-        window.location.replace("/search_title?string=" + string);
-
-        /*
+      if (value1 == "title") {
+        window.location.replace("/search_title?string=" + string);/*
         request.open("GET", "/search_title?string=" + string);
         request.send();*/
       } else {
@@ -37,13 +34,13 @@
   </script>
 </head>
 <body>
-
+<div class="body_wrapper">
 <nav class="navbar bg-light fixed-top" id = "navbar_custom">
   <div class="container-fluid" id = "container-fluid_custom">
     <a class="navbar-brand" href="#">
       <img src="https://cdn-icons-png.flaticon.com/512/6815/6815258.png" alt="Bootstrap" width="30" height="24">
     </a>
-    <a class="navbar-brand" href="http://localhost:8080/">Main Page</a>
+    <a class="navbar-brand" href="http://localhost:8080/">포인트로 캐쉬를 만들자! POTOCA 갤러리</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -69,8 +66,10 @@
   </div>
 </nav>
 
-<h1 class = "List_Banner">일반 게시글 목록
-  <button type="button" class="btn btn-success" onclick="location.href='http://localhost:8080/posting'">일반 게시글쓰기</button>
+  <div class="body_wrapper" id="valorantIMG">
+    <div class="body_wrapper2">
+<h1 class = "List_Banner"> VALORANT 갤러리
+  <button type="button" class="btn btn-success" onclick="location.href='http://localhost:8080/posting'">게시글 작성</button>
 </h1>
 
 <div class = "Background">
@@ -104,9 +103,9 @@
 </div>
 
 
-<div class = "search_bar" id = "search_bar_wrapper">
+<div class = "search_bar"s id = "search_bar_wrapper">
   <div class="col-md-3" id = "search_condition">
-    <label for="validationCustom04" class="form-label">검색 조건</label>
+    <label for="validationCustom04" class="form-label" style="color: white">검색 조건</label>
     <select class="form-select" id="validationCustom04" required>
       <option value="title">제목</option>
       <option value="postedUser">작성자</option>
@@ -114,28 +113,27 @@
   </div>
 
   <div class="col-md-6" id = "search_content">
-    <label for="validationCustom03" class="form-label">내용</label>
+    <label for="validationCustom03" class="form-label" style="color: white">내용</label>
     <input type="text" class="form-control" id="validationCustom03" required>
   </div>
 
   <div class="col-md-6" id = "search_button_wrapper">
-    <label for="validationCustom03" class="form-label" id = "bb">검색</label>
+    <label for="validationCustom03" class="form-label" id = "bb" style="color: white">검색</label>
     <button type="button" class="btn btn-success" id= "search_button" onclick="search()">button</button>
   </div>
 </div>
 
 <nav aria-label="Page navigation example" id="list1" style="justify-content: center">
   <!--표에 사용될 변수값 초기화 -->
-  <th:block  th:if="${how_to_search}=='title'">
-  <ul class="pagination"
+  <ul class="pagination justify-content-center"
       th:with="start=${T(java.lang.Math).floor(list.number/10)*10 + 1},
                     last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
     <th:block th:with="
-                firstAddr=@{/search_title(string=${keyword},page=0)},
-                prevAddr=@{/search_title(string=${keyword},page=${list.number - 1})},
-                nextAddr=@{/search_title(string=${keyword},page=${list.number + 1})},
-                lastAddr=@{/search_title(string=${keyword},page=${list.totalPages -1})}">
-      <li class="page-item">
+                firstAddr=@{/listpage(page=0)},
+                prevAddr=@{/listpage(page=${list.number - 1})},
+                nextAddr=@{/listpage(page=${list.number + 1})},
+                lastAddr=@{/listpage(page=${list.totalPages -1})}">
+      <li class="page-item" style="padding-bottom: 5%">
         <a class="page-link" th:href="${firstAddr}" aria-label="First">
           <span aria-hidden="true">First</span>
         </a>
@@ -150,7 +148,7 @@
       <!--1,2,3,4,.. 등 페이지-->
       <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}"
           th:class="${page == list.number + 1} ? 'active'">
-        <a class="page-link" th:text="${page}" th:href="@{/search_title(string=${keyword},page=${page -1})}"></a>
+        <a class="page-link" th:text="${page}" th:href="@{/listpage(page=${page -1})}"></a>
       </li>
       <!--다음 페이지로 -->
       <li class="page-item" th:class="${list.last} ? 'disabled'">
@@ -167,51 +165,9 @@
       </li>
     </th:block>
   </ul>
-  </th:block>
-
-  <th:block  th:unless="${how_to_search}=='title'">
-    <ul class="pagination justify-content-center"
-        th:with="start=${T(java.lang.Math).floor(list.number/10)*10 + 1},
-                    last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
-      <th:block th:with="
-                firstAddr=@{/search_user(string=${keyword},page=0)},
-                prevAddr=@{/search_user(string=${keyword},page=${list.number - 1})},
-                nextAddr=@{/search_user(string=${keyword},page=${list.number + 1})},
-                lastAddr=@{/search_user(string=${keyword},page=${list.totalPages -1})}">
-        <li class="page-item">
-          <a class="page-link" th:href="${firstAddr}" aria-label="First">
-            <span aria-hidden="true">First</span>
-          </a>
-        </li>
-        <!-- 이전 페이지로 가기 버튼 -->
-        <li class="page-item" th:class="${list.first} ? 'disabled'">
-          <a class="page-link" th:href="${list.first} ? '#' :${prevAddr}"
-             aria-label="Previous">
-            <span aria-hidden="true">&lt;</span>
-          </a>
-        </li>
-        <!--1,2,3,4,.. 등 페이지-->
-        <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}"
-            th:class="${page == list.number + 1} ? 'active'">
-          <a class="page-link" th:text="${page}" th:href="@{/search_user(string=${keyword},page=${page -1})}"></a>
-        </li>
-        <!--다음 페이지로 -->
-        <li class="page-item" th:class="${list.last} ? 'disabled'">
-          <a class="page-link" th:href="${list.last} ? '#' : ${nextAddr}"
-             aria-label="Next">
-            <span aria-hidden="true">&gt;</span>
-          </a>
-        </li>
-        <!--맨 마지막 페이지로 이동 -->
-        <li class="page-item">
-          <a class="page-link" th:href="${lastAddr}" aria-label="Last">
-            <span aria-hidden="true">Last</span>
-          </a>
-        </li>
-      </th:block>
-    </ul>
-  </th:block>
 </nav>
+    </div>
+  </div>
 
 
 <!-- Footer -->

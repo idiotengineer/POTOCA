@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>lol_listpage</title>
+  <title>listPage_LostArk</title>
   <link rel = "stylesheet" href ="/css/sample.css">
   <link href="/css/votelistpage.css" rel="stylesheet">
   <link href="/css/font.css" rel = "stylesheet">
+  <link href="/css/backgroundIMG.css" rel="stylesheet">
 
   <script th:inline="javascript">
     function search() {
@@ -33,7 +34,7 @@
   </script>
 </head>
 <body>
-
+<div class="body_wrapper">
 <nav class="navbar bg-light fixed-top" id = "navbar_custom">
   <div class="container-fluid" id = "container-fluid_custom">
     <a class="navbar-brand" href="#">
@@ -65,8 +66,10 @@
   </div>
 </nav>
 
-<h1 class = "List_Banner">일반 게시글 목록
-  <button type="button" class="btn btn-success" onclick="location.href='http://localhost:8080/posting'">일반 게시글쓰기</button>
+  <div class="body_wrapper" id="lostArkIMG">
+    <div class="body_wrapper2">
+<h1 class = "List_Banner"> LOST ARK 갤러리
+  <button type="button" class="btn btn-success" onclick="location.href='http://localhost:8080/posting'">게시글 작성</button>
 </h1>
 
 <div class = "Background">
@@ -100,9 +103,9 @@
 </div>
 
 
-<div class = "search_bar" id = "search_bar_wrapper">
+<div class = "search_bar"s id = "search_bar_wrapper">
   <div class="col-md-3" id = "search_condition">
-    <label for="validationCustom04" class="form-label">검색 조건</label>
+    <label for="validationCustom04" class="form-label" style="color: white">검색 조건</label>
     <select class="form-select" id="validationCustom04" required>
       <option value="title">제목</option>
       <option value="postedUser">작성자</option>
@@ -110,19 +113,19 @@
   </div>
 
   <div class="col-md-6" id = "search_content">
-    <label for="validationCustom03" class="form-label">내용</label>
+    <label for="validationCustom03" class="form-label" style="color: white">내용</label>
     <input type="text" class="form-control" id="validationCustom03" required>
   </div>
 
   <div class="col-md-6" id = "search_button_wrapper">
-    <label for="validationCustom03" class="form-label" id = "bb">검색</label>
+    <label for="validationCustom03" class="form-label" id = "bb" style="color: white">검색</label>
     <button type="button" class="btn btn-success" id= "search_button" onclick="search()">button</button>
   </div>
 </div>
 
 <nav aria-label="Page navigation example" id="list1" style="justify-content: center">
   <!--표에 사용될 변수값 초기화 -->
-  <ul class="pagination"
+  <ul class="pagination justify-content-center"
       th:with="start=${T(java.lang.Math).floor(list.number/10)*10 + 1},
                     last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
     <th:block th:with="
@@ -130,7 +133,7 @@
                 prevAddr=@{/listpage(page=${list.number - 1})},
                 nextAddr=@{/listpage(page=${list.number + 1})},
                 lastAddr=@{/listpage(page=${list.totalPages -1})}">
-      <li class="page-item">
+      <li class="page-item" style="padding-bottom: 5%">
         <a class="page-link" th:href="${firstAddr}" aria-label="First">
           <span aria-hidden="true">First</span>
         </a>
@@ -163,6 +166,8 @@
     </th:block>
   </ul>
 </nav>
+    </div>
+  </div>
 
 
 <!-- Footer -->

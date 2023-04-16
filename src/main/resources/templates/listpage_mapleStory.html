@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>listPage_MapleStory</title>
+  <link rel = "stylesheet" href ="/css/sample.css">
+  <link href="/css/votelistpage.css" rel="stylesheet">
+  <link href="/css/font.css" rel = "stylesheet">
+  <link href="/css/backgroundIMG.css" rel="stylesheet">
+
+  <script th:inline="javascript">
+    function search() {
+      let string = document.getElementById("validationCustom03").value;
+      var numSelect = document.getElementById("validationCustom04");
+      let value1 = numSelect.options[document.getElementById("validationCustom04").selectedIndex].value;
+      /*var data = {
+        "string": string
+      };
+
+      let stringify = JSON.stringify(data);
+*/
+      let request = new XMLHttpRequest();
+      if (value1 == "title") {
+        window.location.replace("/search_title?string=" + string);/*
+        request.open("GET", "/search_title?string=" + string);
+        request.send();*/
+      } else {
+        window.location.replace("/search_user?string=" + string);
+        /*request.open("GET", "/search_user?string=" + string);
+        request.send();*/
+      }
+    }
+  </script>
+</head>
+<body>
+<div class="body_wrapper">
+  <nav class="navbar bg-light fixed-top" id = "navbar_custom">
+    <div class="container-fluid" id = "container-fluid_custom">
+      <a class="navbar-brand" href="#">
+        <img src="https://cdn-icons-png.flaticon.com/512/6815/6815258.png" alt="Bootstrap" width="30" height="24">
+      </a>
+      <a class="navbar-brand" href="http://localhost:8080/">포인트로 캐쉬를 만들자! POTOCA 갤러리</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">My Page</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">설정</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">마이페이지</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">마이포인트</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="body_wrapper" id="mapleStoryIMG">
+    <div class="body_wrapper2">
+      <h1 class = "List_Banner"> MAPLESTORY 갤러리
+        <button type="button" class="btn btn-success" onclick="location.href='http://localhost:8080/posting'">게시글 작성</button>
+      </h1>
+
+      <div class = "Background">
+        <table class="table" style="table-layout: fixed;">
+          <thead>
+          <tr>
+            <th scope="col" id = "table-th-1">추천수</th>
+            <th scope="col" id = "table-th-2">작성자</th>
+            <th scope="col" id = "table-th-3">제목</th>
+            <th scope="col" id = "table-th-4">등록일자</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="product : ${list}" th:onclick="'location.href=\'' + @{find_post(id=${product.getPostNumber()})} + '\''">
+            <th scope="row" th:text="${product.getPostNumber()}">1</th>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;" th:text="${product.getUsers().getEmail()}">Mark</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;" th:text="${product.getPostTitle()}">카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!</td>
+            <td style="
+            overflow:hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;" th:text="${#temporals.format(product.getDates().getUploadedTime(),'yyyy-MM-dd')}">@mdo</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <div class = "search_bar"s id = "search_bar_wrapper">
+        <div class="col-md-3" id = "search_condition">
+          <label for="validationCustom04" class="form-label" style="color: white">검색 조건</label>
+          <select class="form-select" id="validationCustom04" required>
+            <option value="title">제목</option>
+            <option value="postedUser">작성자</option>
+          </select>
+        </div>
+
+        <div class="col-md-6" id = "search_content">
+          <label for="validationCustom03" class="form-label" style="color: white">내용</label>
+          <input type="text" class="form-control" id="validationCustom03" required>
+        </div>
+
+        <div class="col-md-6" id = "search_button_wrapper">
+          <label for="validationCustom03" class="form-label" id = "bb" style="color: white">검색</label>
+          <button type="button" class="btn btn-success" id= "search_button" onclick="search()">button</button>
+        </div>
+      </div>
+
+      <nav aria-label="Page navigation example" id="list1" style="justify-content: center">
+        <!--표에 사용될 변수값 초기화 -->
+        <ul class="pagination justify-content-center"
+            th:with="start=${T(java.lang.Math).floor(list.number/10)*10 + 1},
+                    last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
+          <th:block th:with="
+                firstAddr=@{/listpage(page=0)},
+                prevAddr=@{/listpage(page=${list.number - 1})},
+                nextAddr=@{/listpage(page=${list.number + 1})},
+                lastAddr=@{/listpage(page=${list.totalPages -1})}">
+            <li class="page-item" style="padding-bottom: 5%">
+              <a class="page-link" th:href="${firstAddr}" aria-label="First">
+                <span aria-hidden="true">First</span>
+              </a>
+            </li>
+            <!-- 이전 페이지로 가기 버튼 -->
+            <li class="page-item" th:class="${list.first} ? 'disabled'">
+              <a class="page-link" th:href="${list.first} ? '#' :${prevAddr}"
+                 aria-label="Previous">
+                <span aria-hidden="true">&lt;</span>
+              </a>
+            </li>
+            <!--1,2,3,4,.. 등 페이지-->
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}"
+                th:class="${page == list.number + 1} ? 'active'">
+              <a class="page-link" th:text="${page}" th:href="@{/listpage(page=${page -1})}"></a>
+            </li>
+            <!--다음 페이지로 -->
+            <li class="page-item" th:class="${list.last} ? 'disabled'">
+              <a class="page-link" th:href="${list.last} ? '#' : ${nextAddr}"
+                 aria-label="Next">
+                <span aria-hidden="true">&gt;</span>
+              </a>
+            </li>
+            <!--맨 마지막 페이지로 이동 -->
+            <li class="page-item">
+              <a class="page-link" th:href="${lastAddr}" aria-label="Last">
+                <span aria-hidden="true">Last</span>
+              </a>
+            </li>
+          </th:block>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+
+  <!-- Footer -->
+  <footer class="text-center text-lg-start bg-white text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <!-- Left -->
+      <div class="me-5 d-none d-lg-block">
+        <span>Get connected with us on social networks:</span>
+      </div>
+      <!-- Left -->
+
+      <!-- Right -->
+      <div>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              <i class="fas fa-gem me-3 text-secondary"></i>Company name
+            </h6>
+            <p>
+              This is a side project website, and we're not generating any revenue yet.
+              Thank you for your visit. :)
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              Products
+            </h6>
+            <p>
+              <a href="#!" class="text-reset">HTML, CSS, BOOTSTRAP</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">SPRING</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">JPA</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">MYSQL</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+            <p><i class="fas fa-home me-3 text-secondary"></i> Seoul, 129 Teheran-ro, KR</p>
+            <p>
+              <i class="fas fa-envelope me-3 text-secondary"></i>
+              gurtjd97@naver.com
+            </p>
+            <p><i class="fas fa-phone me-3 text-secondary"></i> +82)10-2729-3646</p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+      © 2021 Copyright:
+      <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</body>
+</html>

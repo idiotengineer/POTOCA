@@ -28,4 +28,8 @@ public interface PostRepository extends JpaRepository<PostInfo,Long>, PostInfoCu
     Page<PostInfo> findAllByOrderByPostNumber(Pageable pageable);
 
     Optional<PostInfo> findPostInfoWithSpringDataJpaByPostNumber(Long id);
+
+    Page<PostInfo> findAllByOrderByDatesUploadedTimeDesc(Pageable pageable);
+
+//    Page<PostInfo> findPostInfo(String postType,Pageable pageable);
 }

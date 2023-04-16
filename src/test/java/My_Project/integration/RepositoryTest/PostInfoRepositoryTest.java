@@ -1,9 +1,12 @@
 package My_Project.integration.RepositoryTest;
 
 import My_Project.integration.entity.*;
+import My_Project.integration.entity.DiscriminatedEntity.*;
 import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
 import My_Project.integration.repository.PostCommentsRepository;
 import My_Project.integration.repository.PostRepository;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,11 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.Set;
 
+import static My_Project.integration.entity.DiscriminatedEntity.QDiabloPost.*;
+import static My_Project.integration.entity.DiscriminatedEntity.QLeagueOfLegendPost.*;
+import static My_Project.integration.entity.DiscriminatedEntity.QLostArkPost.*;
+import static My_Project.integration.entity.DiscriminatedEntity.QStarcraftPost.*;
+import static My_Project.integration.entity.DiscriminatedEntity.QValorantPost.*;
 import static My_Project.integration.entity.QBigComments.*;
 import static My_Project.integration.entity.QDisLiked.disLiked;
 import static My_Project.integration.entity.QLiked.liked;
@@ -112,5 +120,14 @@ public void findPostV4Test() throws Exception {
                 .fetchOne();
     //then
     Assertions.assertThat(postInfo1).isNotNull();
+    }
+
+    @Test
+    public void q() throws Exception {
+        //given
+
+        //when
+
+        //then
     }
 }

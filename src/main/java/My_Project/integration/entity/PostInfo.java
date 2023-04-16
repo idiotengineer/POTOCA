@@ -1,7 +1,9 @@
 package My_Project.integration.entity;
 
 import My_Project.integration.entity.Dto.PostInfoDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 
@@ -12,8 +14,10 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "postType")
+@DiscriminatorColumn
 public class PostInfo {
 
     @Id
@@ -49,7 +53,7 @@ public class PostInfo {
             mappedBy = "postInfo"
     )
     @BatchSize(size = 1000)
-    private Set<PostComments> comments;
+    private Set<PostComments> comments = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
@@ -60,19 +64,9 @@ public class PostInfo {
     @ElementCollection
     private List<Integer> bestPostCommentsList = new ArrayList<>(Arrays.asList(1, 2, 3));
 
-    public PostInfo(Long postNumber, Users postedUser, String postTitle, String postContent, Dates dates, Set<Photo> photo, Set<PostComments> comments, PostLikeAndDislike postLikeAndDislike) {
-        this.postNumber = postNumber;
-        this.postedUser = postedUser;
-        this.postTitle = postTitle;
-        this.postContent = postContent;
-        this.dates = dates;
-        this.photo = photo;
-        this.comments = comments;
-        this.postLikeAndDislike = postLikeAndDislike;
-    }
+    @Column(insertable = false, updatable = false)
+    private String dtype;
 
-    public PostInfo() {
-    }
 
     // Board에서 파일 처리 위함
     public void addPhoto(Photo photo) {
@@ -94,6 +88,7 @@ public class PostInfo {
         this.dates = dates;
         this.comments = new HashSet<>();
         this.postLikeAndDislike = postLikeAndDislike;
+        this.dtype = postInfo.getDtype();
     }
 
     public void addComments(PostComments postComments) {
@@ -106,6 +101,17 @@ public class PostInfo {
         for (PostComments postComment : postComments) {
             postComment.setPostInfo(this);
         }
+    }
+
+    public void setPostInfoWithNoArgsConstructor(Users users, PostInfoDto postInfoDto, PostLikeAndDislike postLikeAndDislike) {
+        Dates dates = new Dates(LocalDateTime.now(), LocalDateTime.now());
+
+        setPostedUser(users);
+        setPostLikeAndDislike(postLikeAndDislike);
+        setDates(dates);
+        setPostTitle(postInfoDto.getPostTitle());
+        setPostContent(postInfoDto.getPostContent());
+        setComments(new HashSet<>());
     }
 }
 

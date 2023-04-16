@@ -3,9 +3,14 @@ package My_Project.integration.repository.PostInfoCustom.Impl;
 import My_Project.integration.entity.*;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.repository.PostInfoCustom.PostInfoCustomRepository;
+import ch.qos.logback.core.util.ContextUtil;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.swing.text.html.Option;
@@ -168,4 +173,5 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
 
         return Optional.ofNullable(postInfo1);
     }
+
 }

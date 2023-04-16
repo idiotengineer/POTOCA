@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>listpage</title>
+  <title>listPage_GeneralPost</title>
   <link rel = "stylesheet" href ="/css/sample.css">
   <link href="/css/votelistpage.css" rel="stylesheet">
   <link href="/css/font.css" rel = "stylesheet">
+  <link href="/css/backgroundIMG.css" rel="stylesheet">
 
   <script th:inline="javascript">
     function search() {
@@ -33,7 +34,7 @@
   </script>
 </head>
 <body>
-
+<div class="body_wrapper">
 <nav class="navbar bg-light fixed-top" id = "navbar_custom">
   <div class="container-fluid" id = "container-fluid_custom">
     <a class="navbar-brand" href="#">
@@ -65,8 +66,10 @@
   </div>
 </nav>
 
-<h1 class = "List_Banner">일반 게시글 목록
-  <button type="button" class="btn btn-success" onclick="location.href='http://localhost:8080/posting'">일반 게시글쓰기</button>
+  <div class="body_wrapper">
+    <div class="body_wrapper2">
+<h1 class = "List_Banner" style="color: black "> 일반 갤러리
+  <button type="button" class="btn btn-success" onclick="location.href='http://localhost:8080/posting'">게시글 작성</button>
 </h1>
 
 <div class = "Background">
@@ -130,7 +133,7 @@
                 prevAddr=@{/listpage(page=${list.number - 1})},
                 nextAddr=@{/listpage(page=${list.number + 1})},
                 lastAddr=@{/listpage(page=${list.totalPages -1})}">
-      <li class="page-item">
+      <li class="page-item" style="padding-bottom: 5%">
         <a class="page-link" th:href="${firstAddr}" aria-label="First">
           <span aria-hidden="true">First</span>
         </a>
@@ -163,6 +166,8 @@
     </th:block>
   </ul>
 </nav>
+    </div>
+  </div>
 
 
 <!-- Footer -->
