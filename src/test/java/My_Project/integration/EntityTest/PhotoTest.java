@@ -6,8 +6,10 @@ import My_Project.integration.repository.PostRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -24,6 +26,7 @@ import static My_Project.integration.entity.QPostLikeAndDislike.postLikeAndDisli
 import static My_Project.integration.entity.QUsers.users;
 
 @SpringBootTest
+@RunWith(SpringRunner.class)
 @Transactional
 public class PhotoTest {
 
@@ -37,65 +40,65 @@ public class PhotoTest {
     @Autowired
     PostRepository postRepository;
 
-    @BeforeEach
-    public void init() {
-        jpaQueryFactory = new JPAQueryFactory(em);
-
-        Address Address1 = new Address(
-                "울산광역시",
-                "남구",
-                "신정1동",
-                "1491-4",
-                "xx빌딩"
-        );
-
-        Dates dates = new Dates(
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
-
-        Users users1 = new Users(
-                "test9999@naver.com",
-                "test1234",
-                "테스트",
-                "003456789099",
-                "0023456789019",
-                Address1,
-                0L,
-                new ArrayList<>(),
-                new ArrayList<>(),
-                dates,
-                new HashSet<>(),
-                new HashSet<>()
-        );
-
-
-        PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike(
-                null,
-                null,
-                new HashSet<>(),
-                new HashSet<>()
-        );
-
-        PostInfo postInfo = new PostInfo(
-                null,
-                users1,
-                "test123",
-                "content1",
-                dates,
-                new HashSet<>(),
-                new HashSet<>(),
-                postLikeAndDislike
-        );
-
-        postLikeAndDislike.setPostInfo(postInfo);
-
-        em.persist(users1);
-        em.persist(postInfo);
-        em.persist(postLikeAndDislike);
-
-        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-    }
+//    @BeforeEach
+//    public void init() {
+//        jpaQueryFactory = new JPAQueryFactory(em);
+//
+//        Address Address1 = new Address(
+//                "울산광역시",
+//                "남구",
+//                "신정1동",
+//                "1491-4",
+//                "xx빌딩"
+//        );
+//
+//        Dates dates = new Dates(
+//                LocalDateTime.now(),
+//                LocalDateTime.now()
+//        );
+//
+//        Users users1 = new Users(
+//                "test9999@naver.com",
+//                "test1234",
+//                "테스트",
+//                "003456789099",
+//                "0023456789019",
+//                Address1,
+//                0L,
+//                new ArrayList<>(),
+//                new ArrayList<>(),
+//                dates,
+//                new HashSet<>(),
+//                new HashSet<>()
+//        );
+//
+//
+//        PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike(
+//                null,
+//                null,
+//                new HashSet<>(),
+//                new HashSet<>()
+//        );
+//
+//        PostInfo postInfo = new PostInfo(
+//                null,
+//                users1,
+//                "test123",
+//                "content1",
+//                dates,
+//                new HashSet<>(),
+//                new HashSet<>(),
+//                postLikeAndDislike
+//        );
+//
+//        postLikeAndDislike.setPostInfo(postInfo);
+//
+//        em.persist(users1);
+//        em.persist(postInfo);
+//        em.persist(postLikeAndDislike);
+//
+//        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+//    }
 
     @Test
     public void 게시글의사진삭제테스트() {

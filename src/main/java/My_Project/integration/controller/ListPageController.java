@@ -43,7 +43,7 @@ public class ListPageController {
         } else {
             LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
-            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"regular");
             model.addAttribute("list", postDtoList);
         }
         return "listpage_copy";
@@ -95,7 +95,7 @@ public class ListPageController {
         } else {
             LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
-            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"LEAGUEOFLEGEND");
             model.addAttribute("list", postDtoList);
         }
 
@@ -116,7 +116,7 @@ public class ListPageController {
         } else {
             LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
-            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"VALORANT");
             model.addAttribute("list", postDtoList);
         }
         return "listpage_valorant";
@@ -136,7 +136,7 @@ public class ListPageController {
         } else {
             LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
-            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"LOSTARK");
             model.addAttribute("list", postDtoList);
         }
         return "listpage_lostArk";
@@ -156,7 +156,7 @@ public class ListPageController {
         } else {
             LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
-            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"MAPLESTORY");
             model.addAttribute("list", postDtoList);
         }
 
@@ -177,7 +177,8 @@ public class ListPageController {
         } else {
             LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
-            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+//            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
+            Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable, "STARCRAFT");
             model.addAttribute("list", postDtoList);
         }
         return "listpage_starCraft";

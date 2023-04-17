@@ -5,20 +5,28 @@ import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.repository.PostInfoCustom.PostInfoCustomRepository;
 import ch.qos.logback.core.util.ContextUtil;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.util.StringUtils;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.swing.text.html.Option;
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+import static My_Project.integration.entity.DiscriminatedEntity.QLeagueOfLegendPost.leagueOfLegendPost;
+import static My_Project.integration.entity.DiscriminatedEntity.QLostArkPost.lostArkPost;
+import static My_Project.integration.entity.DiscriminatedEntity.QMapleStoryPost.mapleStoryPost;
+import static My_Project.integration.entity.DiscriminatedEntity.QStarcraftPost.starcraftPost;
+import static My_Project.integration.entity.DiscriminatedEntity.QValorantPost.valorantPost;
 import static My_Project.integration.entity.QBigComments.bigComments;
 import static My_Project.integration.entity.QDisLiked.disLiked;
 import static My_Project.integration.entity.QLiked.liked;
@@ -174,4 +182,69 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
         return Optional.ofNullable(postInfo1);
     }
 
+    public Page<PostInfo> listingPage(Pageable pageable, String s) {
+        List<PostInfo> fetch = jpaQueryFactory.selectFrom(postInfo)
+                .where(
+                        eqLOL(s),
+                        eqLostArk(s),
+                        eqValorant(s),
+                        eqMapleStory(s),
+                        eqStarCraft(s),
+                        eqRegular(s)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(
+                        postInfo.dates.uploadedTime.desc()
+                )
+                .fetch();
+
+        return new PageImpl<PostInfo>(fetch);
+    }
+
+    public BooleanExpression eqStarCraft(String s) {
+        if (StringUtils.isNullOrEmpty(s) || !s.equals("STARCRAFT")) {
+            return null;
+        }
+        return postInfo.instanceOf(starcraftPost.getType());
+    }
+
+    public BooleanExpression eqLOL(String s) {
+        if (StringUtils.isNullOrEmpty(s) || !s.equals("LEAGUEOFLEGEND")) {
+            return null;
+        }
+        return postInfo.instanceOf(leagueOfLegendPost.getType());
+    }
+
+    public BooleanExpression eqLostArk(String s) {
+        if (StringUtils.isNullOrEmpty(s) || !s.equals("LOSTARK")) {
+            return null;
+        }
+
+        return postInfo.instanceOf(lostArkPost.getType());
+    }
+
+    public BooleanExpression eqValorant(String s) {
+        if (StringUtils.isNullOrEmpty(s) || !s.equals("VALORANT")) {
+            return null;
+        }
+
+        return postInfo.instanceOf(valorantPost.getType());
+    }
+
+    public BooleanExpression eqMapleStory(String s) {
+        if (StringUtils.isNullOrEmpty(s) || !s.equals("MAPLESTORY")) {
+            return null;
+        }
+
+        return postInfo.instanceOf(mapleStoryPost.getType());
+    }
+
+    public BooleanExpression eqRegular(String s) {
+        if (StringUtils.isNullOrEmpty(s) || !s.equals("regular")) {
+            return null;
+        }
+
+        return postInfo.instanceOf(mapleStoryPost.getType());
+    }
 }

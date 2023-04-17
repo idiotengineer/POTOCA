@@ -5,23 +5,28 @@ import My_Project.integration.entity.DiscriminatedEntity.*;
 import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
 import My_Project.integration.repository.PostCommentsRepository;
 import My_Project.integration.repository.PostRepository;
+import ch.qos.logback.core.util.ContextUtil;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static My_Project.integration.entity.DiscriminatedEntity.QDiabloPost.*;
 import static My_Project.integration.entity.DiscriminatedEntity.QLeagueOfLegendPost.*;
 import static My_Project.integration.entity.DiscriminatedEntity.QLostArkPost.*;
+import static My_Project.integration.entity.DiscriminatedEntity.QMapleStoryPost.*;
 import static My_Project.integration.entity.DiscriminatedEntity.QStarcraftPost.*;
 import static My_Project.integration.entity.DiscriminatedEntity.QValorantPost.*;
 import static My_Project.integration.entity.QBigComments.*;
@@ -125,9 +130,68 @@ public void findPostV4Test() throws Exception {
     @Test
     public void q() throws Exception {
         //given
+        PageRequest of = PageRequest.of(0, 10);
 
+        String parameter = "STARCRAFT";
+
+        List<PostInfo> fetch = jpaQueryFactory.selectFrom(postInfo)
+                .where(
+                        eqLOL(parameter),
+                        eqLostArk(parameter),
+                        eqValorant(parameter),
+                        eqMapleStory(parameter),
+                        eqStarCraft(parameter)
+                )
+                .leftJoin(postInfo.postedUser, users).fetchJoin()
+                .leftJoin(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postInfo.photo, photo).fetchJoin()
+
+                .offset(of.getOffset())
+                .limit(of.getPageSize())
+                .fetch();
         //when
 
         //then
+
+        Assertions.assertThat(fetch).isNotEmpty();
+
+    }
+
+    public BooleanExpression eqStarCraft(String s) {
+        if (StringUtils.isBlank(s) || !s.equals("STARCRAFT")) {
+            return null;
+        }
+        return postInfo.instanceOf(starcraftPost.getType());
+    }
+
+    public BooleanExpression eqLOL(String s) {
+        if (StringUtils.isBlank(s) || !s.equals("LEAGUEOFLEGEND")) {
+            return null;
+        }
+        return postInfo.instanceOf(leagueOfLegendPost.getType());
+    }
+
+    public BooleanExpression eqLostArk(String s) {
+        if (StringUtils.isBlank(s) || !s.equals("LOSTARK")) {
+            return null;
+        }
+
+        return postInfo.instanceOf(lostArkPost.getType());
+    }
+
+    public BooleanExpression eqValorant(String s) {
+        if (StringUtils.isBlank(s) || !s.equals("VALORANT")) {
+            return null;
+        }
+
+        return postInfo.instanceOf(valorantPost.getType());
+    }
+
+    public BooleanExpression eqMapleStory(String s) {
+        if (StringUtils.isBlank(s) || !s.equals("MAPLESTORY")) {
+            return null;
+        }
+
+        return postInfo.instanceOf(mapleStoryPost.getType());
     }
 }

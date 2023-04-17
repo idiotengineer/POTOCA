@@ -298,6 +298,17 @@ public class PostService {
     }
 
     @Transactional
+    public Page<ListingPostDto> getPostInfoListV2(Pageable pageable, String s) {
+        Page<PostInfo> all = postRepository.listingPage(pageable, s);
+
+        List<ListingPostDto> collect = all.stream().map(
+                postInfo -> new ListingPostDto(postInfo)
+        ).collect(Collectors.toList());
+
+        return new PageImpl<>(collect, all.getPageable(), all.getTotalElements());
+    }
+
+    @Transactional
     public Page<PostDto> SearchByName(String name, Pageable pageable) {
         List<PostDto> list = postRepository.searchByName(name);
 
