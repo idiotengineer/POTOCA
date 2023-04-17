@@ -54,6 +54,25 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
         ).collect(Collectors.toList());
     }
 
+    public List<PostDto> searchByNameV2(String name,String s) {
+        List<PostInfo> fetch = jpaQueryFactory.
+                selectFrom(postInfo)
+                .where(
+                        postInfo.postedUser.email.contains(name),
+                        eqRegular(s),
+                        eqLOL(s),
+                        eqLostArk(s),
+                        eqValorant(s),
+                        eqStarCraft(s),
+                        eqMapleStory(s)
+                )
+                .fetch();
+
+        return fetch.stream().map(
+                postInfo1 -> new PostDto(postInfo1)
+        ).collect(Collectors.toList());
+    }
+
     @Override
     public List<PostDto> searchByTitle(String title) {
         List<PostInfo> list = em.createQuery("select p from PostInfo p where p.postTitle like concat('%',?1,'%')")
@@ -62,6 +81,25 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
 
                 return list.stream().map(p -> new PostDto(p))
                 .collect(Collectors.toList());
+    }
+
+    public List<PostDto> searchByTitleV2(String name,String s) {
+        List<PostInfo> fetch = jpaQueryFactory.
+                selectFrom(postInfo)
+                .where(
+                        postInfo.postTitle.contains(name),
+                        eqRegular(s),
+                        eqLOL(s),
+                        eqLostArk(s),
+                        eqValorant(s),
+                        eqStarCraft(s),
+                        eqMapleStory(s)
+                )
+                .fetch();
+
+        return fetch.stream().map(
+                postInfo1 -> new PostDto(postInfo1)
+        ).collect(Collectors.toList());
     }
 
     @Override

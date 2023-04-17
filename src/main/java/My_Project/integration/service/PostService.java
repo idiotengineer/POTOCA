@@ -331,6 +331,29 @@ public class PostService {
     }
 
     @Transactional
+    public Page<PostDto> SearchByTitleV2(String title, Pageable pageable, String s) {
+        List<PostDto> list = postRepository.searchByTitleV2(title,s);
+
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), list.size());
+        Page<PostDto> postDtos = new PageImpl<>(list.subList(start, end), pageable, list.size());
+
+        return postDtos;
+    }
+
+    @Transactional
+    public Page<PostDto> SearchByNameV2(String title, Pageable pageable,String s) {
+        List<PostDto> list = postRepository.searchByNameV2(title,s);
+
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), list.size());
+        Page<PostDto> postDtos = new PageImpl<>(list.subList(start, end), pageable, list.size());
+
+        return postDtos;
+    }
+
+
+    @Transactional
     public boolean savePostLikeAndDislike(PostLikeAndDislike postLikeAndDislike) {
         try {
             postLikeAndDislikeRepository.save(postLikeAndDislike);

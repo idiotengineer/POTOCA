@@ -22,4 +22,8 @@ public interface PostInfoCustomRepository {
     public Optional<PostInfo> findPostV4(Long id);
 
     public Page<PostInfo> listingPage(Pageable pageable, String s);
+
+    public List<PostDto> searchByNameV2(String name,String s);
+
+    public List<PostDto> searchByTitleV2(String name,String s);
 }

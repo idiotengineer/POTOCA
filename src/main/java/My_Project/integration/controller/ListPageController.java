@@ -55,7 +55,7 @@ public class ListPageController {
     }*/
 
     @GetMapping("/search_user")
-    public String searchByUser(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+    public String searchByUser(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
         Page<PostDto> list = postService.SearchByName(string, pageable);
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -71,6 +71,7 @@ public class ListPageController {
         model.addAttribute("how_to_search","title");
         return "listpage_copy2";
     }
+
 
     /*@GetMapping("/searchPage")
     public String searchPage(@ApiIgnore Model model, @PageableDefault Pageable pageable, HttpServletRequest request)
@@ -184,4 +185,93 @@ public class ListPageController {
         return "listpage_starCraft";
     }
 
+    @GetMapping("/search_user/LOLPost")
+    public String searchByUserLOLPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+        Page<PostDto> list = postService.SearchByNameV2(string, pageable, "LEAGUEOFLEGEND");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","user");
+        return "listpage_LeagueOfLegends";
+    }
+
+    @GetMapping("/search_title/LOLPost")
+    public String searchByTitleLOLPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+        Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"LEAGUEOFLEGEND");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","title");
+        return "listpage_LeagueOfLegends";
+    }
+
+    @GetMapping("/search_user/LostArkPost")
+    public String searchByUserLostArkPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+        Page<PostDto> list = postService.SearchByNameV2(string, pageable, "LOSTARK");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","user");
+        return "listpage_lostArk";
+    }
+
+    @GetMapping("/search_title/LostArkPost")
+    public String searchByTitleLostArkPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+        Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"LOSTARK");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","title");
+        return "listpage_lostArk";
+    }
+
+    @GetMapping("/search_user/MapleStoryPost")
+    public String searchByUserMapleStoryPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+        Page<PostDto> list = postService.SearchByNameV2(string, pageable, "MAPLESTORY");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","user");
+        return "listpage_mapleStory";
+    }
+
+    @GetMapping("/search_title/MapleStoryPost")
+    public String searchByTitleMapleStoryPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+        Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"MAPLESTORY");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","title");
+        return "listpage_mapleStory";
+    }
+
+    @GetMapping("/search_user/StarCraftPost")
+    public String searchByUserStarCraftPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+        Page<PostDto> list = postService.SearchByNameV2(string, pageable, "STARCRAFT");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","user");
+        return "listpage_starcraft";
+    }
+
+    @GetMapping("/search_title/StarCraftPost")
+    public String searchByTitleStarCraftPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+        Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"STARCRAFT");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","title");
+        return "listpage_starcraft";
+    }
+
+    @GetMapping("/search_user/ValorantPost")
+    public String searchByUserValorantPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+        Page<PostDto> list = postService.SearchByNameV2(string, pageable, "VALORANT");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","user");
+        return "listpage_valorant";
+    }
+
+    @GetMapping("/search_title/ValorantPost")
+    public String searchByTitleValorantPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+        Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"VALORANT");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","title");
+        return "listpage_valorant";
+    }
 }
