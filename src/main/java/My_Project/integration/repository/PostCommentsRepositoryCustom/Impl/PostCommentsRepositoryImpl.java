@@ -37,7 +37,7 @@ public class PostCommentsRepositoryImpl implements PostCommentsRepositoryCustom 
         return jpaQueryFactory
                 .selectFrom(postComments)
                 .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
-                .join(postLikeAndDislike.postInfo, postInfo).fetchJoin()
+//                .join(postLikeAndDislike.postInfo, postInfo).fetchJoin()
                 .where(postComments.commentNumber.eq(id))
                 .fetchOne();
     }
@@ -56,7 +56,7 @@ public class PostCommentsRepositoryImpl implements PostCommentsRepositoryCustom 
         return jpaQueryFactory
                 .selectFrom(postComments)
                 .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked).fetchJoin()
                 .where(postComments.commentNumber.eq(id))
@@ -74,7 +74,7 @@ public class PostCommentsRepositoryImpl implements PostCommentsRepositoryCustom 
                 .leftJoin(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
                 .leftJoin(bigComments.bigCommentedUser).fetchJoin()
                 .leftJoin(bigComments.postComments).fetchJoin()
@@ -136,7 +136,7 @@ public class PostCommentsRepositoryImpl implements PostCommentsRepositoryCustom 
                 .leftJoin(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
                 .leftJoin(bigComments.bigCommentedUser).fetchJoin()
                 .leftJoin(bigComments.postComments).fetchJoin()

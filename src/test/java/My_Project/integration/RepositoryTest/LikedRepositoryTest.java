@@ -30,16 +30,16 @@ public class LikedRepositoryTest {
     @Autowired
     private PostLikeAndDislikeRepository postLikeAndDislikeRepository;
 
-    @Test
-    public void findLikedByUsersAndPostLidiTest() throws Exception {
-        //given
-        Users users = usersRepository.findUsersByEmail("gurtjd97@naver.com").get();
-        PostLikeAndDislike postLikeAndDislike = postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(236L);
-        //when
-
-        Optional<Liked> likedByUsers = likedRepository.findLikedByUsers(postLikeAndDislike, users);
-        //then
-
-        Assertions.assertThat(likedByUsers.get()).isNotNull();
-    }
+//    @Test
+//    public void findLikedByUsersAndPostLidiTest() throws Exception {
+//        //given
+//        Users users = usersRepository.findUsersByEmail("gurtjd97@naver.com").get();
+//        PostLikeAndDislike postLikeAndDislike = postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(236L);
+//        //when
+//
+//        Optional<Liked> likedByUsers = likedRepository.findLikedByUsers(postLikeAndDislike, users);
+//        //then
+//
+//        Assertions.assertThat(likedByUsers.get()).isNotNull();
+//    }
 }

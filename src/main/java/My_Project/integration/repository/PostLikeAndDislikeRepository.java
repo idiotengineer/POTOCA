@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostLikeAndDislikeRepository extends JpaRepository<PostLikeAndDislike, Long>, PostLikeAndDislikeRepositoryCustom {
 
-    @EntityGraph(
-            attributePaths = {"liked","disLiked"}
-    )
-    public PostLikeAndDislike findPostLikeAndDislikeByPostInfoPostNumber(Long PostNumber);
+//    @EntityGraph(
+//            attributePaths = {"liked","disLiked"}
+//    )
+//    public PostLikeAndDislike findPostLikeAndDislikeByPostInfoPostNumber(Long PostNumber);
 }

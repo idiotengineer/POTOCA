@@ -237,8 +237,8 @@ public class PhotoTest {
                 .fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked)
                 .fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo)
-                .fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo)
+//                .fetchJoin()
                 .where(postComments.postInfo.postNumber.eq(postInfo1.getPostNumber()))
                 .fetch();
 

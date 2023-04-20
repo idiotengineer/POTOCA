@@ -31,5 +31,16 @@ public interface PostRepository extends JpaRepository<PostInfo,Long>, PostInfoCu
 
     Page<PostInfo> findAllByOrderByDatesUploadedTimeDesc(Pageable pageable);
 
+    @EntityGraph(
+            attributePaths = {"postLikeAndDislike","postLikeAndDislike.liked","postLikeAndDislike.liked.postLikeAndDislike"}
+    )
+    Page<PostInfo> findAllByDtypeOrderByDatesUploadedTimeDesc(String dtype,Pageable pageable);
+
 //    Page<PostInfo> findPostInfo(String postType,Pageable pageable);
+
+
+    @EntityGraph(
+            attributePaths = {"postLikeAndDislike", "postLikeAndDislike.liked"}
+    )
+    public Optional<PostInfo> findPostByPostNumber(Long postNumber);
 }

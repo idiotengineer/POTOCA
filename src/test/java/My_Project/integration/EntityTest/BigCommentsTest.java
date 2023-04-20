@@ -33,43 +33,43 @@ public class BigCommentsTest {
     @Autowired
     PostCommentsRepository postCommentsRepository;
 
-    @Test
-    @Transactional
-    public void BigCommentsSaveTest() throws Exception {
-        //given
-        Long postNumber = 296L;
-        Long commentNumber = 29L;
-
-        String s = "gurtjd97@naver.com";
-        addBigCommentsDto dto =
-                addBigCommentsDto
-                        .builder()
-                .comment("대댓글")
-                .comment_number(commentNumber)
-                .post_number(postNumber)
-                .build();
-
-        Dates dates = new Dates(LocalDateTime.now(), LocalDateTime.now());
-        Users users = usersRepository.findUsersByEmail(s).get();
-        PostComments postCommentsByIdWithFetch = postCommentsRepository.findPostCommentsV2(dto.getPost_number()).get();
-
-        PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
-        postLikeAndDislike.setPostInfo(postCommentsByIdWithFetch.getPostInfo());
-
-
-        BigComments bigComments = BigComments.builder()
-                .bigCommentedUser(users)
-                .content(dto.getComment())
-                .postLikeAndDislike(postLikeAndDislike)
-                .dates(dates)
-                .postInfo(postCommentsByIdWithFetch.getPostInfo())
-                .postComments(postCommentsByIdWithFetch)
-                .build();
-
-        //when
-        BigComments save = bigCommentsRepository.save(bigComments);
-
-        //then
-        System.out.println("");
-    }
+//    @Test
+//    @Transactional
+//    public void BigCommentsSaveTest() throws Exception {
+//        //given
+//        Long postNumber = 296L;
+//        Long commentNumber = 29L;
+//
+//        String s = "gurtjd97@naver.com";
+//        addBigCommentsDto dto =
+//                addBigCommentsDto
+//                        .builder()
+//                .comment("대댓글")
+//                .comment_number(commentNumber)
+//                .post_number(postNumber)
+//                .build();
+//
+//        Dates dates = new Dates(LocalDateTime.now(), LocalDateTime.now());
+//        Users users = usersRepository.findUsersByEmail(s).get();
+//        PostComments postCommentsByIdWithFetch = postCommentsRepository.findPostCommentsV2(dto.getPost_number()).get();
+//
+//        PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
+//        postLikeAndDislike.setPostInfo(postCommentsByIdWithFetch.getPostInfo());
+//
+//
+//        BigComments bigComments = BigComments.builder()
+//                .bigCommentedUser(users)
+//                .content(dto.getComment())
+//                .postLikeAndDislike(postLikeAndDislike)
+//                .dates(dates)
+//                .postInfo(postCommentsByIdWithFetch.getPostInfo())
+//                .postComments(postCommentsByIdWithFetch)
+//                .build();
+//
+//        //when
+//        BigComments save = bigCommentsRepository.save(bigComments);
+//
+//        //then
+//        System.out.println("");
+//    }
 }

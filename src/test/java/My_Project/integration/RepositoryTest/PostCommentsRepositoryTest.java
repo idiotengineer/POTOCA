@@ -105,41 +105,41 @@ public class PostCommentsRepositoryTest {
         System.out.println("1");
     }
 
-    @Test
-    public void 한방쿼리2() throws Exception {
-        //given
-        Map<String, Object> data = new HashMap<>();
-        data.put("id", "11");
-
-        Long postNumber = Long.parseLong(data.get("id").toString());
-
-        List<PostComments> fetch = jpaQueryFactory
-                .select(postComments)
-                .from(postComments)
-                .leftJoin(postComments.postLikeAndDislike, postLikeAndDislike)
-                .fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo,postInfo)
-                .fetchJoin()
-                .where(postComments.commentNumber.eq(11L))
-                .fetch();
-
-        System.out.println("================================================================================================================================");
-        //when
-
-        //then
-        boolean loaded = fetch.stream()
-                        .allMatch(
-                                postComments1 ->
-                                        emf.getPersistenceUnitUtil().isLoaded(postComments1.getPostLikeAndDislike())
-                        );
-
-        boolean loaded2 = fetch.stream()
-                .allMatch(
-                        postComments1 -> emf.getPersistenceUnitUtil().isLoaded(postComments1.getPostLikeAndDislike().getPostInfo())
-                );
-        Assertions.assertThat(loaded).isTrue();
-        Assertions.assertThat(loaded2).isTrue();
-    }
+//    @Test
+//    public void 한방쿼리2() throws Exception {
+//        //given
+//        Map<String, Object> data = new HashMap<>();
+//        data.put("id", "11");
+//
+//        Long postNumber = Long.parseLong(data.get("id").toString());
+//
+//        List<PostComments> fetch = jpaQueryFactory
+//                .select(postComments)
+//                .from(postComments)
+//                .leftJoin(postComments.postLikeAndDislike, postLikeAndDislike)
+//                .fetchJoin()
+////                .leftJoin(postLikeAndDislike.postInfo,postInfo)
+//                .fetchJoin()
+//                .where(postComments.commentNumber.eq(11L))
+//                .fetch();
+//
+//        System.out.println("================================================================================================================================");
+//        //when
+//
+//        //then
+//        boolean loaded = fetch.stream()
+//                        .allMatch(
+//                                postComments1 ->
+//                                        emf.getPersistenceUnitUtil().isLoaded(postComments1.getPostLikeAndDislike())
+//                        );
+//
+//        boolean loaded2 = fetch.stream()
+//                .allMatch(
+//                        postComments1 -> emf.getPersistenceUnitUtil().isLoaded(postComments1.getPostLikeAndDislike().getPostInfo())
+//                );
+//        Assertions.assertThat(loaded).isTrue();
+//        Assertions.assertThat(loaded2).isTrue();
+//    }
 
     @Test
     public void findCommentsWithPagingTest() throws Exception {
@@ -183,7 +183,7 @@ public class PostCommentsRepositoryTest {
                 .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .where(postInfo.postNumber.eq(id))
                 .fetchOne();
 
@@ -193,7 +193,7 @@ public class PostCommentsRepositoryTest {
                 .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
                 .leftJoin(bigComments.bigCommentedUser).fetchJoin()
                 .leftJoin(bigComments.postComments).fetchJoin()
@@ -239,7 +239,7 @@ public class PostCommentsRepositoryTest {
                 .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .where(postInfo.postNumber.eq(id))
                 .fetchOne();
 
@@ -253,7 +253,7 @@ public class PostCommentsRepositoryTest {
                 .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
                 .leftJoin(bigComments.bigCommentedUser).fetchJoin()
                 .leftJoin(bigComments.postComments).fetchJoin()

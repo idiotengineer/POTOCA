@@ -23,7 +23,7 @@ public class BigCommentsCustomRepositoryImpl implements BigCommentsCustomReposit
         return Optional.ofNullable(jpaQueryFactory
                 .selectFrom(bigComments)
                 .join(bigComments.postLikeAndDislike , postLikeAndDislike).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked).fetchJoin()
                 .where(bigComments.bigCommentsNumber.eq(id))

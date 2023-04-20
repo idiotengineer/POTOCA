@@ -67,6 +67,7 @@ public class PostInfo {
     @Column(insertable = false, updatable = false)
     private String dtype;
 
+    private Long LikedCount = 0L;
 
     // Board에서 파일 처리 위함
     public void addPhoto(Photo photo) {

@@ -17,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.swing.text.html.Option;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,11 +78,13 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
 
     @Override
     public List<PostDto> searchByTitle(String title) {
-        List<PostInfo> list = em.createQuery("select p from PostInfo p where p.postTitle like concat('%',?1,'%')")
-                .setParameter(1, title)
-                .getResultList();
+//        List<PostInfo> list = em.createQuery("select p from PostInfo p where p.postTitle like concat('%',?1,'%')")
+//                .setParameter(1, title)
+//                .getResultList();
 
-                return list.stream().map(p -> new PostDto(p))
+        List<PostInfo> list = jpaQueryFactory.selectFrom(postInfo).fetch();
+
+        return list.stream().map(p -> new PostDto(p))
                 .collect(Collectors.toList());
     }
 
@@ -126,8 +131,8 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked)
                 .fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo)
-                .fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo)
+//                .fetchJoin()
                 .where(postComments.postInfo.postNumber.eq(id))
                 .fetch();
 
@@ -143,7 +148,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .leftJoin(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .leftJoin(postInfo.comments, postComments).fetchJoin()
                 .leftJoin(postInfo.postedUser, users).fetchJoin()
                 .where(postInfo.postNumber.eq(id))
@@ -154,7 +159,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .join(postComments.postInfo, postInfo).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .join(postComments.bigCommentsList, bigComments).fetchJoin()
                 .where(postComments.postInfo.postNumber.eq(id))
                 .fetch();
@@ -185,7 +190,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                         .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                         .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
                         .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
-                        .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                        .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                         .where(postInfo.postNumber.eq(id))
                         .fetchOne()
         );
@@ -193,35 +198,58 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
 
     public Optional<PostInfo> findPostV4(Long id) {
         PostInfo postInfo1 = jpaQueryFactory
-                .selectFrom(postInfo)
-                .leftJoin(postInfo.postedUser, users).fetchJoin()
-                .leftJoin(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
-                .leftJoin(postLikeAndDislike.liked).fetchJoin()
-                .leftJoin(postLikeAndDislike.disLiked).fetchJoin()
-                .leftJoin(postInfo.comments, postComments).fetchJoin()
-                .leftJoin(postComments.postInfo).fetchJoin()
-                .leftJoin(postComments.postLikeAndDislike).fetchJoin()
-//                .leftJoin(postComments.postLikeAndDislike.disLiked).fetchJoin()
-//                .leftJoin(postComments.postLikeAndDislike.liked).fetchJoin()
-//                .leftJoin(postComments.postLikeAndDislike.postInfo).fetchJoin()
-                .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
-                .leftJoin(bigComments.postComments).fetchJoin()
-                .leftJoin(bigComments.bigCommentedUser).fetchJoin()
-                .leftJoin(bigComments.postInfo).fetchJoin()
-                .leftJoin(bigComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .select(postInfo)
+                .from(postInfo)
+                .join(postInfo.postedUser, users).fetchJoin() // OK
+                .join(postInfo.photo, photo).fetchJoin()
+                .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
-                .leftJoin(postInfo.photo, photo).fetchJoin()
-                .leftJoin(photo.postInfo).fetchJoin()
+                .join(postInfo.comments, postComments).fetchJoin()
                 .where(postInfo.postNumber.eq(id))
                 .fetchOne();
+
+        List<PostComments> fetch = jpaQueryFactory
+                .select(postComments)
+                .from(postComments)
+                .join(postComments.postInfo, postInfo).fetchJoin()
+                .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked,disLiked).fetchJoin()
+                .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
+                .where(postComments.in(postInfo1.getComments()))
+                .orderBy(postComments.dates.uploadedTime.desc())
+                .fetch();
+
+        List<List<BigComments>> collect = fetch.stream()
+                .map(
+                        postComments1 -> postComments1.getBigCommentsList()
+                ).collect(Collectors.toList());
+
+        List<BigComments> collect1 = collect.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+
+        List<BigComments> fetch1 = jpaQueryFactory
+                .select(bigComments)
+                .from(bigComments)
+                .join(bigComments.bigCommentedUser, users).fetchJoin()
+                .join(bigComments.postComments, postComments).fetchJoin()
+                .join(bigComments.postInfo, postInfo).fetchJoin()
+                .join(bigComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                .where(bigComments.in(collect1))
+                .fetch();
 
         return Optional.ofNullable(postInfo1);
     }
 
     public Page<PostInfo> listingPage(Pageable pageable, String s) {
-        List<PostInfo> fetch = jpaQueryFactory.selectFrom(postInfo)
+        List<PostInfo> fetch = jpaQueryFactory
+                .selectFrom(postInfo)
+                .join(postInfo.postedUser, users).fetchJoin()
                 .where(
                         eqLOL(s),
                         eqLostArk(s),
@@ -236,7 +264,6 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                         postInfo.dates.uploadedTime.desc()
                 )
                 .fetch();
-
         return new PageImpl<PostInfo>(fetch);
     }
 
@@ -284,5 +311,31 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
         }
 
         return postInfo.instanceOf(mapleStoryPost.getType());
+    }
+
+    public List<PostInfo> best4PostForMonth(LocalDateTime now) {
+        LocalDate currentDate = LocalDate.now();
+        LocalDateTime localDateTime = LocalDateTime.now().;
+
+        jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .join(postInfo.postedUser, users).fetchJoin()
+                .where(
+
+                )
+    }
+
+    public BooleanExpression eqDatesWithToday(LocalDateTime dbValue) {
+        int year = dbValue.getYear();
+        int monthValue = dbValue.getMonthValue();
+        int day = dbValue.getDayOfMonth();
+
+        LocalDateTime now = LocalDateTime.now();
+        if (now.getYear() == year && now.getMonthValue() == monthValue && now.getDayOfMonth() == day) {
+            return postInfo.dates.uploadedTime()
+        }
+        return false;
     }
 }

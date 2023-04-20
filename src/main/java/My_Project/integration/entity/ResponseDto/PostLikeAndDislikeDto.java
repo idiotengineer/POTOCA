@@ -11,13 +11,13 @@ import java.util.*;
 @AllArgsConstructor
 public class PostLikeAndDislikeDto {
     private Long id;
-    private PostInfo postInfo;
+//    private PostInfo postInfo;
     private Set<Liked> LikedUser = new HashSet<>();
     private Set<DisLiked> DisLikedUser = new HashSet<>();
 
     public PostLikeAndDislikeDto(PostLikeAndDislike postLikeAndDislike) {
         setId(postLikeAndDislike.getId());
-        setPostInfo(postLikeAndDislike.getPostInfo());
+//        setPostInfo(postLikeAndDislike.getPostInfo());
 
         if (!postLikeAndDislike.getLiked().isEmpty()) {
             this.setLikedUser(clone(postLikeAndDislike.getLiked()));

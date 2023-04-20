@@ -107,10 +107,10 @@ public class PostService {
         throw new NoSuchElementException("postInfo 객체를 찾을 수 없습니다");
     }
 
-    @Transactional
-    public PostLikeAndDislikeDto getPostLikeAndDislike(Long id) {
-        return new PostLikeAndDislikeDto(postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(id));
-    }
+//    @Transactional
+//    public PostLikeAndDislikeDto getPostLikeAndDislike(Long id) {
+//        return new PostLikeAndDislikeDto(postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(id));
+//    }
 
     public boolean Posting(@CookieValue(name = "users") Cookie cookie, PostInfoDto postInfoDto) {
         Optional<Users> usersByEmail = usersRepository.findUsersByEmail(cookie.getValue());
@@ -254,7 +254,7 @@ public class PostService {
 
         try {
             Optional<PostInfo> post = findPostV2(commentDto.getPost_number());
-            PostLikeAndDislike postLikeAndDislike = PostLikeAndDislike.builder().postInfo(post.get()).build();
+            PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
             postLikeAndDislikeRepository.save(postLikeAndDislike);
 
             PostComments postComments = new PostComments(commentDto, post.get(),postLikeAndDislike);
@@ -300,6 +300,17 @@ public class PostService {
     @Transactional
     public Page<ListingPostDto> getPostInfoListV2(Pageable pageable, String s) {
         Page<PostInfo> all = postRepository.listingPage(pageable, s);
+
+        List<ListingPostDto> collect = all.stream().map(
+                postInfo -> new ListingPostDto(postInfo)
+        ).collect(Collectors.toList());
+
+        return new PageImpl<>(collect, all.getPageable(), all.getTotalElements());
+    }
+
+    @Transactional
+    public Page<ListingPostDto> getPostInfoListV3(Pageable pageable, String s) {
+        Page<PostInfo> all = postRepository.findAllByDtypeOrderByDatesUploadedTimeDesc(s,pageable);
 
         List<ListingPostDto> collect = all.stream().map(
                 postInfo -> new ListingPostDto(postInfo)
@@ -363,15 +374,15 @@ public class PostService {
         return true;
     }
 
-    @Transactional
-    public PostLikeAndDislikeDto findPostlidiDtoByPostNumber(Long id) {
-        return new PostLikeAndDislikeDto(postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(id));
-    }
+//    @Transactional
+//    public PostLikeAndDislikeDto findPostlidiDtoByPostNumber(Long id) {
+//        return new PostLikeAndDislikeDto(postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(id));
+//    }
 
-    @Transactional
-    public PostLikeAndDislike findPostlidiByPostNumber(Long id) {
-        return postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(id);
-    }
+//    @Transactional
+//    public PostLikeAndDislike findPostlidiByPostNumber(Long id) {
+//        return postLikeAndDislikeRepository.findPostLikeAndDislikeByPostInfoPostNumber(id);
+//    }
 
     @Transactional
     public String addUsersSet(PostLikeAndDislike postLikeAndDislike, Users users, String s) {
@@ -410,7 +421,7 @@ public class PostService {
         PostLikeAndDislike postLikeAndDislike = postInfo.getPostLikeAndDislike();
 
         if (postLikeAndDislike != null) {
-            postLikeAndDislike.setPostInfo(null);
+//            postLikeAndDislike.setPostInfo(null);
             for (Liked liked : postLikeAndDislike.getLiked()) {
                 liked.setPostLikeAndDislike(null);
             }
@@ -513,7 +524,7 @@ public class PostService {
             BigComments bigComments = new BigComments();
             PostLikeAndDislike postLikeAndDislike = new PostLikeAndDislike();
 
-            postLikeAndDislike.setPostInfo(postInfo);
+//            postLikeAndDislike.setPostInfo(postInfo);
 
             bigComments.setPostLikeAndDislike(postLikeAndDislike);
             bigComments.setPostComments(postComments);
@@ -536,5 +547,11 @@ public class PostService {
     @Transactional
     public Optional<PostInfo> findPostByIdWithSpringDataJpa(Long id) {
         return postRepository.findPostInfoWithSpringDataJpaByPostNumber(id);
+    }
+
+    @Transactional
+    public void setLikeCount(Long findById,Long change) {
+        PostInfo postByPostNumber = postRepository.findPostByPostNumber(findById).get();
+        postByPostNumber.setLikedCount(change);
     }
 }

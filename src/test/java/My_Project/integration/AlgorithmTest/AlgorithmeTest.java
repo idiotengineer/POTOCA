@@ -1,7 +1,11 @@
 package My_Project.integration.AlgorithmTest;
 
+import net.bytebuddy.asm.Advice;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,5 +41,13 @@ public class AlgorithmeTest {
         for(Integer integer : bestPostCommentsList) {
             System.out.println(integer);
         }
+    }
+
+    @Test
+    public void Test2() {
+        LocalDate currentDate = LocalDate.now();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        Assertions.assertThat(currentDateTime.toLocalDate()).isEqualTo(currentDate);
     }
 }

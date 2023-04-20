@@ -21,13 +21,15 @@ public class ListingPostDto {
         private Dates dates;
         private PostLikeAndDislike postLikeAndDislike;
 
+        private Long likedCount;
+
         public ListingPostDto(PostInfo postInfo) {
             this.postNumber = postInfo.getPostNumber();
             this.users = postInfo.getPostedUser();
             this.dates = postInfo.getDates();
             this.postTitle = postInfo.getPostTitle();
             this.postContent = postInfo.getPostContent();
-            this.postLikeAndDislike = postInfo.getPostLikeAndDislike();
+            this.likedCount = postInfo.getLikedCount();
         }
 
         public String checkLikeAndDisLike(Optional<Users> users) {

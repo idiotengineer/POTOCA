@@ -19,10 +19,10 @@ public class PostLikeAndDislike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(
-            fetch = FetchType.LAZY,
-            mappedBy = "postLikeAndDislike")
-    PostInfo postInfo;
+//    @OneToOne(
+//            fetch = FetchType.LAZY,
+//            mappedBy = "postLikeAndDislike")
+//    PostInfo postInfo;
 
     @OneToMany(
             mappedBy = "postLikeAndDislike",
@@ -38,8 +38,8 @@ public class PostLikeAndDislike {
     )
     private Set<DisLiked> disLiked = new HashSet<>();
 
-    public void setPostInfo1(PostInfo postInfo) {
-        this.postInfo = postInfo;
-        postInfo.setPostLikeAndDislike(this);
-    }
+//    public void setPostInfo1(PostInfo postInfo) {
+//        this.postInfo = postInfo;
+//        postInfo.setPostLikeAndDislike(this);
+//    }
 }

@@ -141,8 +141,9 @@ public class PostController {
                                  RedirectAttributes redirectAttributes) {
         if (cookie.isPresent()) {
             Long id = Long.parseLong(data.get("id").toString());
-            PostLikeAndDislike postLikeAndDislike = postService.findPostlidiByPostNumber(id);
-            // PostInfo post = postService.findPost(id);
+//            PostLikeAndDislike postLikeAndDislike = postService.findPostlidiByPostNumber(id);
+            PostInfo post = postService.findPost(id);
+            PostLikeAndDislike postLikeAndDislike = post.getPostLikeAndDislike();
 
             Users users = userService.findById(cookie.get().getValue()).get();
             if (data.get("type").equals("like")) { // Like 일 때
@@ -151,13 +152,13 @@ public class PostController {
                         .isPresent();
 
                 String sizeOfDislikeList;
+
                 if (anyMatch) { // 이미 Like 했을 때
                     sizeOfDislikeList = postService.removeUsersSet(postLikeAndDislike, users, "like");
-//                    postService.AddUserListValue(postLikeAndDislikeDto.getLikedUser(),users);
-//                    postService.RemoveUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(), users);// PostLikeAndDislike의 likedUser에서 User 제거
+                    postService.setLikeCount(id,Long.parseLong(sizeOfDislikeList));
                 } else { // Like 하지 않았을 때
-//                    postService.AddUserListValue(postDto.getPostLikeAndDislikeDto().getLikedUser(),users);
                     sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "like");
+                    postService.setLikeCount(id,Long.parseLong(sizeOfDislikeList));
                 }
 
                 return sizeOfDislikeList;
@@ -245,26 +246,6 @@ public class PostController {
         }
     }
 
-    private static void extracted(PostLikeAndDislike postLikeAndDislike,int x) {
-        List<Integer> bestPostCommentsList = postLikeAndDislike.getPostInfo().getBestPostCommentsList();
-
-        if (x > bestPostCommentsList.get(2)) {
-            int temp = bestPostCommentsList.get(1);
-
-            bestPostCommentsList.set(1,bestPostCommentsList.get(2));
-            bestPostCommentsList.set(0,temp);
-            bestPostCommentsList.set(2,x);
-        }
-
-        else if (x > bestPostCommentsList.get(1) && x != bestPostCommentsList.get(2)) {
-            bestPostCommentsList.set(0, bestPostCommentsList.get(1));
-            bestPostCommentsList.set(1,x);
-        }
-
-        else if (x > bestPostCommentsList.get(0) && x != bestPostCommentsList.get(1) && x != bestPostCommentsList.get(2)) {
-            bestPostCommentsList.set(0,x);
-        }
-    }
 
 
     @RequestMapping(value = "/find_post/deletePost", method = {RequestMethod.POST})

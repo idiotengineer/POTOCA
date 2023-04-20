@@ -118,7 +118,7 @@ public void findPostV4Test() throws Exception {
                 .leftJoin(bigComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
-                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+//                .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
                 .leftJoin(postInfo.photo, photo).fetchJoin()
                 .leftJoin(photo.postInfo).fetchJoin()
                 .where(postInfo.postNumber.eq(id))
@@ -193,5 +193,40 @@ public void findPostV4Test() throws Exception {
         }
 
         return postInfo.instanceOf(mapleStoryPost.getType());
+    }
+
+    @Test
+    public void test2() throws Exception {
+        //given
+        Long id = 3L;
+        //when
+
+        PostInfo postInfo1 = jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .join(postInfo.postedUser, users).fetchJoin() // OK
+                .join(postInfo.photo, photo).fetchJoin()
+                .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                .where(postInfo.postNumber.eq(id))
+                .fetchOne();
+
+        List<PostComments> fetch = jpaQueryFactory
+                .select(postComments)
+                .from(postComments)
+                .join(postComments.postInfo, postInfo).fetchJoin()
+                .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
+                .leftJoin(bigComments.postInfo).fetchJoin()
+                .leftJoin(bigComments.postComments).fetchJoin()
+                .leftJoin(bigComments.bigCommentedUser).fetchJoin()
+                .leftJoin(bigComments.postLikeAndDislike).fetchJoin()
+                .leftJoin(bigComments.bigCommentedUser, users).fetchJoin()
+                .where(postComments.postInfo.eq(postInfo1))
+                .fetch();
+
+        //then
+        Assertions.assertThat(fetch).isNotEmpty();
     }
 }
