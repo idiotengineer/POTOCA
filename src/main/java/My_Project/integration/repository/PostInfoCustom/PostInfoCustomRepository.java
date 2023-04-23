@@ -26,4 +26,6 @@ public interface PostInfoCustomRepository {
     public List<PostDto> searchByNameV2(String name,String s);
 
     public List<PostDto> searchByTitleV2(String name,String s);
+
+    public List<PostInfo> best4PostForMonth();
 }

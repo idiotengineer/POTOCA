@@ -7,7 +7,9 @@ import ch.qos.logback.core.util.ContextUtil;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.util.StringUtils;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,11 +203,11 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .select(postInfo)
                 .from(postInfo)
                 .join(postInfo.postedUser, users).fetchJoin() // OK
-                .join(postInfo.photo, photo).fetchJoin()
-                .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postInfo.photo, photo).fetchJoin()
+                .leftJoin(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
-                .join(postInfo.comments, postComments).fetchJoin()
+                .leftJoin(postInfo.comments, postComments).fetchJoin()
                 .where(postInfo.postNumber.eq(id))
                 .fetchOne();
 
@@ -313,29 +315,71 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
         return postInfo.instanceOf(mapleStoryPost.getType());
     }
 
-    public List<PostInfo> best4PostForMonth(LocalDateTime now) {
-        LocalDate currentDate = LocalDate.now();
-        LocalDateTime localDateTime = LocalDateTime.now().;
+//    public List<PostInfo> best4PostForMonth(LocalDateTime now) {
+//        LocalDate currentDate = LocalDate.now();
+//        LocalDateTime localDateTime = LocalDateTime.now().;
+//
+//        jpaQueryFactory
+//                .select(postInfo)
+//                .from(postInfo)
+//                .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+//                .join(postInfo.postedUser, users).fetchJoin()
+//                .where(
+//
+//                )
+//    }
+//
+//    public BooleanExpression eqDatesWithToday(LocalDateTime dbValue) {
+//        int year = dbValue.getYear();
+//        int monthValue = dbValue.getMonthValue();
+//        int day = dbValue.getDayOfMonth();
+//
+//        LocalDateTime now = LocalDateTime.now();
+//        if (now.getYear() == year && now.getMonthValue() == monthValue && now.getDayOfMonth() == day) {
+//            return
+//                    postInfo.dates.uploadedTime.year().eq(dbValue.getYear())
+//                            .and(postInfo.dates.uploadedTime.month().eq(dbValue.getMonthValue()))
+//                            .and(postInfo.dates.uploadedTime.day().eq(dbValue.getYear()));
+//        }
+//        return null;
+//
+//        postInfo.dates.uploadedTime.toLocalDate().isEqual()
+//    }
 
-        jpaQueryFactory
+
+    public List<PostInfo> best4PostForMonth() {
+        List<PostInfo> fetch = jpaQueryFactory
                 .select(postInfo)
                 .from(postInfo)
                 .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postInfo.photo, photo).fetchJoin()
                 .join(postInfo.postedUser, users).fetchJoin()
-                .where(
+//                .where(
+//                        eqYearWithNow(),
+//                        eqMonthWithNow()
+//                )
+                .orderBy(postInfo.LikedCount.desc())
+                .limit(4)
+                .fetch();
 
-                )
+        return fetch;
     }
 
-    public BooleanExpression eqDatesWithToday(LocalDateTime dbValue) {
-        int year = dbValue.getYear();
-        int monthValue = dbValue.getMonthValue();
-        int day = dbValue.getDayOfMonth();
+    public BooleanExpression eqYearWithNow() {
+//        return postInfo.dates.uploadedTime.eq(A.m);
 
         LocalDateTime now = LocalDateTime.now();
-        if (now.getYear() == year && now.getMonthValue() == monthValue && now.getDayOfMonth() == day) {
-            return postInfo.dates.uploadedTime()
-        }
-        return false;
+        Integer year = now.getYear();
+
+        return postInfo.dates.uploadedTime.year().eq(year);
+    }
+
+    public BooleanExpression eqMonthWithNow() {
+//        return postInfo.dates.uploadedTime.eq(A.m);
+
+        LocalDateTime now = LocalDateTime.now();
+        Integer month = now.getMonthValue();
+
+        return postInfo.dates.uploadedTime.month().eq(month);
     }
 }

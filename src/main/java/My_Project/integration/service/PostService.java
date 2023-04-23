@@ -554,4 +554,9 @@ public class PostService {
         PostInfo postByPostNumber = postRepository.findPostByPostNumber(findById).get();
         postByPostNumber.setLikedCount(change);
     }
+
+    @Transactional
+    public List<PostInfo> findBest4Post() {
+        return postRepository.best4PostForMonth();
+    }
 }

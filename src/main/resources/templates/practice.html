@@ -96,50 +96,15 @@
 
 
    <section class = "thums">
-    <div class = "thums_wrapper">
-    <div class = "each_votes_post"  onclick="location.href='http://localhost:8080/votepost'">
-      <img class = "post_image" src = "https://img.hankyung.com/photo/202210/BF.31506021.1.jpg">
+    <div class = "thums_wrapper" >
+    <div th:each="eachPost : ${best4Post}" class = "each_votes_post" th:onclick="|location.href='http://localhost:8080/find_post?id=' + ${eachPost.getPostNumber()}|">
+      <img class = "post_image" th:if="${eachPost.getPhoto().isEmpty()}"  src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg">
+      <img class = "post_image" th:unless="${eachPost.getPhoto().isEmpty()}" th:src="|${eachPost.getPhoto()[0].getFilePath()}|">
       <div class = "post_information">
-        <h2 class = "post_title">제목 : 카리나는 여신 카리나는 여신 카리나는 여신 카리나는 여신 카리나는 여신 카리나는 여신 카리나는 여신 </h2>
-        <p class = "post_publisher">게시자 : 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동  </p>
-        <p class = "post_hits">조회수 : 100000000000000000000000000000000000000000000000000000000000000000000000000000000000 </p>
-        <p class = "post_hits">투표수 : 999999999999999999999999999999999999999999999999999999999999999999999999999999999999</p>
-      </div>
-    </div>
-
-    <div class = "each_votes_post"  onclick="location.href='http://localhost:8080/votepost'">
-      <img class = "post_image" src = "https://upload.wikimedia.org/wikipedia/commons/c/c8/Karina_for_Eternal_Return_%C3%97_aespa_collaboration_BTS_photoshoot_03.jpg">
-      <div class = "post_information">
-        <h2 class = "post_title">제목 : </h2>
-        <div class = "post_inner_information">
-        <p class = "post_publisher">게시자 : </p>
-        <p class = "post_hits">조회수 : </p>
-        <p class = "post_hits">투표수 : </p>
-      </div>
-      </div>
-    </div>
-
-    <div class = "each_votes_post"  onclick="location.href='http://localhost:8080/votepost'">
-      <img class = "post_image" src = "https://img.hankyung.com/photo/202210/BF.31506021.1.jpg">
-      <div class = "post_information">
-        <h2 class = "post_title">제목 : </h2>
-        <div class = "post_inner_information">
-        <p class = "post_publisher">게시자 : </p>
-        <p class = "post_hits">조회수 : </p>
-        <p class = "post_hits">투표수 : </p>
-      </div>
-      </div>
-    </div>
-
-     <div class = "each_votes_post"  onclick="location.href='http://localhost:8080/votepost'">
-      <img class = "post_image" src = "https://img.hankyung.com/photo/202210/BF.31506021.1.jpg">
-      <div class = "post_information">
-        <h2 class = "post_title">제목 : </h2>
-        <div class = "post_inner_information">
-        <p class = "post_publisher">게시자 : </p>
-        <p class = "post_hits">조회수 : </p>
-        <p class = "post_hits">투표수 : </p>
-      </div>
+        <h2 class = "post_title" th:text="'제목 : ' + ${eachPost.getPostTitle()}"></h2>
+        <p class = "post_publisher" th:text="'작성자 : ' + ${eachPost.getPostedUser().getEmail()}"></p>
+        <p class = "post_hits" th:text="'좋아요 수 : '+ ${eachPost.getLikedCount()}"></p>
+        <p class = "post_hits" th:text="'작성일자 : ' + ${eachPost.getDates().getUploadedTime()}"></p>
       </div>
     </div>
   </div>

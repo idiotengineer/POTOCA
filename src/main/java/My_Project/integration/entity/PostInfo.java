@@ -1,10 +1,7 @@
 package My_Project.integration.entity;
 
 import My_Project.integration.entity.Dto.PostInfoDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -18,6 +15,7 @@ import java.util.*;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
+@Builder
 public class PostInfo {
 
     @Id

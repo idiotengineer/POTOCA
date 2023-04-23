@@ -5,6 +5,7 @@ import My_Project.integration.entity.DiscriminatedEntity.*;
 import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
 import My_Project.integration.repository.PostCommentsRepository;
 import My_Project.integration.repository.PostRepository;
+import My_Project.integration.repository.UsersRepository;
 import ch.qos.logback.core.util.ContextUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -17,8 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.test.annotation.Rollback;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -52,6 +57,11 @@ public class PostInfoRepositoryTest {
     @Autowired
     PostCommentsRepository postCommentsRepository;
 
+    @Autowired
+    EntityManager em;
+
+    @Autowired
+    UsersRepository usersRepository;
 
     @Test
     public void postInfo조회Fetch조인테스트V2() throws Exception {
@@ -228,5 +238,68 @@ public void findPostV4Test() throws Exception {
 
         //then
         Assertions.assertThat(fetch).isNotEmpty();
+    }
+
+    @Test
+    public void findTop4Entity() throws Exception {
+        //given
+        Users users1 = usersRepository.findUsersByEmail("gurtjd97@naver.com").get();
+
+        PostInfo postInfo1 =PostInfo.builder()
+                .postTitle("title")
+                .postContent("content")
+                .postedUser(users1).build();
+
+        PostInfo postInfo2 =PostInfo.builder()
+                .postTitle("title")
+                .postContent("content")
+                .postedUser(users1).build();
+
+        PostInfo postInfo3 =PostInfo.builder()
+                .postTitle("title")
+                .postContent("content")
+                .postedUser(users1).build();
+
+        PostInfo postInfo4 =PostInfo.builder()
+                .postTitle("title")
+                .postContent("content")
+                .postedUser(users1).build();
+
+        postInfo1.setLikedCount(10L);
+        postInfo2.setLikedCount(11L);
+        postInfo3.setLikedCount(10L);
+        postInfo4.setLikedCount(11L);
+
+        LocalDateTime oneMonthAgo = LocalDateTime.of(2022, 3, 22, 0, 0, 0);
+        LocalDateTime now = LocalDateTime.now();
+
+        Dates oneMonthAgoDates = new Dates(oneMonthAgo, oneMonthAgo);
+        Dates nowDates = new Dates(now, now);
+
+        postInfo1.setDates(oneMonthAgoDates);
+        postInfo2.setDates(oneMonthAgoDates);
+        postInfo3.setDates(nowDates);
+        postInfo4.setDates(nowDates);
+
+        postRepository.save(postInfo1);
+        postRepository.save(postInfo2);
+        postRepository.save(postInfo3);
+        postRepository.save(postInfo4);
+
+        //when
+        List<PostInfo> postInfoList = jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .join(postInfo.postedUser, users).fetchJoin()
+//                .where(
+//                        eqYearWithNow(),
+//                        eqMonthWithNow()
+//                )
+                .orderBy(postInfo.LikedCount.desc())
+                .limit(4)
+                .fetch();
+        //then
+        Assertions.assertThat(postInfoList).isNotEmpty();
     }
 }

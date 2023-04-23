@@ -45,11 +45,15 @@ public class MainpageController {
     public String mainPage(@CookieValue(name = "users") Optional<Cookie> cookie
             , Model model) {
         LOGGER.info("메인 페이지 접속");
+        List<PostInfo> best4Post = postService.findBest4Post();
+
         if (cookie.isPresent()) {
             model.addAttribute("users", cookie.get().getValue());
         } else {
             model.addAttribute("users", null);
         }
+
+        model.addAttribute("best4Post",best4Post);
         return "practice";
         /*
         if (Arrays.stream(cookies).findAny().isPresent()) {
