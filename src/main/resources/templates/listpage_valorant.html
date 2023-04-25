@@ -84,7 +84,7 @@
     </thead>
     <tbody>
     <tr th:each="product : ${list}" th:onclick="'location.href=\'' + @{find_post(id=${product.getPostNumber()})} + '\''">
-      <th scope="row" th:text="${product.getPostNumber()}">1</th>
+      <th scope="row" th:text="${product.getLikedCount()}">1</th>
       <td style="
             overflow:hidden;
             text-overflow: ellipsis;

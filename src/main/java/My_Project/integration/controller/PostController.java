@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -39,35 +40,26 @@ public class PostController {
     @Autowired
     BigCommentsService bigCommentsService;
 
-    @PostMapping("/post_execute2")
+    @PostMapping(value = "/post_execute2", consumes = {"multipart/form-data"})
     public String create(
             @RequestPart(value = "image", required = false) List<MultipartFile> files,
             PostInfoDto postInfoDto,
             @CookieValue(name = "users") Cookie cookie,
             RedirectAttributes model) {
         try {
-            PostDto postDto = postService.create(postInfoDto, files, cookie);
-            // PostDto 내부에는 private List<PostComments> comments까지 구현되어있음.
+            if (cookie.getValue().isEmpty()) {
+                throw new Exception("로그인 하지 않았습니다");
+            }
 
+            PostDto postDto = postService.create(postInfoDto, files, cookie);
             List<PhotoResponseDto> photoResponseDtoList = photoService.findAllByPostInfo(postDto.getPostNumber());
             List<String> photoPath = new ArrayList<>();
-
-/*
-            File file = new File(".");
-            String projectPath = file.getAbsolutePath();
-            String subStringProjectPath = projectPath.substring(0, projectPath.length() - 1);
-*/
 
             for (PhotoResponseDto photoResponseDto : photoResponseDtoList) {
                 photoPath.add(photoResponseDto.getFilePath());
             }
 
-            model.addAttribute("time", LocalDateTime.now());
-            model.addAttribute("photoPath", photoPath);
-            model.addAttribute("postDtoEmail", postDto.getUsers().getEmail());
-            model.addAttribute("postDtoGetPostContent", postDto.getPostContent());
-            model.addFlashAttribute("postDto", postDto);
-            return "redirect:/post";
+            return "redirect:/find_post?id=" + postDto.getPostNumber();
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("string", "일반 게시글 작성에 실패하셨습니다");
@@ -90,49 +82,6 @@ public class PostController {
             return "redirect:/alert";
         }
     }
-
-
-/*
-        @PostMapping("/post_execute")
-        public String create1(
-                @RequestPart(value = "image", required = false) List<MultipartFile> files,
-                PostInfoDto postInfoDto,
-                @CookieValue(name = "users") Cookie cookie,
-                RedirectAttributes model) {
-            try {
-                PostDto postDto = postService.create(postInfoDto, files, cookie);
-                // PostDto 내부에는 private List<PostComments> comments까지 구현되어있음.
-
-                List<PhotoResponseDto> photoResponseDtoList = photoService.findAllByPostInfo(postDto.getPostNumber());
-                List<String> photoPath = new ArrayList<>();
-
-                for (PhotoResponseDto photoResponseDto : photoResponseDtoList) {
-                    photoPath.add(photoResponseDto.getFilePath());
-                }
-
-                model.addAttribute("time",LocalDateTime.now());
-                model.addFlashAttribute("postDto",postDto);
-                return "redirect:/post";
-            } catch (Exception e) {
-                e.printStackTrace();
-                model.addAttribute("string","일반 게시글 작성에 실패하셨습니다");
-                return "redirect:/alert";
-            }
-    }*/
-/*
-    @GetMapping("/board/{id}")
-    public PostInfoResponseDto searchById(@PathVariable Long id) {
-        List<PhotoResponseDto> photoResponseDtoList =
-                photoService.findAllByPostInfo(id);
-
-        List<String> photoPath = new ArrayList<>();
-
-        for (PhotoResponseDto photoResponseDto : photoResponseDtoList) {
-            photoPath.add(photoResponseDto.getFilePath());
-        }
-
-        return postService.searchById(id,);
-    }*/
 
     @PostMapping("/find_post/likeAndDisLike")
     @ResponseBody

@@ -46,14 +46,15 @@ public class MainpageController {
             , Model model) {
         LOGGER.info("메인 페이지 접속");
         List<PostInfo> best4Post = postService.findBest4Post();
-
+        List<PostInfo> todays10Post = postService.findTodays10Post();
         if (cookie.isPresent()) {
             model.addAttribute("users", cookie.get().getValue());
         } else {
             model.addAttribute("users", null);
         }
-
+        model.addAttribute("todays10Post",todays10Post);
         model.addAttribute("best4Post",best4Post);
+
         return "practice";
         /*
         if (Arrays.stream(cookies).findAny().isPresent()) {

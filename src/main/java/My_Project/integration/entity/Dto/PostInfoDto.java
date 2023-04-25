@@ -21,6 +21,7 @@ public class PostInfoDto {
     private String postContent;
     private List<MultipartFile> files;
     private String dtype;
+    private Long point;
 
     public PostInfoDto(ModifyDto modifyDto,Users users) {
         this.setUsers(users);

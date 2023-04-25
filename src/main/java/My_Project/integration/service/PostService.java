@@ -559,4 +559,9 @@ public class PostService {
     public List<PostInfo> findBest4Post() {
         return postRepository.best4PostForMonth();
     }
+
+    @Transactional
+    public List<PostInfo> findTodays10Post() {
+        return postRepository.findTodaysBestPost();
+    }
 }

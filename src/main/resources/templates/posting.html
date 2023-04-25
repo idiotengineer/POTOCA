@@ -7,7 +7,42 @@
     <link href= "/css/posting.css" rel = "stylesheet">
     <link href= "/css/font.css" rel= "stylesheet">
     <link rel = "stylesheet" href ="/css/sample.css">
+
+    <script th:inline="javascript">
+        function sendData() {
+          // FormData 객체 생성
+          var formData = new FormData();
+
+          // 파일 업로드 인풋 요소에서 선택한 파일들 추가
+          var files = document.getElementById("formFileMultiple").files;
+          for (var i = 0; i < files.length; i++) {
+            formData.append("files", files[i]);
+          }
+
+          // 나머지 필드값 추가
+          formData.append("postTitle", document.getElementById("exampleFormControlInput1").value);
+          formData.append("postContent", document.getElementById("exampleFormControlTextarea1").value);
+          formData.append("dtype", document.getElementById("validationCustom04").value);
+          formData.append("point", document.getElementById("my-number-input").value);
+
+          // POST 요청 보내기
+          fetch('/post_execute2', {
+            method: 'POST',
+            body: formData
+
+          }).then(function(response) {
+            if (response.redirected) {
+              alert("게시글을 성공적으로 작성했습니다.");
+              window.location.href = response.url;
+            } else {
+              alert("게시글 작성에 실패했습니다.");
+              history.back();
+            }
+          });
+        }
+    </script>
   </head>
+
   <body>
 
     <nav class="navbar bg-light fixed-top" id = "navbar_custom">
@@ -40,7 +75,7 @@
         </div>
       </div>
     </nav>
-    <form action="/post_execute2" method ="post" enctype="multipart/form-data">
+    <form method ="post" enctype="multipart/form-data">
       <div class = "posting_background">
 
         <div class="form-group" id = "search_condition">
@@ -53,7 +88,10 @@
             <option value="STARCRAFT">STARCRAFT 갤러리</option>
             <option value="MAPLESTORY">MAPLESTORY 갤러리</option>
           </select>
+
         </div>
+
+
 
       <div class="form-group">
         <label for="exampleFormControlInput1" id = "title">글의 제목 입력</label>
@@ -70,8 +108,10 @@
           <input class="form-control" type="file" id="formFileMultiple" name="image" multiple >
         </div>
 
+        <label for="my-number-input">사용 할 포인트 입력:</label>
+        <input type="number" id="my-number-input" name="point" min="0">
 
-        <button type="submit" class="btn btn-success">작성완료</button>
+        <button th:onclick="sendData()" class="btn btn-success">작성완료</button>
       </div>
     </form>
 

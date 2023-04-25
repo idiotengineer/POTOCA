@@ -266,7 +266,22 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                         postInfo.dates.uploadedTime.desc()
                 )
                 .fetch();
-        return new PageImpl<PostInfo>(fetch);
+
+
+        long fetchCount = jpaQueryFactory
+                .selectFrom(postInfo)
+                .join(postInfo.postedUser, users).fetchJoin()
+                .where(
+                        eqLOL(s),
+                        eqLostArk(s),
+                        eqValorant(s),
+                        eqMapleStory(s),
+                        eqStarCraft(s),
+                        eqRegular(s)
+                )
+                .fetchCount();
+
+        return new PageImpl<PostInfo>(fetch,pageable,fetchCount);
     }
 
     public BooleanExpression eqStarCraft(String s) {
@@ -381,5 +396,26 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
         Integer month = now.getMonthValue();
 
         return postInfo.dates.uploadedTime.month().eq(month);
+    }
+
+    public List<PostInfo> findTodaysBestPost() {
+        Integer dayOfYear = LocalDateTime.now().getDayOfYear();
+
+        List<PostInfo> fetch = jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .join(postInfo.postedUser, users).fetchJoin()
+                .where(
+                        Today(dayOfYear)
+                )
+                .limit(10)
+                .orderBy(postInfo.dates.uploadedTime.desc())
+                .fetch();
+
+        return fetch;
+    }
+
+    public BooleanExpression Today(Integer today) {
+        return postInfo.dates.uploadedTime.dayOfYear().eq(today);
     }
 }

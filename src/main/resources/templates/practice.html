@@ -104,7 +104,7 @@
         <h2 class = "post_title" th:text="'제목 : ' + ${eachPost.getPostTitle()}"></h2>
         <p class = "post_publisher" th:text="'작성자 : ' + ${eachPost.getPostedUser().getEmail()}"></p>
         <p class = "post_hits" th:text="'좋아요 수 : '+ ${eachPost.getLikedCount()}"></p>
-        <p class = "post_hits" th:text="'작성일자 : ' + ${eachPost.getDates().getUploadedTime()}"></p>
+        <p class = "post_hits" th:text="'작성일자 : ' + ${#temporals.format(eachPost.getDates().getUploadedTime(),'yyyy년 MM월 dd일 HH시')}"></p>
       </div>
     </div>
   </div>
@@ -118,162 +118,27 @@
         <table class="table" id = "practice_table" style="table-layout: fixed;">
           <thead>
           <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="col" id = "table-th-1">순위</th>
-            <th scope="col" id = "table-th-2">추천수</th>
+            <th scope="col" id = "table-th-1">좋아요 수</th>
+            <th scope="col" id = "table-th-2">작성자</th>
             <th scope="col" id = "table-th-3">제목</th>
-            <th scope="col" id = "table-th-4">작성자</th>
+            <th scope="col" id = "table-th-4">게시판 명</th>
           </tr>
           </thead>
-          <tbody>
-          <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="row">1</th>
+          <tbody th:each="eachPost2 : ${todays10Post}">
+          <tr th:onclick="|location.href='http://localhost:8080/find_post?id=' + ${eachPost2.getPostNumber()}|">
+            <th scope="row" th:text="${eachPost2.getLikedCount()}"></th>
             <td style="
             overflow:hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;">Mark</td>
+            white-space: nowrap;" th:text="${eachPost2.getPostedUser().getEmail()}"></td>
             <td style="
             overflow:hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;">카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!카리나 최고다!</td>
+            white-space: nowrap;" th:text="${eachPost2.getPostTitle()}"></td>
             <td style="
             overflow:hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;">@mdo</td>
-          </tr>
-          <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="row">2</th>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-          </tr>
-          <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="row">3</th>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-          </tr>
-          <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="row">4</th>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-          </tr>
-          <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="row">5</th>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-          </tr>
-          <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="row">6</th>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-          </tr>
-          <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="row">7</th>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-          </tr>
-          <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="row">8</th>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-          </tr>
-          <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="row">9</th>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
-          </tr>
-          <tr onclick="location.href='http://localhost:8080/post'">
-            <th scope="row">10</th>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Jacob</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">Thornton</td>
-            <td style="
-            overflow:hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;">@fat</td>
+            white-space: nowrap;" th:text="${eachPost2.getDtype()}"></td>
           </tr>
           </tbody>
         </table>
