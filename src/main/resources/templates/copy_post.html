@@ -633,6 +633,10 @@
     }
 </script>
 
+<script th:if="${string}" th:inline="javascript">
+    alert([[${string}]]);
+</script>
+
 <style>
     .blockCSS{
         display: block;

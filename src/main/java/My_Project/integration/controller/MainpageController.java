@@ -16,10 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import java.time.Duration;
@@ -96,8 +94,8 @@ public class MainpageController {
         return "post";
     }
 
-    @GetMapping("/find_post")
-    public String findPost(@RequestParam("id") Long id, Model model, @CookieValue("users") Optional<Cookie> cookie) {
+    @RequestMapping(value="/find_post",method = {RequestMethod.GET,RequestMethod.POST})
+    public String findPost(@RequestParam("id") Long id, Model model, @CookieValue("users") Optional<Cookie> cookie,@ModelAttribute("string") String s) {
         try {
             PageRequest of = PageRequest.of(0, 10);
 
@@ -120,6 +118,11 @@ public class MainpageController {
             model.addAttribute("logined",logined);
             model.addAttribute("post", post);
             model.addAttribute("time", LocalDateTime.now());
+
+            if (StringUtils.hasText(s)) {
+                model.addAttribute("string",s);
+            }
+
             return "copy_post";
         } catch (NoSuchElementException e) {
             model.addAttribute("string", e.toString());

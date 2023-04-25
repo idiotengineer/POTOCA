@@ -1,10 +1,7 @@
 package My_Project.integration.service;
 
 import My_Project.integration.entity.*;
-import My_Project.integration.entity.DiscriminatedEntity.LeagueOfLegendPost;
-import My_Project.integration.entity.DiscriminatedEntity.LostArkPost;
-import My_Project.integration.entity.DiscriminatedEntity.StarcraftPost;
-import My_Project.integration.entity.DiscriminatedEntity.ValorantPost;
+import My_Project.integration.entity.DiscriminatedEntity.*;
 import My_Project.integration.entity.Dto.*;
 import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
 import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
@@ -195,7 +192,7 @@ public class PostService {
             } else if(postInfoDto.getDtype().equals("STARCRAFT")){
                 postInfo = new StarcraftPost();
             } else if(postInfoDto.getDtype().equals("MAPLESTORY")){
-                postInfo = new LeagueOfLegendPost();
+                postInfo = new MapleStoryPost();
             }else {
                 postInfo = new PostInfo();
                 postDto = new PostDto();

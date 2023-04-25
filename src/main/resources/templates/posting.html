@@ -9,7 +9,7 @@
     <link rel = "stylesheet" href ="/css/sample.css">
 
     <script th:inline="javascript">
-        function sendData() {
+        async function sendData() {
           // FormData 객체 생성
           var formData = new FormData();
 
@@ -29,7 +29,6 @@
           fetch('/post_execute2', {
             method: 'POST',
             body: formData
-
           }).then(function(response) {
             if (response.redirected) {
               alert("게시글을 성공적으로 작성했습니다.");
@@ -75,7 +74,7 @@
         </div>
       </div>
     </nav>
-    <form method ="post" enctype="multipart/form-data">
+    <form action="/post_execute2" method ="post" enctype="multipart/form-data">
       <div class = "posting_background">
 
         <div class="form-group" id = "search_condition">
@@ -111,7 +110,7 @@
         <label for="my-number-input">사용 할 포인트 입력:</label>
         <input type="number" id="my-number-input" name="point" min="0">
 
-        <button th:onclick="sendData()" class="btn btn-success">작성완료</button>
+        <button type="submit" class="btn btn-success">작성완료</button>
       </div>
     </form>
 

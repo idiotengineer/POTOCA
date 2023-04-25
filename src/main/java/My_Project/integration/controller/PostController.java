@@ -45,7 +45,7 @@ public class PostController {
             @RequestPart(value = "image", required = false) List<MultipartFile> files,
             PostInfoDto postInfoDto,
             @CookieValue(name = "users") Cookie cookie,
-            RedirectAttributes model) {
+            RedirectAttributes redirectAttributes) {
         try {
             if (cookie.getValue().isEmpty()) {
                 throw new Exception("로그인 하지 않았습니다");
@@ -59,11 +59,13 @@ public class PostController {
                 photoPath.add(photoResponseDto.getFilePath());
             }
 
-            return "redirect:/find_post?id=" + postDto.getPostNumber();
+            redirectAttributes.addAttribute("id",postDto.getPostNumber());
+            redirectAttributes.addFlashAttribute("string","게시글을 성공적으로 작성했습니다.");
+            return "redirect:/find_post?id={id}";
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("string", "일반 게시글 작성에 실패하셨습니다");
-            return "redirect:/alert";
+            redirectAttributes.addAttribute("string", "게시글 작성에 실패하셨습니다");
+            return "redirect:/alert?string={string}";
         }
     }
 
