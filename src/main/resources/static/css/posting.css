@@ -34,3 +34,10 @@
 .posting_background{
     padding: 15px;
 }
+
+.presentPoint{
+    color: #808080;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+}

@@ -13,6 +13,9 @@
     <link href = "/css/navbar.css" rel = "stylesheet">
 
 
+    <script th:if="${!#strings.isEmpty(users)}" th:inline="javascript">
+      alert([[${users}]] + '님 로그인 하였습니다.');
+    </script>
 
   </head>
   <body>

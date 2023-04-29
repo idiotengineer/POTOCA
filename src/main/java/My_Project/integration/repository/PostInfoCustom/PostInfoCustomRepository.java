@@ -2,6 +2,7 @@ package My_Project.integration.repository.PostInfoCustom;
 
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.PostInfo;
+import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,4 +31,6 @@ public interface PostInfoCustomRepository {
     public List<PostInfo> best4PostForMonth();
 
     public List<PostInfo> findTodaysBestPost();
+
+    public PostInfoResponseDto findPostV5(Long id);
 }

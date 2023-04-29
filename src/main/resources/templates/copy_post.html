@@ -22,6 +22,11 @@
             integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
             crossorigin="anonymous"></script>
 
+
+    <script th:if="${!#strings.isEmpty(string)}" th:inline="javascript">
+        alert([[${string}]]);
+    </script>
+
     <script th:inline="javascript">
         function getCookie(cookie_name) {
             var x, y;
@@ -109,8 +114,10 @@
         function deletePost() {
             let email = getCookie('users')?.valueOf();
 
+            
+            
             /*<![CDATA[*/
-            let postedUserEmail = [[${post.getUsers().getEmail()}]];
+            let postedUserEmail = [[${post.getPostedUser().getEmail()}]];
             let postNumber = [[${post.getPostNumber()}]];
             /*]]*/
 
@@ -143,13 +150,13 @@
     <script th:inline="javascript">
         function modifyPost() {
             let email = getCookie('users')?.valueOf();
-            let postedUser = [[${post.getUsers().getEmail()}]];
+            let postedUser = [[${post.getPostedUser().getEmail()}]];
             if (email != null) {
                 let equals = email == postedUser;
                 if (equals) { // 로그인 한 ID(Cookie('users'))와 PostedUser.getEmail()가 같으면 서버의 API 호출, 다르면 안함
                     var dataMap = {
                         id: [[${post.getPostNumber()}]],
-                        userEmail: [[${post.getUsers().getEmail()}]]
+                        userEmail: [[${post.getPostedUser().getEmail()}]]
                     };
 
                     $.ajax({
@@ -197,6 +204,25 @@
         // });
 
         /*]]>*/
+    </script>
+
+    <script th:inline="javascript">
+        window.onload = function() {
+            const content = [[${@mainpageController.useTimeRemainingCalculator(post.getDates().getUploadedTime(),post.getClosingTime())}]];
+            const text = document.querySelector(".text");
+            let i = 0;
+
+            function typing() {
+                let txt = content[i++];
+                text.innerHTML += txt;
+                if (i > content.length) {
+                    text.textContent = "";
+                    i = 0;
+                }
+            }
+
+            setInterval(typing, 200);
+        }
     </script>
 </head>
 <body>
@@ -253,7 +279,7 @@
             <div class="post_profile_left">
                 <div class="post_profile_photo"></div>
                 <div class="post_profile_wrapper">
-                    <div class="post_profile_name" th:text="${post.getUsers().getEmail()}">작성자 :</div>
+                    <div class="post_profile_name" th:text="${post.getPostedUser().getName()}">작성자 :</div>
                     <div class="post_profile_time"
                          th:text="${@mainpageController.getTimeDiffAndReturnElapsedTime(post.getDates().getUploadedTime(),time)}">
                         작성 시간 :
@@ -261,7 +287,7 @@
                 </div>
             </div>
             <div class="cash_wrapper">
-                <div class="cash">500 Point</div>
+                <div class="cash" th:text="${post.getPoint()} + 'Point'"></div>
                 <div class="cash_emoji">&#x1F4B0;</div>
             </div>
         </div>
@@ -287,7 +313,7 @@
                 ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
                 ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
             </div>
-            <div th:each="path : ${post.getImages()}">
+            <div th:each="path : ${post.getPhoto()}">
                 <img th:src="|${path.getFilePath()}|" alt="" class=post_content_img>
             </div>
         </div>
@@ -301,12 +327,16 @@
     <div class="lidiWrapWrapper">
         <div class="lidiWrap">
             <img class="likeButton" id="post_likeButton" onclick="buttonFunc('like')">
-            <div class="likeCount" id="post_likeCount" th:text="${post.getPostLikeAndDislikeDto().getLikedUser().size()}">123</div>
+            <div class="likeCount" id="post_likeCount" th:text="${post.getPostLikeAndDislike().getLikedUser().size()}">123</div>
+            
             <img class="disLikeButton" id="post_disLikeButton" onclick="buttonFunc('dislike')">
-            <div class="disLikeCount" id="post_disLikeCount" th:text="${post.getPostLikeAndDislikeDto().getDisLikedUser().size()}">123</div>
+            <div class="disLikeCount" id="post_disLikeCount" th:text="${post.getPostLikeAndDislike().getDisLikedUser().size()}">123</div>
         </div>
     </div>
 
+    <div class="text_box">
+        <span class="text"></span>
+    </div>
 
     <div class="deleteButtonWrapper">
         <button type="button" class="btn btn-warning" id="button_custom1" th:onclick="modifyPost()">게시글 수정</button>
@@ -339,7 +369,7 @@
                 addNumber = -1;
             }
         } else if (param1 == 'dislike') {
-            className = '#post_disLikeCount';
+        className = '#post_disLikeCount';
             if (attr1 == '-48px 50%') {
                 $('#post_disLikeButton').css('background-position', '-72px');
                 $('#post_likeButton').css('pointer-events', 'none');
@@ -633,10 +663,6 @@
     }
 </script>
 
-<script th:if="${string}" th:inline="javascript">
-    alert([[${string}]]);
-</script>
-
 <style>
     .blockCSS{
         display: block;
@@ -673,27 +699,27 @@
             작성 시간
         </div>
 
-        <div class="gold_medal" th:classappend="${post.getBestPostCommentsList().get(2) == value.getPostLikeAndDislike().getLiked().size()} ? 'inline-blockCSS' : 'noneCSS'">&#x1F947;</div>
-        <div class="silver_medal" th:classappend="${post.getBestPostCommentsList().get(1) == value.getPostLikeAndDislike().getLiked().size()} ? 'inline-blockCSS' : 'noneCSS'">&#x1F948;</div>
-        <div class="bronze_medal" th:classappend="${post.getBestPostCommentsList().get(0) == value.getPostLikeAndDislike().getLiked().size()} ? 'inline-blockCSS' : 'noneCSS'">&#x1F949;</div>
+        <div class="gold_medal" th:classappend="${post.getBestPostCommentsList().get(2) == value.getPostLikeAndDislike().getLikedUser().size()} ? 'inline-blockCSS' : 'noneCSS'">&#x1F947;</div>
+        <div class="silver_medal" th:classappend="${post.getBestPostCommentsList().get(1) == value.getPostLikeAndDislike().getLikedUser().size()} ? 'inline-blockCSS' : 'noneCSS'">&#x1F948;</div>
+        <div class="bronze_medal" th:classappend="${post.getBestPostCommentsList().get(0) == value.getPostLikeAndDislike().getLikedUser().size()} ? 'inline-blockCSS' : 'noneCSS'">&#x1F949;</div>
         <div class="reply_profile_content" th:text="${value.getPostCommentsContents()}"></div>
 
         <div class="comment_lidiWrap">
             <button th:id="'comment_likeButton' + ${i.index}" class="comment_likeButton"
                  th:onclick="|commentLidiButton('like','${value.getCommentNumber()}','${i.index}')|"
-                    th:classappend="${logined} and ${@postController.likedButtonCheckedWhether(value.getPostLikeAndDislike().getLiked(),cookie)} ? 'checked_LikeButtonCSS' : 'unChecked_ButtonCSS'">
+                    th:classappend="${logined} and ${@postController.likedButtonCheckedWhether(value.getPostLikeAndDislike().getLikedUser(),cookie)} ? 'checked_LikeButtonCSS' : 'unChecked_ButtonCSS'">
                 <i class="fa fa-thumbs-up"></i>
             </button>
             <div th:id="'comment_likeCount' + ${i.index}" class="comment_likeCount"
-                 th:text="${value.getPostLikeAndDislike().getLiked().size()}">
+                 th:text="${value.getPostLikeAndDislike().getLikedUser().size()}">
             </div>
             <button th:id="'comment_disLikeButton' + ${i.index}" class="comment_disLikeButton"
                  th:onclick="|commentLidiButton('dislike','${value.getCommentNumber()}','${i.index}')|"
-                    th:classappend="${logined} and ${@postController.disLikedButtonCheckedWhether(value.getPostLikeAndDislike().getDisLiked(),cookie)} ? 'checked_DislikeButtonCSS' : 'unChecked_ButtonCSS'">
+                    th:classappend="${logined} and ${@postController.disLikedButtonCheckedWhether(value.getPostLikeAndDislike().getDisLikedUser(),cookie)} ? 'checked_DislikeButtonCSS' : 'unChecked_ButtonCSS'">
                 <i class="fa fa-thumbs-down"></i>
             </button>
             <div th:id="'comment_disLikeCount' + ${i.index}" class="comment_disLikeCount"
-                 th:text="${value.getPostLikeAndDislike().getDisLiked().size()}">
+                 th:text="${value.getPostLikeAndDislike().getDisLikedUser().size()}">
             </div>
             <span th:onclick="|openAndCloseAddBigCommentsWrapper(${i.index})|"
                   th:id="'comment_addBigCommentsButton' + ${i.index}" class="comment_addBigCommentsButton">답글</span>
@@ -715,7 +741,6 @@
             <span th:id="'comment_BigCommentsCount' + ${i.index}" class="comment_BigCommentSymbol" th:text="|답글 ${value.getBigCommentsList().size()} 개 |"> 답글 x개</span>
         </div>
 
-
         <div th:id="'bigCommentsWrapper' + ${i.index}" class="bigCommentsWrapper">
             <th:block th:each="bigComment,j : ${value.getBigCommentsList()}">
                 <img class="reply_profile_img" src="https://mblogthumb-phinf.pstatic.net/MjAyMTA1MjhfMjUg/MDAxNjIyMTk3NzUyMTAz.JgBnXWFplrlgwuGvVqlosma8FFPXqfGwVApVvMeP3vQg.LRmquqydeYieBEwyF9jWhljRvcd37HQf5dMa_AXxB1Ag.JPEG.mykpoint/Screenshot%EF%BC%BF20210528%EF%BC%8D192632%EF%BC%BFSamsung_Internet.jpg?type=w800">
@@ -725,19 +750,19 @@
                 <div class="comment_lidiWrap">
                     <button th:id="'comment_likeButton' + ${i.index} + '_' + ${j.index}" class="comment_likeButton"
                             th:onclick="|bigCommentLidiButton('like','${bigComment.getBigCommentsNumber()}','${i.index}','${j.index}')|"
-                            th:classappend="${logined} and ${@postController.likedButtonCheckedWhether(bigComment.getPostLikeAndDislike().getLiked(),cookie)} ? 'checked_LikeButtonCSS' : 'unChecked_ButtonCSS'">
+                            th:classappend="${logined} and ${@postController.likedButtonCheckedWhether(bigComment.getPostLikeAndDislikeResponsedto().getLikedUser(),cookie)} ? 'checked_LikeButtonCSS' : 'unChecked_ButtonCSS'">
                         <i class="fa fa-thumbs-up"></i>
                     </button>
                     <div th:id="'comment_likeCount' + ${i.index} + '_' + ${j.index}" class="comment_likeCount"
-                         th:text="${bigComment.getPostLikeAndDislike().getLiked().size()}">
+                         th:text="${bigComment.getPostLikeAndDislikeResponsedto().getLikedUser().size()}">
                     </div>
                     <button th:id="'comment_disLikeButton' + ${i.index} + '_' + ${j.index}" class="comment_disLikeButton"
                             th:onclick="|bigCommentLidiButton('dislike','${bigComment.getBigCommentsNumber()}','${i.index}','${j.index}')|"
-                            th:classappend="${logined} and ${@postController.disLikedButtonCheckedWhether(bigComment.getPostLikeAndDislike().getDisLiked(),cookie)} ? 'checked_DislikeButtonCSS' : 'unChecked_ButtonCSS'">
+                            th:classappend="${logined} and ${@postController.disLikedButtonCheckedWhether(bigComment.getPostLikeAndDislikeResponsedto().getDisLikedUser(),cookie)} ? 'checked_DislikeButtonCSS' : 'unChecked_ButtonCSS'">
                         <i class="fa fa-thumbs-down"></i>
                     </button>
                     <div th:id="'comment_disLikeCount' + ${i.index} + '_' + ${j.index}" class="comment_disLikeCount"
-                         th:text="${bigComment.getPostLikeAndDislike().getDisLiked().size()}">
+                         th:text="${bigComment.getPostLikeAndDislikeResponsedto().getDisLikedUser().size()}">
                     </div>
                     <span th:onclick="|openAndCloseAddBigCommentsWrapper(${i.index})|"
                           th:id="'comment_addBigCommentsButton' + ${i.index}" class="comment_addBigCommentsButton">답글</span>

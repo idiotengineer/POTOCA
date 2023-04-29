@@ -67,6 +67,10 @@ public class PostInfo {
 
     private Long LikedCount = 0L;
 
+    private Long point;
+
+    private Long closingTime;
+
     // Board에서 파일 처리 위함
     public void addPhoto(Photo photo) {
         this.photo.add(photo);
@@ -88,6 +92,8 @@ public class PostInfo {
         this.comments = new HashSet<>();
         this.postLikeAndDislike = postLikeAndDislike;
         this.dtype = postInfo.getDtype();
+        this.point = postInfo.getPoint();
+        this.closingTime = postInfo.getClosingTime();
     }
 
     public void addComments(PostComments postComments) {
@@ -111,6 +117,8 @@ public class PostInfo {
         setPostTitle(postInfoDto.getPostTitle());
         setPostContent(postInfoDto.getPostContent());
         setComments(new HashSet<>());
+        setPoint(postInfoDto.getPoint());
+        setClosingTime(postInfoDto.getClosingTime());
     }
 }
 

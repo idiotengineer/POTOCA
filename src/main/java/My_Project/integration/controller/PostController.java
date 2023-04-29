@@ -2,6 +2,8 @@ package My_Project.integration.controller;
 
 import My_Project.integration.entity.*;
 import My_Project.integration.entity.Dto.*;
+import My_Project.integration.entity.ResponseDto.DisLikedResponseDto;
+import My_Project.integration.entity.ResponseDto.LikedResponseDto;
 import My_Project.integration.entity.ResponseDto.ModiyingPostResponseDto;
 import My_Project.integration.entity.ResponseDto.PhotoResponseDto;
 import My_Project.integration.exception.NotSameStringException;
@@ -49,6 +51,14 @@ public class PostController {
         try {
             if (cookie.getValue().isEmpty()) {
                 throw new Exception("로그인 하지 않았습니다");
+            }
+
+            if (!Optional.ofNullable(postInfoDto.getPoint()).isPresent() || postInfoDto.getPoint().equals("")) {
+                postInfoDto.setPoint(0L);
+            }
+
+            if (!Optional.ofNullable (postInfoDto.getClosingTime()).isPresent() || postInfoDto.getClosingTime().equals("") || postInfoDto.getClosingTime().equals(0L) ) {
+                postInfoDto.setClosingTime(24L);
             }
 
             PostDto postDto = postService.create(postInfoDto, files, cookie);
@@ -366,23 +376,25 @@ public class PostController {
     }
 
 
-    public boolean likedButtonCheckedWhether(Set<Liked> set,Optional<Users> users1) throws Exception {
+//    public boolean likedButtonCheckedWhether(Set<Liked> set,Optional<Users> users1) throws Exception {
+public boolean likedButtonCheckedWhether(Set<LikedResponseDto> set, Optional<Users> users1) throws Exception {
         Users users = users1.get();
 
         if (set == null) return false;
         else if(set.isEmpty()) return false;
-        else if(!set.stream().anyMatch(liked -> liked.getUsers().equals(users))) return false;
-        else if (set.stream().anyMatch(liked -> liked.getUsers().equals(users))) return true;
+        else if(!set.stream().anyMatch(liked -> liked.getUsers().getEmail().equals(users.getEmail()))) return false;
+        else if (set.stream().anyMatch(liked -> liked.getUsers().getEmail().equals(users.getEmail()))) return true;
         else throw new Exception("PostController.likedButtonCheckedWhether 메서드 에러발생");
     }
 
-    public boolean disLikedButtonCheckedWhether(Set<DisLiked> set,Optional<Users> users1) throws Exception {
+//    public boolean disLikedButtonCheckedWhether(Set<DisLiked> set,Optional<Users> users1) throws Exception {
+public boolean disLikedButtonCheckedWhether(Set<DisLikedResponseDto> set, Optional<Users> users1) throws Exception {
         Users users = users1.get();
 
         if (set == null) return false;
         else if(set.isEmpty()) return false;
-        else if(!set.stream().anyMatch(disLiked -> disLiked.getUsers().equals(users))) return false;
-        else if (set.stream().anyMatch(disLiked -> disLiked.getUsers().equals(users))) return true;
+        else if(!set.stream().anyMatch(disLiked -> disLiked.getUsers().getEmail().equals(users.getEmail()))) return false;
+        else if (set.stream().anyMatch(disLiked -> disLiked.getUsers().getEmail().equals(users.getEmail()))) return true;
         else throw new Exception("PostController.disLikedButtonCheckedWhether 메서드 에러발생");
     }
 }

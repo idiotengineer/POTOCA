@@ -8,6 +8,11 @@
     <link href= "/css/font.css" rel= "stylesheet">
     <link rel = "stylesheet" href ="/css/sample.css">
 
+    <script th:if="${!users.isPresent()}">
+      alert("로그인 후 게시글 작성이 가능합니다");
+      window.location.replace("/login");
+    </script>
+
     <script th:inline="javascript">
         async function sendData() {
           // FormData 객체 생성
@@ -107,8 +112,19 @@
           <input class="form-control" type="file" id="formFileMultiple" name="image" multiple >
         </div>
 
-        <label for="my-number-input">사용 할 포인트 입력:</label>
-        <input type="number" id="my-number-input" name="point" min="0">
+        <div>
+        <label for="my-number-input">사용 할 포인트 입력 :</label>
+        <input type="number" id="my-number-input" name="point" min="0" th:max="${users.get().getPoint()}">
+        <div class="presentPoint" th:text="'보유 중인 포인트 : ' + ${users.get().getPoint()}"></div>
+        </div>
+
+        <div>
+        <div style="display: inline-block">
+        <label for="closingTime">채택 시간 입력 :</label>
+        <input type="number" id = "closingTime" name="closingTime" min="0" max="168">
+        </div>
+        <div class="presentPoint" value="24">기본 24시간, 최대 168시간 (1주일)</div>
+        </div>
 
         <button type="submit" class="btn btn-success">작성완료</button>
       </div>

@@ -2,18 +2,16 @@ package My_Project.integration.controller;
 
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.PostInfo;
-import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
+import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
 import My_Project.integration.entity.Users;
 import My_Project.integration.service.PostService;
 import My_Project.integration.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -99,24 +97,22 @@ public class MainpageController {
         try {
             PageRequest of = PageRequest.of(0, 10);
 
-//            PostInfo postInfo = postService.findPostV2(id).get();
-            PostInfo postInfo = postService.findPostV3(id).get();
-//            PostInfo postInfo = postService.findPostByIdWithSpringDataJpa(id).get();
+//            PostInfo postInfo = postService.findPostV3(id).get();
+//            PostDto post = new PostDto(postInfo);
 
-//            Slice<PostCommentsResponseDto> commentsV2 = postService.findCommentsV2(postInfo, of);
-            PostDto post = new PostDto(postInfo);
+            PostInfoResponseDto postV4 = postService.findPostV4(id);
             boolean logined = true;
 
             if (cookie.isPresent()) { // 로그인 되어 있을 시
                 Optional<Users> usersOptional = userService.findById(cookie.get().getValue());
-                model.addAttribute("checked", post.checkLikeAndDisLike(usersOptional));
+                model.addAttribute("checked", postV4.checkLikeAndDisLike(usersOptional));
                 model.addAttribute("cookie",usersOptional);
             } else {
                 logined = false;
             }
 
             model.addAttribute("logined",logined);
-            model.addAttribute("post", post);
+            model.addAttribute("post", postV4);
             model.addAttribute("time", LocalDateTime.now());
 
             if (StringUtils.hasText(s)) {
@@ -150,6 +146,40 @@ public class MainpageController {
         } else {
             return duration.getSeconds() + "초 전";
         }
+    }
+
+    public String useTimeRemainingCalculator(LocalDateTime startTime, Long x) {
+        LocalDateTime endTime = startTime.plusHours(x);
+        LocalDateTime now = LocalDateTime.now();
+
+        Duration duration = Duration.between(now, endTime);
+
+        long year = duration.getSeconds() / 31556926;
+        long month = duration.getSeconds() / 2629800;
+        long day = duration.getSeconds() / 86400;
+        long hour = duration.getSeconds() / 3600;
+        long minute = duration.getSeconds() / 60;
+        long second = duration.getSeconds();
+
+        String s;
+        
+        if (year > 0) { //
+            s = "약 " + year + "년 후 종료!";
+        } else if (month > 0) {
+            s = ("약 " + month + "달 후 종료!");
+        } else if (day > 0) {
+            s = ("약 " + day + "일 후 종료!");
+        } else if (hour > 0) {
+            s = ("약 " + hour + "시간 후 종료!");
+        } else if (minute > 0) {
+            s = (minute + "분 후 종료!");
+        } else if (second > 1){
+            s = (second + "초 후 종료!");
+        } else {
+            s = ("마감된 게시글입니다");
+        }
+
+        return s;
     }
 
 //    public String commentsLidiCheckedSearch(String LoginedEmail, Long commentsNumber) {
@@ -193,9 +223,10 @@ public class MainpageController {
 
     @ApiOperation(value = "일반 게시글 작성 페이지")
     @GetMapping("/posting")
-    public String postingPage() {
-        LOGGER.info("일반 게시글 작성 페이지 접속");
-        return "posting";
+    public String postingPage(Model model,@CookieValue("users") Optional<Users> users) {
+        LOGGER.info("게시글 작성 페이지 접속");
+            model.addAttribute("users",users);
+            return "posting";
     }
 
     @GetMapping("/test")

@@ -2,6 +2,8 @@ package My_Project.integration.repository.PostInfoCustom.Impl;
 
 import My_Project.integration.entity.*;
 import My_Project.integration.entity.Dto.PostDto;
+import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto2;
+import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
 import My_Project.integration.repository.PostInfoCustom.PostInfoCustomRepository;
 import ch.qos.logback.core.util.ContextUtil;
 import com.querydsl.core.BooleanBuilder;
@@ -221,6 +223,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
                 .where(postComments.in(postInfo1.getComments()))
                 .orderBy(postComments.dates.uploadedTime.desc())
+                .distinct()
                 .fetch();
 
         List<List<BigComments>> collect = fetch.stream()
@@ -230,6 +233,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
 
         List<BigComments> collect1 = collect.stream()
                 .flatMap(List::stream)
+                .distinct()
                 .collect(Collectors.toList());
 
 
@@ -243,6 +247,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
                 .where(bigComments.in(collect1))
+                .distinct()
                 .fetch();
 
         return Optional.ofNullable(postInfo1);
@@ -417,5 +422,60 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
 
     public BooleanExpression Today(Integer today) {
         return postInfo.dates.uploadedTime.dayOfYear().eq(today);
+    }
+
+    public PostInfoResponseDto findPostV5(Long id){
+        PostInfo postInfo1 = jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .join(postInfo.postedUser, users).fetchJoin() // OK
+                .leftJoin(postInfo.photo, photo).fetchJoin()
+                .leftJoin(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                .leftJoin(postInfo.comments, postComments).fetchJoin()
+                .where(postInfo.postNumber.eq(id))
+                .fetchOne();
+
+        List<PostComments> fetch = jpaQueryFactory
+                .select(postComments)
+                .from(postComments)
+                .join(postComments.postInfo, postInfo).fetchJoin()
+                .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked,disLiked).fetchJoin()
+                .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
+                .where(postComments.in(postInfo1.getComments()))
+                .orderBy(postComments.dates.uploadedTime.desc())
+                .distinct()
+                .fetch();
+
+        List<List<BigComments>> collect = fetch.stream()
+                .map(
+                        postComments1 -> postComments1.getBigCommentsList()
+                ).collect(Collectors.toList());
+
+        List<BigComments> collect1 = collect.stream()
+                .flatMap(List::stream)
+                .distinct()
+                .collect(Collectors.toList());
+
+
+        List<BigComments> fetch1 = jpaQueryFactory
+                .select(bigComments)
+                .from(bigComments)
+                .join(bigComments.bigCommentedUser, users).fetchJoin()
+                .join(bigComments.postComments, postComments).fetchJoin()
+                .join(bigComments.postInfo, postInfo).fetchJoin()
+                .join(bigComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                .where(bigComments.in(collect1))
+                .distinct()
+                .fetch();
+
+        PostInfoResponseDto postInfoResponseDto = new PostInfoResponseDto(postInfo1, fetch, fetch1);
+
+        return postInfoResponseDto;
     }
 }

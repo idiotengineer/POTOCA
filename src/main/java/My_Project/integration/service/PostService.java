@@ -198,7 +198,7 @@ public class PostService {
                 postDto = new PostDto();
             }
 
-            postInfo.setPostInfoWithNoArgsConstructor(usersByEmail.get(), postInfoDto, postLikeAndDislike);
+            postInfo.setPostInfoWithNoArgsConstructor(usersByEmail.get(), postInfoDto, postLikeAndDislike); // 기본 생성자를 사용하지 않으면, dtype이 입력되지 않기 때문에 새로운 메서드를 사용했다.
             savePhoto(files, postInfo);
             postDto = new PostDto(postInfo);
 
@@ -223,16 +223,6 @@ public class PostService {
 
         em.persist(postInfo);
     }
-
-
-    @org.springframework.transaction.annotation.Transactional(readOnly = true)
-    public PostInfoResponseDto searchById(Long id, List<Long> fileId) {
-        PostInfo postInfo = postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시글이 존재하지 않습니다"));
-
-        return new PostInfoResponseDto(postInfo, fileId);
-    }
-
 
     @Transactional
     public Boolean registerComments(CommentDto commentDto, Optional<Cookie> cookie) throws Exception{
@@ -560,5 +550,10 @@ public class PostService {
     @Transactional
     public List<PostInfo> findTodays10Post() {
         return postRepository.findTodaysBestPost();
+    }
+
+    @Transactional
+    public PostInfoResponseDto findPostV4(Long id) throws NoSuchElementException {
+        return postRepository.findPostV5(id);
     }
 }

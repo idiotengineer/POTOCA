@@ -25,6 +25,10 @@ public class PostDto {
 
     private List<Integer> bestPostCommentsList;
 
+    private Long point;
+
+    private Long closingTime;
+
     public PostDto(PostInfo postInfo) {
         this.postNumber = postInfo.getPostNumber();
         this.users = postInfo.getPostedUser();
@@ -39,7 +43,8 @@ public class PostDto {
         this.postLikeAndDislikeDto = new PostLikeAndDislikeDto(postInfo.getPostLikeAndDislike());
         this.images = postInfo.getPhoto();
         this.bestPostCommentsList = postInfo.getBestPostCommentsList();
-//
+        this.point = postInfo.getPoint();
+        this.closingTime = postInfo.getClosingTime();
 //        Collections.copy(this.images, postInfo.getPhoto());
 //        Collections.copy(this.comments,postInfo.getComments());
     }
@@ -88,5 +93,7 @@ public class PostDto {
         this.comments = new HashSet<>(postInfo.getComments());
         this.postLikeAndDislikeDto = postLikeAndDislikeDto;
         this.bestPostCommentsList = postInfo.getBestPostCommentsList();
+        this.point = postInfo.getPoint();
+        this.closingTime = postInfo.getClosingTime();
     }
 }

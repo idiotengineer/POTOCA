@@ -2,7 +2,11 @@ package My_Project.integration.RepositoryTest;
 
 import My_Project.integration.entity.*;
 import My_Project.integration.entity.DiscriminatedEntity.*;
+import My_Project.integration.entity.Dto.PhotoDto;
+import My_Project.integration.entity.Dto.UsersDto;
 import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto;
+import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
+import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeResponseDto;
 import My_Project.integration.repository.PostCommentsRepository;
 import My_Project.integration.repository.PostRepository;
 import My_Project.integration.repository.UsersRepository;
@@ -23,10 +27,8 @@ import org.springframework.test.annotation.Rollback;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static My_Project.integration.entity.DiscriminatedEntity.QDiabloPost.*;
 import static My_Project.integration.entity.DiscriminatedEntity.QLeagueOfLegendPost.*;
@@ -301,5 +303,66 @@ public void findPostV4Test() throws Exception {
                 .fetch();
         //then
         Assertions.assertThat(postInfoList).isNotEmpty();
+    }
+
+    @Test
+    public void findPost() throws Exception {
+        //given
+        Long id = 4L;
+        //when
+
+        PostInfo postInfo1 = jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .join(postInfo.postedUser, users).fetchJoin() // OK
+                .leftJoin(postInfo.photo, photo).fetchJoin()
+                .leftJoin(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                .leftJoin(postInfo.comments, postComments).fetchJoin()
+                .where(postInfo.postNumber.eq(id))
+                .fetchOne();
+
+        List<PostComments> fetch = jpaQueryFactory
+                .select(postComments)
+                .from(postComments)
+                .join(postComments.postInfo, postInfo).fetchJoin()
+                .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked,disLiked).fetchJoin()
+                .leftJoin(postComments.bigCommentsList, bigComments).fetchJoin()
+                .where(postComments.in(postInfo1.getComments()))
+                .orderBy(postComments.dates.uploadedTime.desc())
+                .distinct()
+                .fetch();
+
+        List<List<BigComments>> collect = fetch.stream()
+                .map(
+                        postComments1 -> postComments1.getBigCommentsList()
+                ).collect(Collectors.toList());
+
+        List<BigComments> collect1 = collect.stream()
+                .flatMap(List::stream)
+                .distinct()
+                .collect(Collectors.toList());
+
+
+        List<BigComments> fetch1 = jpaQueryFactory
+                .select(bigComments)
+                .from(bigComments)
+                .join(bigComments.bigCommentedUser, users).fetchJoin()
+                .join(bigComments.postComments, postComments).fetchJoin()
+                .join(bigComments.postInfo, postInfo).fetchJoin()
+                .join(bigComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                .where(bigComments.in(collect1))
+                .distinct()
+                .fetch();
+
+        PostInfoResponseDto postInfoResponseDto = new PostInfoResponseDto(postInfo1, fetch, fetch1);
+
+        //then
+        Assertions.assertThat(fetch).isNotEmpty();
     }
 }

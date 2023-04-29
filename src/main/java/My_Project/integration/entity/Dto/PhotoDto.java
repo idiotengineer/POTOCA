@@ -1,5 +1,6 @@
 package My_Project.integration.entity.Dto;
 
+import My_Project.integration.entity.Photo;
 import lombok.*;
 
 @Getter
@@ -14,5 +15,11 @@ public class PhotoDto {
         this.origFileName = origFileName;
         this.filePath = filePath;
         this.fileSize = fileSize;
+    }
+
+    public PhotoDto(Photo photo) {
+        this.origFileName = photo.getOrigFileName();
+        this.filePath = photo.getFilePath();
+        this.fileSize = photo.getFileSize();
     }
 }

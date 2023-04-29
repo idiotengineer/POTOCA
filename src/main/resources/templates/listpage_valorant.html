@@ -129,10 +129,10 @@
       th:with="start=${T(java.lang.Math).floor(list.number/10)*10 + 1},
                     last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
     <th:block th:with="
-                firstAddr=@{/listpage(page=0)},
-                prevAddr=@{/listpage(page=${list.number - 1})},
-                nextAddr=@{/listpage(page=${list.number + 1})},
-                lastAddr=@{/listpage(page=${list.totalPages -1})}">
+                firstAddr=@{/Valorant_listpage(page=0)},
+                prevAddr=@{/Valorant_listpage(page=${list.number - 1})},
+                nextAddr=@{/Valorant_listpage(page=${list.number + 1})},
+                lastAddr=@{/Valorant_listpage(page=${list.totalPages -1})}">
       <li class="page-item" style="padding-bottom: 5%">
         <a class="page-link" th:href="${firstAddr}" aria-label="First">
           <span aria-hidden="true">First</span>
@@ -148,7 +148,7 @@
       <!--1,2,3,4,.. 등 페이지-->
       <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}"
           th:class="${page == list.number + 1} ? 'active'">
-        <a class="page-link" th:text="${page}" th:href="@{/listpage(page=${page -1})}"></a>
+        <a class="page-link" th:text="${page}" th:href="@{/Valorant_listpage(page=${page -1})}"></a>
       </li>
       <!--다음 페이지로 -->
       <li class="page-item" th:class="${list.last} ? 'disabled'">
