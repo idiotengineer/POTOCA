@@ -7,6 +7,7 @@ import org.hibernate.annotations.BatchSize;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -60,7 +61,7 @@ public class PostInfo {
     private PostLikeAndDislike postLikeAndDislike;
 
     @ElementCollection
-    private List<Integer> bestPostCommentsList = new ArrayList<>(Arrays.asList(1, 2, 3));
+    private List<Integer> bestPostCommentsList = new ArrayList<>(3);
 
     @Column(insertable = false, updatable = false)
     private String dtype;
@@ -119,6 +120,33 @@ public class PostInfo {
         setComments(new HashSet<>());
         setPoint(postInfoDto.getPoint());
         setClosingTime(postInfoDto.getClosingTime());
+
+        this.bestPostCommentsList.add(0);
+        this.bestPostCommentsList.add(0);
+        this.bestPostCommentsList.add(0);
+    }
+
+    public void updateTop3LikeCount() {
+        List<Integer> collect = comments
+                .stream()
+                .map(
+                        postComments -> postComments.getPostLikeAndDislike().getLiked().size()
+                )
+                .sorted(Comparator.reverseOrder())
+                .limit(3)
+                .collect(Collectors.toList());
+
+
+        if (collect.size() < 2) {
+            collect.add(0);
+        }
+
+        if (collect.size() < 3) {
+            collect.add(0);
+        }
+
+        this.bestPostCommentsList.clear();
+        this.bestPostCommentsList.addAll(collect);
     }
 }
 

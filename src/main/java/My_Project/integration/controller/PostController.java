@@ -170,8 +170,12 @@ public class PostController {
                     String sizeOfDislikeList;
                     if (anyMatch) { // 이미 Like 했을 때
                         sizeOfDislikeList = postService.removeUsersSet(postLikeAndDislike, users, "like");
+                        PostInfo postForBestPostComments = postService.findPostForBestPostComments(postNumber);
+                        postService.updatePostInfoForBestPostCommentsList(postForBestPostComments);
                     } else { // Like 하지 않았을 때
                         sizeOfDislikeList = postService.addUsersSet(postLikeAndDislike, users, "like");
+                        PostInfo postForBestPostComments = postService.findPostForBestPostComments(postNumber);
+                        postService.updatePostInfoForBestPostCommentsList(postForBestPostComments);
                     }
 
                     return sizeOfDislikeList;

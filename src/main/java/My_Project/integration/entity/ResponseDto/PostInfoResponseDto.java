@@ -31,7 +31,7 @@ public class PostInfoResponseDto {
 
     private PostLikeAndDislikeResponseDto postLikeAndDislike;
 
-    private List<Integer> bestPostCommentsList = new ArrayList<>(Arrays.asList(1, 2, 3));
+    private List<Integer> bestPostCommentsList = new ArrayList<>();
 
     private String dtype;
 

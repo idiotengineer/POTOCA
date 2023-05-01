@@ -33,4 +33,6 @@ public interface PostInfoCustomRepository {
     public List<PostInfo> findTodaysBestPost();
 
     public PostInfoResponseDto findPostV5(Long id);
+
+    public PostInfo findPostForBestPostCommentsList(Long id);
 }

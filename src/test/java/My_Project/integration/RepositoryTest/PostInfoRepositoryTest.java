@@ -365,4 +365,37 @@ public void findPostV4Test() throws Exception {
         //then
         Assertions.assertThat(fetch).isNotEmpty();
     }
+
+    @Test
+    public void findPostForBestPostCommentsList() throws Exception {
+        //given
+        Long id = 9L;
+        //when
+
+        PostInfo postInfo1 = jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .join(postInfo.postedUser, users).fetchJoin()
+                .leftJoin(postInfo.bestPostCommentsList).fetchJoin()
+                .leftJoin(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+                .leftJoin(postInfo.comments, postComments).fetchJoin()
+                .where(postInfo.postNumber.eq(id))
+                .fetchOne();
+
+        List<PostComments> fetch = jpaQueryFactory
+                .select(postComments)
+                .from(postComments)
+                .join(postComments.postInfo, postInfo).fetchJoin()
+                .join(postComments.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .where(postComments.in(postInfo1.getComments()))
+                .distinct()
+                .fetch();
+
+        //then
+
+        System.out.println();
+    }
 }

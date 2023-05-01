@@ -30,7 +30,6 @@ public class PostCommentsResponseDto2 {
 
     private PostLikeAndDislikeResponseDto postLikeAndDislike;
 
-
     public PostCommentsResponseDto2(PostComments postComments,List<BigComments> bigComments) {
         this.commentNumber = postComments.getCommentNumber();
         this.postCommentedUsersEmail = postComments.getPostCommentedUsersEmail();
@@ -58,6 +57,5 @@ public class PostCommentsResponseDto2 {
                             }
                         }
                 );
-
     }
 }

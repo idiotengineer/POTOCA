@@ -379,6 +379,8 @@ public class PostService {
             liked.setPostLikeAndDislike(postLikeAndDislike);
 
             likedRepository.save(liked);
+            em.flush();
+            em.clear();
             return String.valueOf(postLikeAndDislike.getLiked().size() + 1);
         } else {
             DisLiked disLiked = new DisLiked();
@@ -394,6 +396,8 @@ public class PostService {
     public String removeUsersSet(PostLikeAndDislike postLikeAndDislike, Users users, String s) {
         if (likeOrNot(s)) {
             likedRepository.deleteByPostLidiAndUsers(postLikeAndDislike, users);
+            em.flush();
+            em.clear();
             return String.valueOf(postLikeAndDislike.getLiked().size() - 1);
         } else {
             disLikedRepository.deleteByPostLidiAndUsers(postLikeAndDislike, users);
@@ -555,5 +559,15 @@ public class PostService {
     @Transactional
     public PostInfoResponseDto findPostV4(Long id) throws NoSuchElementException {
         return postRepository.findPostV5(id);
+    }
+
+    @Transactional
+    public PostInfo findPostForBestPostComments(Long id) {
+        return postRepository.findPostForBestPostCommentsList(id);
+    }
+
+    @Transactional
+    public void updatePostInfoForBestPostCommentsList(PostInfo postInfo) {
+        postInfo.updateTop3LikeCount();
     }
 }
