@@ -35,4 +35,6 @@ public interface PostInfoCustomRepository {
     public PostInfoResponseDto findPostV5(Long id);
 
     public PostInfo findPostForBestPostCommentsList(Long id);
+
+    public List<PostInfo> findExpiredPost();
 }

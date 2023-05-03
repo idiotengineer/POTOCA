@@ -504,4 +504,22 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
 
         return postInfo1;
     }
+
+    public List<PostInfo> findExpiredPost() {
+        return jpaQueryFactory
+                .selectFrom(postInfo)
+                .leftJoin(postInfo.comments, postComments).fetchJoin()
+                .join(postInfo.postedUser, users).fetchJoin()
+                .leftJoin(postInfo.bestPostCommentsList).fetchJoin()
+                .where(
+                        postInfo.closingTime.before(
+                                LocalDateTime.now()
+                        ).and(
+                                postInfo.closed.isFalse()
+                        )
+                )
+                .distinct()
+                .fetch();
+    }
+
 }

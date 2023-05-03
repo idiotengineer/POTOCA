@@ -208,7 +208,7 @@
 
     <script th:inline="javascript">
         window.onload = function() {
-            const content = [[${@mainpageController.useTimeRemainingCalculator(post.getDates().getUploadedTime(),post.getClosingTime())}]];
+            const content = [[${@mainpageController.useTimeRemainingCalculator(post.getClosingTime())}]];
             const text = document.querySelector(".text");
             let i = 0;
 

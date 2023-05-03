@@ -11,9 +11,7 @@ import My_Project.integration.repository.PostCommentsRepository;
 import My_Project.integration.repository.PostRepository;
 import My_Project.integration.repository.UsersRepository;
 import ch.qos.logback.core.util.ContextUtil;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.SimpleExpression;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,11 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.test.annotation.Rollback;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -397,5 +397,22 @@ public void findPostV4Test() throws Exception {
         //then
 
         System.out.println();
+    }
+
+    @Test
+    public void findExpiredPost() throws Exception {
+        //given
+
+        //when
+        List<PostInfo> expiredPosts = jpaQueryFactory
+                .selectFrom(postInfo)
+                .where(
+                        postInfo.closingTime.after(
+                                postInfo.dates.uploadedTime
+                        )
+                )
+                .fetch();
+        //then
+        Assertions.assertThat(expiredPosts).isEmpty();
     }
 }

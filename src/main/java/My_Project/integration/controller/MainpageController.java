@@ -48,8 +48,8 @@ public class MainpageController {
         } else {
             model.addAttribute("users", null);
         }
-        model.addAttribute("todays10Post",todays10Post);
-        model.addAttribute("best4Post",best4Post);
+        model.addAttribute("todays10Post", todays10Post);
+        model.addAttribute("best4Post", best4Post);
 
         return "practice";
         /*
@@ -92,8 +92,8 @@ public class MainpageController {
         return "post";
     }
 
-    @RequestMapping(value="/find_post",method = {RequestMethod.GET,RequestMethod.POST})
-    public String findPost(@RequestParam("id") Long id, Model model, @CookieValue("users") Optional<Cookie> cookie,@ModelAttribute("string") String s) {
+    @RequestMapping(value = "/find_post", method = {RequestMethod.GET, RequestMethod.POST})
+    public String findPost(@RequestParam("id") Long id, Model model, @CookieValue("users") Optional<Cookie> cookie, @ModelAttribute("string") String s) {
         try {
             PageRequest of = PageRequest.of(0, 10);
 
@@ -106,17 +106,17 @@ public class MainpageController {
             if (cookie.isPresent()) { // 로그인 되어 있을 시
                 Optional<Users> usersOptional = userService.findById(cookie.get().getValue());
                 model.addAttribute("checked", postV4.checkLikeAndDisLike(usersOptional));
-                model.addAttribute("cookie",usersOptional);
+                model.addAttribute("cookie", usersOptional);
             } else {
                 logined = false;
             }
 
-            model.addAttribute("logined",logined);
+            model.addAttribute("logined", logined);
             model.addAttribute("post", postV4);
             model.addAttribute("time", LocalDateTime.now());
 
             if (StringUtils.hasText(s)) {
-                model.addAttribute("string",s);
+                model.addAttribute("string", s);
             }
 
             return "copy_post";
@@ -148,11 +148,9 @@ public class MainpageController {
         }
     }
 
-    public String useTimeRemainingCalculator(LocalDateTime startTime, Long x) {
-        LocalDateTime endTime = startTime.plusHours(x);
-        LocalDateTime now = LocalDateTime.now();
-
-        Duration duration = Duration.between(now, endTime);
+    public String useTimeRemainingCalculator(LocalDateTime endTime) {
+        LocalDateTime startTime= LocalDateTime.now();
+        Duration duration = Duration.between(startTime, endTime);
 
         long year = duration.getSeconds() / 31556926;
         long month = duration.getSeconds() / 2629800;
@@ -162,7 +160,7 @@ public class MainpageController {
         long second = duration.getSeconds();
 
         String s;
-        
+
         if (year > 0) { //
             s = "약 " + year + "년 후 종료!";
         } else if (month > 0) {
@@ -173,7 +171,7 @@ public class MainpageController {
             s = ("약 " + hour + "시간 후 종료!");
         } else if (minute > 0) {
             s = (minute + "분 후 종료!");
-        } else if (second > 1){
+        } else if (second > 1) {
             s = (second + "초 후 종료!");
         } else {
             s = ("마감된 게시글입니다");
@@ -223,15 +221,19 @@ public class MainpageController {
 
     @ApiOperation(value = "일반 게시글 작성 페이지")
     @GetMapping("/posting")
-    public String postingPage(Model model,@CookieValue("users") Optional<Users> users) {
+    public String postingPage(Model model, @CookieValue("users") Optional<Users> users) {
         LOGGER.info("게시글 작성 페이지 접속");
-            model.addAttribute("users",users);
-            return "posting";
+        model.addAttribute("users", users);
+        return "posting";
     }
 
-    @GetMapping("/test")
-    public String sdf() {
-        return "test";
+    @GetMapping("/setClosingTime")
+    public void setClosingTime(@RequestParam Long id) {
+        postService.setClosingTime(id);
     }
 
+    @GetMapping("/setPoint")
+    public void setPoint(@RequestParam Long id) {
+        postService.setPoint(id);
+    }
 }

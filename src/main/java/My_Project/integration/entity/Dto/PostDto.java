@@ -4,6 +4,7 @@ import My_Project.integration.entity.*;
 import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -27,7 +28,7 @@ public class PostDto {
 
     private Long point;
 
-    private Long closingTime;
+    private LocalDateTime closingTime;
 
     public PostDto(PostInfo postInfo) {
         this.postNumber = postInfo.getPostNumber();

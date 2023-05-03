@@ -70,8 +70,9 @@ public class PostInfo {
 
     private Long point;
 
-    private Long closingTime;
+    private Boolean closed = false;
 
+    private LocalDateTime closingTime;
     // Board에서 파일 처리 위함
     public void addPhoto(Photo photo) {
         this.photo.add(photo);
@@ -94,7 +95,7 @@ public class PostInfo {
         this.postLikeAndDislike = postLikeAndDislike;
         this.dtype = postInfo.getDtype();
         this.point = postInfo.getPoint();
-        this.closingTime = postInfo.getClosingTime();
+        this.closingTime = LocalDateTime.now().plusHours(postInfo.getClosingTime());
     }
 
     public void addComments(PostComments postComments) {
@@ -119,7 +120,7 @@ public class PostInfo {
         setPostContent(postInfoDto.getPostContent());
         setComments(new HashSet<>());
         setPoint(postInfoDto.getPoint());
-        setClosingTime(postInfoDto.getClosingTime());
+        setClosingTime(LocalDateTime.now().plusHours(postInfoDto.getClosingTime()));
 
         this.bestPostCommentsList.add(0);
         this.bestPostCommentsList.add(0);

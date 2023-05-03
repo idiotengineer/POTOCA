@@ -570,4 +570,18 @@ public class PostService {
     public void updatePostInfoForBestPostCommentsList(PostInfo postInfo) {
         postInfo.updateTop3LikeCount();
     }
+
+    @Transactional
+    public void setClosingTime(Long id) {
+        PostInfo postInfo = postRepository.findById(id).get();
+
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(1);
+        postInfo.setClosingTime(localDateTime);
+    }
+
+    @Transactional
+    public void setPoint(Long id) {
+        PostInfo postInfo = postRepository.findById(id).get();
+        postInfo.setPoint(100L);
+    }
 }

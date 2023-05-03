@@ -8,6 +8,7 @@ import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,5 +87,14 @@ public class AlgorithmeTest {
         } else {
             System.out.println("마감된 게시글입니다");
         }
+    }
+
+    @Test
+    public void timeTest() throws Exception {
+        Long id = 20L;
+
+        LocalDateTime localDateTime = LocalDateTime.now().plusHours(1L);
+
+        System.out.println(localDateTime);
     }
 }

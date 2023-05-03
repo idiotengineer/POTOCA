@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ public class PostInfoResponseDto {
 
     private Long point;
 
-    private Long closingTime;
+    private LocalDateTime closingTime;
     
     public PostInfoResponseDto(PostInfo postInfo1,List<PostComments> postComments, List<BigComments> bigComments) {
         this.setPostNumber(postInfo1.getPostNumber());
