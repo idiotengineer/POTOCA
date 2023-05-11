@@ -1,12 +1,14 @@
 package My_Project.integration.repository.PostInfoCustom.Impl;
 
 import My_Project.integration.entity.*;
+import My_Project.integration.entity.DiscriminatedEntity.QRegularPost;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.entity.ResponseDto.PostCommentsResponseDto2;
 import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
 import My_Project.integration.repository.PostInfoCustom.PostInfoCustomRepository;
 import ch.qos.logback.core.util.ContextUtil;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
@@ -21,8 +23,10 @@ import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.swing.text.html.Option;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +36,7 @@ import java.util.stream.Collectors;
 import static My_Project.integration.entity.DiscriminatedEntity.QLeagueOfLegendPost.leagueOfLegendPost;
 import static My_Project.integration.entity.DiscriminatedEntity.QLostArkPost.lostArkPost;
 import static My_Project.integration.entity.DiscriminatedEntity.QMapleStoryPost.mapleStoryPost;
+import static My_Project.integration.entity.DiscriminatedEntity.QRegularPost.*;
 import static My_Project.integration.entity.DiscriminatedEntity.QStarcraftPost.starcraftPost;
 import static My_Project.integration.entity.DiscriminatedEntity.QValorantPost.valorantPost;
 import static My_Project.integration.entity.QBigComments.bigComments;
@@ -332,7 +337,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
             return null;
         }
 
-        return postInfo.instanceOf(mapleStoryPost.getType());
+        return postInfo.instanceOf(regularPost.getType());
     }
 
 //    public List<PostInfo> best4PostForMonth(LocalDateTime now) {
@@ -416,6 +421,29 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .limit(10)
                 .orderBy(postInfo.dates.uploadedTime.desc())
                 .fetch();
+
+        return fetch;
+    }
+
+    @Override
+    public List<PostInfo> findTodaysAllPost() {
+        Integer dayOfYear = LocalDateTime.now().getDayOfYear();
+
+        List<PostInfo> fetch = jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .where(
+                        Today(dayOfYear)
+                )
+                .fetch();
+
+        long count = jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .where(
+                        Today(dayOfYear)
+                )
+                .fetchCount();
 
         return fetch;
     }
@@ -522,4 +550,72 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .fetch();
     }
 
+    public List<PostInfo> findThisWeeksAllPost() {
+        return jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .where(
+                        thisWeeks()
+                )
+                .fetch();
+    }
+
+    public BooleanExpression thisWeeks() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY)).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(java.time.DayOfWeek.SUNDAY)).withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+
+        return postInfo.dates.uploadedTime.between(startOfWeek,endOfWeek);
+    }
+
+    public List<PostInfo> findThisMonthAllPost() {
+        return jpaQueryFactory.select(postInfo)
+                .from(postInfo)
+                .where(
+                        thisMonth()
+                )
+                .fetch();
+    }
+
+    public BooleanExpression thisMonth() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfMonth= now.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfMonth());
+
+        return postInfo.dates.uploadedTime.between(startOfMonth, endOfMonth);
+    }
+
+    public List<PostInfo> findThisYearsAllPost() {
+        return jpaQueryFactory.select(postInfo)
+                .from(postInfo)
+                .where(
+                        thisYear()
+                )
+                .fetch();
+    }
+
+    private BooleanExpression thisYear() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfMonth= now.with(TemporalAdjusters.firstDayOfYear());
+        LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfYear());
+
+        return postInfo.dates.uploadedTime.between(startOfMonth, endOfMonth);
+    }
+
+    public Page<PostInfo> findAllWithPaging(Pageable pageable){
+        List<PostInfo> fetch = jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .join(postInfo.postedUser, users).fetchJoin()
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(postInfo.dates.uploadedTime.desc())
+                .fetch();
+
+        long l = jpaQueryFactory
+                .selectFrom(postInfo)
+                .fetchCount();
+
+        return new PageImpl<>(fetch,pageable,l);
+    }
 }

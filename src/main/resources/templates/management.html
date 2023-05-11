@@ -1,0 +1,676 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chart.js Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/css/management.css">
+    <link rel="stylesheet" href="/css/sample.css">
+    <link href="/css/thumbs.css" rel="stylesheet">
+    <link href="/css/base_nav.css" rel="stylesheet">
+    <link href="/css/font.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
+        integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
+        crossorigin="anonymous"></script>
+
+
+<nav style="position: relative" class="navbar bg-light fixed-top" id="container-fluid_custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="https://cdn-icons-png.flaticon.com/512/6815/6815258.png" alt="Bootstrap" width="30" height="24">
+        </a>
+        <a class="navbar-brand" href="http://localhost:8080/">포인트로 캐쉬를 만들자! POTOCA 갤러리</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel"
+                    th:text="${#strings.isEmpty(users)} ? '마이페이지를 이용하려면 로그인 해야 합니다' : ${users} + '님의 마이페이지'"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">설정</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">마이페이지</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="http://localhost:8080/mypoint">마이포인트</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!--
+<div class="pie_graph_div">
+  <h3 class="pie_graph_h5">금일 작성된 게시글 비율</h3>
+  <canvas id="todaysPost"></canvas>
+</div>
+
+<script th:inline="javascript">
+  var ctx = document.getElementById('todaysPost');
+  /*<![CDATA[*/
+
+  var serverData = /*[[${todaysPost}]]*/ {};
+
+  var mapData = new Map(Object.entries(serverData));
+
+  var labelsArray = Array.from(mapData.keys());
+  var datasArrays = Array.from(mapData.values());
+
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: labelsArray,
+      datasets: [{
+        label: '게시글 수',
+        data: datasArrays,
+        backgroundColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+    }
+  });
+  /*]]>*/
+</script>
+
+<div class="pie_graph_div">
+  <h3 class="pie_graph_h5">금주 작성된 게시글 비율</h3>
+  <canvas id="thisWeeksPost"></canvas>
+</div>
+
+<script th:inline="javascript">
+  var ctx = document.getElementById('thisWeeksPost');
+  /*<![CDATA[*/
+
+  var serverData = /*[[${thisWeeksPost}]]*/ {};
+
+  var mapData = new Map(Object.entries(serverData));
+
+  var labelsArray = Array.from(mapData.keys());
+  var datasArrays = Array.from(mapData.values());
+
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: labelsArray,
+      datasets: [{
+        label: '게시글 수',
+        data: datasArrays,
+        backgroundColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+    }
+  });
+  /*]]>*/
+</script>
+
+<div class="pie_graph_div">
+  <h3 class="pie_graph_h5">금월 작성된 게시글 비율</h3>
+  <canvas id="thisMonthPost"></canvas>
+</div>
+
+<script th:inline="javascript">
+  var ctx = document.getElementById('thisMonthPost');
+  /*<![CDATA[*/
+
+  var serverData = /*[[${thisMonthPost}]]*/ {};
+
+  var mapData = new Map(Object.entries(serverData));
+
+  var labelsArray = Array.from(mapData.keys());
+  var datasArrays = Array.from(mapData.values());
+
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: labelsArray,
+      datasets: [{
+        label: '게시글 수',
+        data: datasArrays,
+        backgroundColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+    }
+  });
+  /*]]>*/
+</script>
+
+<div class="pie_graph_div">
+  <h3 class="pie_graph_h5">test</h3>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var ctx = document.getElementById('myChart');
+
+  var year2021 = {
+    label:'2021',
+    data:[10,8,6,5,12,7],
+    backgroundColor: `rgba(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},0.5)`,
+    borderColor:'#CBCE91',
+    borderWidth:1
+  }
+  var year2020 = {
+    label:'2020',
+    data:[5,10,5,3,4,2],
+    backgroundColor: `rgba(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},0.5)`,
+    borderColor:'#CBCE91',
+    borderWidth:1
+  }
+
+  var myChart = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      datasets:[
+        year2021,
+        year2020
+      ]
+    },
+    options:{
+      scales:{
+        x:{ //x축값 누적
+          stacked:true
+        },
+        y:{ //y축값 누적
+          stacked:true
+        },
+      },
+      maintainAspectRatio :false,//그래프의 비율 유지
+    }
+  });
+
+  var options = {
+    scales:{
+      x:{ //x축값 누적
+        stacked:true
+      },
+      y:{ //y축값 누적
+        stacked:true
+      },
+    }
+  }
+  /*]]>*/
+</script>
+-->
+<h1 class="managementTitle">관리자 페이지</h1>
+
+<div class="accumulatedBarGraphWrapper">
+    <div class="pie_graph_div">
+        <h3 class="pie_graph_h5">월별 게시글 등록 현황</h3>
+        <canvas id="accumulatedBarGraphByMonth"></canvas>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var ctx = document.getElementById('accumulatedBarGraphByMonth');
+        var yAxisObject = /*[[${YAxisMapMonths}]]*/{};
+        var xAxisDays = /*[[${XAxisMonths}]]*/{};
+
+        var yAxisDataSet = [];
+
+        for (var key in yAxisObject) {
+            var data = yAxisObject[key];
+            var item = {
+                label: key,
+                data: data,
+                backgroundColor: `rgba(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},0.5)`,
+                borderColor: '#CBCE91',
+                borderWidth: 1
+            }
+
+            yAxisDataSet.push(item);
+        }
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: xAxisDays,
+                datasets: yAxisDataSet
+            },
+            options: {
+                scales: {
+                    x: { //x축값 누적
+                        stacked: true
+                    },
+                    y: { //y축값 누적
+                        stacked: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    },
+                },
+                maintainAspectRatio: false,//그래프의 비율 유지
+            }
+        });
+
+        var options = {
+            scales: {
+                x: { //x축값 누적
+                    stacked: true
+                },
+                y: { //y축값 누적
+                    stacked: true
+                },
+            }
+        }
+        /*]]>*/
+    </script>
+
+    <div class="pie_graph_div">
+        <h3 class="pie_graph_h5">주별 게시글 등록 현황</h3>
+        <canvas id="accumulatedBarGraphByWeeks"></canvas>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var ctx = document.getElementById('accumulatedBarGraphByWeeks');
+        var yAxisObject = /*[[${YAxisMapWeeks}]]*/{};
+        var xAxisDays = /*[[${XAxisWeeks}]]*/{};
+
+        let newXAxisDays = xAxisDays.map((item) => item.replace(/\d{4}년\s/g, ""));
+
+        var yAxisDataSet = [];
+
+        for (var key in yAxisObject) {
+            var data = yAxisObject[key];
+            var item = {
+                label: key,
+                data: data,
+                backgroundColor: `rgba(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},0.5)`,
+                borderColor: '#CBCE91',
+                borderWidth: 1
+            }
+
+            yAxisDataSet.push(item);
+        }
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: newXAxisDays,
+                datasets: yAxisDataSet
+            },
+            options: {
+                scales: {
+                    x: { //x축값 누적
+                        stacked: true
+                    },
+                    y: { //y축값 누적
+                        stacked: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    },
+                },
+                maintainAspectRatio: false,//그래프의 비율 유지
+            }
+        });
+
+        var options = {
+            scales: {
+                x: { //x축값 누적
+                    stacked: true
+                },
+                y: { //y축값 누적
+                    stacked: true
+                },
+            }
+        }
+        /*]]>*/
+    </script>
+
+    <div class="pie_graph_div">
+        <h3 class="pie_graph_h5">일별 게시글 등록 현황</h3>
+        <canvas id="accumulatedBarGraphByDays"></canvas>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var ctx = document.getElementById('accumulatedBarGraphByDays');
+        var yAxisObject = /*[[${YAxisMapDays}]]*/{};
+        var xAxisDays = /*[[${XAxisDays}]]*/{};
+
+        var newXAxisDays2 = xAxisDays.map((item) => item.replace(/\d{4}년\s/g, ""));
+
+        var yAxisDataSet = [];
+
+        for (var key in yAxisObject) {
+            var data = yAxisObject[key];
+            var item = {
+                label: key,
+                data: data,
+                backgroundColor: `rgba(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},0.5)`,
+                borderColor: '#CBCE91',
+                borderWidth: 1
+            }
+
+            yAxisDataSet.push(item);
+        }
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: newXAxisDays2,
+                datasets: yAxisDataSet
+            },
+            options: {
+                scales: {
+                    x: { //x축값 누적
+                        stacked: true
+                    },
+                    y: { //y축값 누적
+                        stacked: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    },
+                },
+                maintainAspectRatio: false,//그래프의 비율 유지
+            }
+        });
+
+        var options = {
+            scales: {
+                x: { //x축값 누적
+                    stacked: true
+                },
+                y: { //y축값 누적
+                    stacked: true
+                },
+            }
+        }
+        /*]]>*/
+    </script>
+</div>
+
+<div class="managementListWrapper">
+    <div class="listWrapper">
+        <h3>회원 목록</h3>
+        <table class="table" id="userListTable">
+            <thead>
+            <tr>
+                <th id="userList_th1">보유 포인트</th>
+                <th id="userList_th2">Email</th>
+                <th id="userList_th3">닉네임</th>
+                <th id="userList_th4">가입일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="users : ${allUsersWithPaging}">
+                <th scope="row" th:text="${users.getPoint()}">1</th>
+                <td th:text="${users.getEmail()}">abcdefghijklmn@naver.com</td>
+                <td th:text="${users.getName()}">HappyPants166692</td>
+                <td th:text="${users.getDates().getUploadedTime()}">xxxx년 mm월 dd일</td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-danger">회원 삭제</button>
+        <nav style="text-align: center;">
+            <ul class="pagination" style="display: inline-flex;"
+                th:with="
+                start=${(allUsersWithPaging.number/maxPage)*maxPage + 1},
+                end=(${(allUsersWithPaging.totalPages == 0) ? 1 : (start + (maxPage - 1) < allUsersWithPaging.totalPages ? start + (maxPage - 1) : allUsersWithPaging.totalPages)})">
+                <li class="page-item" th:if="${start > 1}">
+                    <a class="page-link" th:href="@{/admin/main(page=0)}" th:text="'<<'"></a>
+                </li>
+                <li class="page-item" th:if="${start > 1}">
+                    <a class="page-link" th:href="@{/admin/main(page=${start - maxPage})}" th:text="'<'"></a>
+                </li>
+
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                    <a class="page-link" th:text="${page}" th:href="@{/admin/main(page=${page - 1})}"></a>
+                </li>
+
+                <li class="page-item" th:if="${end < allUsersWithPaging.totalPages}">
+                    <a class="page-link" th:href="@{/admin/main(page=${start + maxPage})}" th:text="'>'"></a>
+                </li>
+                <li class="page-item" th:if="${end < allUsersWithPaging.totalPages}">
+                    <a class="page-link" th:href="@{/admin/main(page=${allUsersWithPaging.totalPages - 1})}" th:text="'>>'"></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="listWrapper">
+        <h3>게시글 목록</h3>
+        <table class="table" id="postListTable">
+            <thead>
+            <tr>
+                <th id="postList_th1">게시글 번호</th>
+                <th id="postList_th2">포인트</th>
+                <th id="postList_th3">제목</th>
+                <th id="postList_th4">작성자</th>
+                <th id="postList_th5">작성일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="post : ${allPostWithPaging}">
+                <th scope="row" th:text="${post.getPostNumber()}">1</th>
+                <td th:text="${post.getPoint()}">500</td>
+                <td th:text="${post.getPostTitle()}">가나다라마바사아자차카타파하abcdefghijklmnopqrstuvwxyz</td>
+                <td th:text="${post.getPostedUser().getEmail()}">abcdefghijklmn@naver.com</td>
+                <td th:text="${post.getDates().getUploadedTime()}">xxxx년 mm월 dd일</td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-danger">게시글 삭제</button>
+        <nav style="text-align: center;">
+            <ul class="pagination" style="display: inline-flex;" th:with="start=${(allPostWithPaging.number/maxPage)*maxPage + 1}, end=(${(allPostWithPaging.totalPages == 0) ? 1 : (start + (maxPage - 1) < allPostWithPaging.totalPages ? start + (maxPage - 1) : allPostWithPaging.totalPages)})">
+                <li class="page-item" th:if="${start > 1}">
+                    <a class="page-link" th:href="@{/admin/main(page=0)}" th:text="'<<'"></a>
+                </li>
+                <li class="page-item" th:if="${start > 1}">
+                    <a class="page-link" th:href="@{/admin/main(page=${start - maxPage})}" th:text="'<'"></a>
+                </li>
+
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                    <a class="page-link" th:text="${page}" th:href="@{/admin/main(page=${page - 1})}"></a>
+                </li>
+
+                <li class="page-item" th:if="${end < allPostWithPaging.totalPages}">
+                    <a class="page-link" th:href="@{/admin/main(page=${start + maxPage})}" th:text="'>'"></a>
+                </li>
+                <li class="page-item" th:if="${end < allPostWithPaging.totalPages}">
+                    <a class="page-link" th:href="@{/admin/main(page=${allPostWithPaging.totalPages - 1})}" th:text="'>>'"></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="managementListWrapper">
+    <div class="listWrapper">
+        <h3>포인트 사용 목록</h3>
+        <table class="table" id="pointListTable">
+            <thead>
+            <tr>
+                <th id="pointList_th1">사용 번호</th>
+                <th id="pointList_th2">Email</th>
+                <th id="pointList_th3">사용내용</th>
+                <th id="pointList_th4">사용일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pointHistory : ${allPointHistory}">
+                <th scope="row" th:text="${pointHistory.getHistoryId()}">1</th>
+                <td th:text="${pointHistory.getUserId()}">abcdefghijklmn@naver.com</td>
+                <td th:text="${pointHistory.getContent()}">HappyPants166692</td>
+                <td th:text="${pointHistory.getSetUppedTime()}">xxxx년 mm월 dd일</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="listWrapper">
+        <h3>신고 목록</h3>
+        <table class="table" id="reportListTable">
+            <thead>
+            <tr>
+                <th id="reportListTable_th1">신고 번호</th>
+                <th id="reportListTable_th2">신고 대상</th>
+                <th id="reportListTable_th3">게시글 번호</th>
+                <th id="reportListTable_th4">댓글 번호</th>
+                <th id="reportListTable_th5">신고일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>abcdefghijklmn@naver.com</td>
+                <td>0</td>
+                <td>1</td>
+                <td>xxxx년 mm월 dd일</td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-danger">댓글 삭제</button>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-white text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+        <!-- Left -->
+        <div class="me-5 d-none d-lg-block">
+            <span>Get connected with us on social networks:</span>
+        </div>
+        <!-- Left -->
+
+        <!-- Right -->
+        <div>
+            <a href="" class="me-4 link-secondary">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="" class="me-4 link-secondary">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="" class="me-4 link-secondary">
+                <i class="fab fa-google"></i>
+            </a>
+            <a href="" class="me-4 link-secondary">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="" class="me-4 link-secondary">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="" class="me-4 link-secondary">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+        <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+
+    <!-- Section: Links  -->
+    <section class="">
+        <div class="container text-center text-md-start mt-5">
+            <!-- Grid row -->
+            <div class="row mt-3">
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <!-- Content -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        <i class="fas fa-gem me-3 text-secondary"></i>Company name
+                    </h6>
+                    <p>
+                        This is a side project website, and we're not generating any revenue yet.
+                        Thank you for your visit. :)
+                    </p>
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        Products
+                    </h6>
+                    <p>
+                        <a href="#!" class="text-reset">HTML, CSS, BOOTSTRAP</a>
+                    </p>
+                    <p>
+                        <a href="#!" class="text-reset">SPRING</a>
+                    </p>
+                    <p>
+                        <a href="#!" class="text-reset">JPA</a>
+                    </p>
+                    <p>
+                        <a href="#!" class="text-reset">MYSQL</a>
+                    </p>
+                </div>
+                <!-- Grid column -->
+
+
+                <!-- Grid column -->
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                    <p><i class="fas fa-home me-3 text-secondary"></i> Seoul, 129 Teheran-ro, KR</p>
+                    <p>
+                        <i class="fas fa-envelope me-3 text-secondary"></i>
+                        gurtjd97@naver.com
+                    </p>
+                    <p><i class="fas fa-phone me-3 text-secondary"></i> +82)10-2729-3646</p>
+                </div>
+                <!-- Grid column -->
+            </div>
+            <!-- Grid row -->
+        </div>
+    </section>
+    <!-- Section: Links  -->
+
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+        © 2021 Copyright:
+        <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<!-- Footer -->
+</body>
+</html>

@@ -37,4 +37,15 @@ public interface PostInfoCustomRepository {
     public PostInfo findPostForBestPostCommentsList(Long id);
 
     public List<PostInfo> findExpiredPost();
+
+    public List<PostInfo> findTodaysAllPost();
+
+    public List<PostInfo> findThisWeeksAllPost();
+
+    public List<PostInfo> findThisMonthAllPost();
+
+    public List<PostInfo> findThisYearsAllPost();
+
+    public Page<PostInfo> findAllWithPaging(Pageable pageable);
+
 }

@@ -25,8 +25,11 @@ import org.springframework.test.annotation.Rollback;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -414,5 +417,82 @@ public void findPostV4Test() throws Exception {
                 .fetch();
         //then
         Assertions.assertThat(expiredPosts).isEmpty();
+    }
+
+    @Test
+    public void findThisWeeksAllPostTest() {
+        List<PostInfo> fetch = jpaQueryFactory
+                .select(postInfo)
+                .from(postInfo)
+                .where(
+                        thisWeeks()
+                )
+                .fetch();
+
+        System.out.println();
+    }
+
+    public BooleanExpression thisWeeks() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY)).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(java.time.DayOfWeek.SUNDAY)).withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+
+        return postInfo.dates.uploadedTime.between(startOfWeek,endOfWeek);
+    }
+
+    @Test
+    public void findThisMonthAllPostTest() throws Exception {
+        //given
+        List<PostInfo> fetch = jpaQueryFactory.select(postInfo)
+                .from(postInfo)
+                .where(
+                        thisMonth()
+                )
+                .fetch();
+        //when
+
+        //then
+    }
+
+    public BooleanExpression thisMonth() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfMonth= now.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfMonth());
+
+        return postInfo.dates.uploadedTime.between(startOfMonth, endOfMonth);
+    }
+
+
+    @Test
+    public void countPostInfo() throws Exception {
+        //given
+        List<PostInfo> thisYearsPost =
+                jpaQueryFactory.select(postInfo)
+                        .from(postInfo)
+                        .where(
+                                thisYear()
+                        )
+                        .fetch();
+
+        LocalDateTime end = LocalDateTime.of(2023, 5, 31, 23, 59, 59);
+        LocalDateTime start = LocalDateTime.of(2023, 4, 30, 23, 59, 59);
+
+        //when
+        int count = (int) thisYearsPost.stream()
+                .filter(post -> post.getDates().getUploadedTime().isAfter(start) &&
+                        post.getDates().getUploadedTime().isBefore(end) &&
+                        post.getDtype().equals("STARCRAFT"))
+                .count();
+
+        //then
+        Assertions.assertThat(count).isNotZero();
+    }
+
+    private BooleanExpression thisYear() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfMonth= now.with(TemporalAdjusters.firstDayOfYear());
+        LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfYear());
+
+        return postInfo.dates.uploadedTime.between(startOfMonth, endOfMonth);
     }
 }

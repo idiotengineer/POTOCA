@@ -18,11 +18,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Api(tags = {"페이지 이동 API"})
 @Controller
@@ -63,8 +63,19 @@ public class MainpageController {
 
     @ApiOperation(value = "포인트 페이지")
     @GetMapping("/mypoint")
-    public String myPoint() {
+    public String myPoint(@CookieValue("users") Optional<Cookie> cookie,
+                          Model model) {
         LOGGER.info("포인트 페이지 접속");
+
+        Boolean logined = false;
+
+        Optional<Users> byId = userService.findById(cookie.get().getValue());
+        if (cookie.isPresent()) {
+            logined = true;
+            model.addAttribute(byId.get());
+        }
+
+        model.addAttribute("logined", logined);
         return "mypoint";
     }
 
@@ -149,7 +160,7 @@ public class MainpageController {
     }
 
     public String useTimeRemainingCalculator(LocalDateTime endTime) {
-        LocalDateTime startTime= LocalDateTime.now();
+        LocalDateTime startTime = LocalDateTime.now();
         Duration duration = Duration.between(startTime, endTime);
 
         long year = duration.getSeconds() / 31556926;

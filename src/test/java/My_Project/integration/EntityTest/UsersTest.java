@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -173,5 +174,17 @@ public class UsersTest {
             Assertions.fail("실패");
         }
         return;
+    }
+    
+    @Test
+    public void UserInfoTest() throws Exception {
+        //given
+        String s = "gurtjd97@naver.com";
+        //when
+
+        Optional<Users> byId = usersRepository.findById(s);
+        //then
+
+        System.out.println();
     }
 }

@@ -5,10 +5,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.sql.Time;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,5 +94,38 @@ public class AlgorithmeTest {
         LocalDateTime localDateTime = LocalDateTime.now().plusHours(1L);
 
         System.out.println(localDateTime);
+    }
+
+    @Test
+    public void timeFormatTets() throws Exception {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm:ss.SSS");
+        String format = LocalDateTime.now().format(formatter);
+
+        System.out.println(format);
+
+        String s =  "2023년 05월 09일";
+
+        LocalDateTime parse = LocalDateTime.parse(format,formatter);
+        System.out.println(parse);
+    }
+
+    @Test
+    public void timeGapCheckTest() throws Exception {
+        //given
+        LocalDateTime idx0 = LocalDateTime.of(2023, 5, 1, 0, 0, 0);
+        LocalDateTime idx1 = LocalDateTime.of(2023, 5, 2, 5, 43, 0);
+
+        //when
+        Duration duration = Duration.between(idx0, idx1);
+        Period period = Period.between(idx0.toLocalDate(), idx1.toLocalDate());
+
+        //then
+        if (duration.toDays() == 1) {
+            System.out.println("하루 차이");
+        } else if (duration.toDays() == 7) {
+            System.out.println("일주일 차이");
+        } else if (period.getMonths() == 1) {
+            System.out.println("한달 차이");
+        }
     }
 }

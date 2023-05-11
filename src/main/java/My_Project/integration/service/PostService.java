@@ -182,7 +182,7 @@ public class PostService {
             PostDto postDto;
 
             if (postInfoDto.getDtype().equals("regular")) {
-                postInfo = new PostInfo();
+                postInfo = new RegularPost();
             } else if(postInfoDto.getDtype().equals("LEAGUEOFLEGEND")){
                 postInfo = new LeagueOfLegendPost();
             } else if(postInfoDto.getDtype().equals("VALORANT")){
@@ -583,5 +583,30 @@ public class PostService {
     public void setPoint(Long id) {
         PostInfo postInfo = postRepository.findById(id).get();
         postInfo.setPoint(100L);
+    }
+
+    @Transactional
+    public List<PostInfo> findAllTodaysPost() {
+        return postRepository.findTodaysAllPost();
+    }
+
+    @Transactional
+    public List<PostInfo> findAllThisWeeksPost() {
+        return postRepository.findThisWeeksAllPost();
+    }
+
+    @Transactional
+    public List<PostInfo> findAllThisMonthPost() {
+        return postRepository.findThisMonthAllPost();
+    }
+
+    @Transactional
+    public List<PostInfo> findThisYearsPost() {
+        return postRepository.findThisYearsAllPost();
+    }
+
+    @Transactional
+    public Page<PostInfo> findPostAllWithPaging(Pageable pageable) {
+        return postRepository.findAllWithPaging(pageable);
     }
 }

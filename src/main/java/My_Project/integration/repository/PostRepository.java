@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,4 +44,5 @@ public interface PostRepository extends JpaRepository<PostInfo,Long>, PostInfoCu
             attributePaths = {"postLikeAndDislike", "postLikeAndDislike.liked"}
     )
     public Optional<PostInfo> findPostByPostNumber(Long postNumber);
+
 }
