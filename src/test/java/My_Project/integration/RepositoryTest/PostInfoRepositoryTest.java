@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
@@ -494,5 +495,15 @@ public void findPostV4Test() throws Exception {
         LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfYear());
 
         return postInfo.dates.uploadedTime.between(startOfMonth, endOfMonth);
+    }
+
+    @Test
+    public void findAllWithPagingTest() throws Exception {
+        //given
+        PageRequest of = PageRequest.of(1, 5);
+        //when
+        Page<PostInfo> allWithPaging = postRepository.findAllWithPaging(of);
+        //then
+        System.out.println();
     }
 }

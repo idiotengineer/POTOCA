@@ -2,16 +2,22 @@ package My_Project.integration.controller;
 
 import My_Project.integration.entity.PointHistory;
 import My_Project.integration.entity.PostInfo;
+import My_Project.integration.entity.Report;
 import My_Project.integration.entity.Users;
 import My_Project.integration.service.PointService;
 import My_Project.integration.service.PostService;
+import My_Project.integration.service.ReportService;
 import My_Project.integration.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -31,8 +37,24 @@ public class ManagementController {
     @Autowired
     PointService pointService;
 
+    @Autowired
+    ReportService reportService;
+
     @GetMapping("/management")
-    public String management(Model model) {
+    public String management(
+            @Qualifier("pageable1") @PageableDefault(size = 5) Pageable pageable1,
+            @Qualifier("pageable2") @PageableDefault(size = 5) Pageable pageable2,
+            @Qualifier("pageable3") @PageableDefault(size = 5) Pageable pageable3,
+            @Qualifier("pageable4") @PageableDefault(size = 5) Pageable pageable4,
+
+            @RequestParam(name = "pageable1.page", defaultValue = "0") int pageable1Page,
+            @RequestParam(name = "pageable2.page", defaultValue = "0") int pageable2Page,
+            @RequestParam(name = "pageable3.page", defaultValue = "0") int pageable3Page,
+            @RequestParam(name = "pageable4.page", defaultValue = "0") int pageable4Page,
+
+            Model model) {
+
+
 //        List<PostInfo> allTodaysPost = postService.findAllTodaysPost();
 //        List<PostInfo> allThisWeeksPost = postService.findAllThisWeeksPost();
 //        List<PostInfo> allThisMonthPost = postService.findAllThisMonthPost();
@@ -73,23 +95,52 @@ public class ManagementController {
 
         //------------------------------------------------------ 누적막대그래프 메서드 ------------------------------------------------------
 
-        PageRequest of = PageRequest.of(0, 5);
+        if (pageable1Page > 0) {
+            PageRequest of = PageRequest.of(pageable1Page, 5);
+            Page<Users> allUsersWithPaging = userService.findAllUsersWithPaging(of);
 
-        Page<Users> allUsersWithPaging = userService.findAllUsersWithPaging(of);
-        model.addAttribute("allUsersWithPaging",allUsersWithPaging);
-        model.addAttribute("maxPage",5);
+        } else {
+            Page<Users> allUsersWithPaging = userService.findAllUsersWithPaging(pageable1);
+            model.addAttribute("allUsersWithPaging", allUsersWithPaging);
+        }
+
+        model.addAttribute("maxPage", 5);
 
         //------------------------------------------------------ 회원 목록 메서드 ------------------------------------------------------
 
-        Page<PostInfo> postAllWithPaging = postService.findPostAllWithPaging(of);
-        model.addAttribute("allPostWithPaging",postAllWithPaging);
-
+        if (pageable2Page > 0) {
+            PageRequest of = PageRequest.of(pageable2Page, 5);
+            Page<PostInfo> postAllWithPaging = postService.findPostAllWithPaging(of);
+            model.addAttribute("allPostWithPaging", postAllWithPaging);
+        } else {
+            Page<PostInfo> postAllWithPaging = postService.findPostAllWithPaging(pageable2);
+            model.addAttribute("allPostWithPaging", postAllWithPaging);
+        }
         //------------------------------------------------------ 게시글 목록 메서드 ------------------------------------------------------
 
-        Page<PointHistory> allPointHistory = pointService.findAllPointHistoryWithPaging(of);
-        model.addAttribute("allPointHistory", allPointHistory);
+        if (pageable3Page > 0) {
+            PageRequest of = PageRequest.of(pageable3Page, 5);
+            Page<PointHistory> allPointHistory = pointService.findAllPointHistoryWithPaging(of);
+            model.addAttribute("allPointHistory", allPointHistory);
+        } else {
+            Page<PointHistory> allPointHistory = pointService.findAllPointHistoryWithPaging(pageable3);
+            model.addAttribute("allPointHistory", allPointHistory);
+        }
 
         //------------------------------------------------------ 포인트 사용 목록 메서드 ------------------------------------------------------
+        if (pageable4Page > 0) {
+            PageRequest of = PageRequest.of(pageable4Page, 5);
+            Page<Report> allReportWithPaging = reportService.findAllWithPaging(of);
+            model.addAttribute("allReportWithPaging", allReportWithPaging);
+        } else {
+            Page<Report> allReportWithPaging = reportService.findAllWithPaging(pageable4);
+            model.addAttribute("allReportWithPaging", allReportWithPaging);
+        }
+
+
+        //------------------------------------------------------ 신고 목록 메서드 ------------------------------------------------------
+
+
         return "management";
     }
 

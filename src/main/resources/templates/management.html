@@ -433,6 +433,7 @@
         <table class="table" id="userListTable">
             <thead>
             <tr>
+                <th>선택</th>
                 <th id="userList_th1">보유 포인트</th>
                 <th id="userList_th2">Email</th>
                 <th id="userList_th3">닉네임</th>
@@ -441,7 +442,8 @@
             </thead>
             <tbody>
             <tr th:each="users : ${allUsersWithPaging}">
-                <th scope="row" th:text="${users.getPoint()}">1</th>
+                <td><input type="checkbox"></td>
+                <td scope="row" th:text="${users.getPoint()}">1</td>
                 <td th:text="${users.getEmail()}">abcdefghijklmn@naver.com</td>
                 <td th:text="${users.getName()}">HappyPants166692</td>
                 <td th:text="${users.getDates().getUploadedTime()}">xxxx년 mm월 dd일</td>
@@ -455,21 +457,21 @@
                 start=${(allUsersWithPaging.number/maxPage)*maxPage + 1},
                 end=(${(allUsersWithPaging.totalPages == 0) ? 1 : (start + (maxPage - 1) < allUsersWithPaging.totalPages ? start + (maxPage - 1) : allUsersWithPaging.totalPages)})">
                 <li class="page-item" th:if="${start > 1}">
-                    <a class="page-link" th:href="@{/admin/main(page=0)}" th:text="'<<'"></a>
+                    <a class="page-link" th:href="@{/management(pageable1.page=0)}" th:text="'<<'"></a>
                 </li>
                 <li class="page-item" th:if="${start > 1}">
-                    <a class="page-link" th:href="@{/admin/main(page=${start - maxPage})}" th:text="'<'"></a>
+                    <a class="page-link" th:href="@{/management(pageable1.page=${start - maxPage})}" th:text="'<'"></a>
                 </li>
 
                 <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                    <a class="page-link" th:text="${page}" th:href="@{/admin/main(page=${page - 1})}"></a>
+                    <a class="page-link" th:text="${page}" th:href="@{/management(pageable1.page=${page - 1})}"></a>
                 </li>
 
                 <li class="page-item" th:if="${end < allUsersWithPaging.totalPages}">
-                    <a class="page-link" th:href="@{/admin/main(page=${start + maxPage})}" th:text="'>'"></a>
+                    <a class="page-link" th:href="@{/management(pageable1.page=${start + maxPage})}" th:text="'>'"></a>
                 </li>
                 <li class="page-item" th:if="${end < allUsersWithPaging.totalPages}">
-                    <a class="page-link" th:href="@{/admin/main(page=${allUsersWithPaging.totalPages - 1})}" th:text="'>>'"></a>
+                    <a class="page-link" th:href="@{/management(pageable1.page=${allUsersWithPaging.totalPages - 1})}" th:text="'>>'"></a>
                 </li>
             </ul>
         </nav>
@@ -480,6 +482,7 @@
         <table class="table" id="postListTable">
             <thead>
             <tr>
+                <th>선택</th>
                 <th id="postList_th1">게시글 번호</th>
                 <th id="postList_th2">포인트</th>
                 <th id="postList_th3">제목</th>
@@ -489,7 +492,8 @@
             </thead>
             <tbody>
             <tr th:each="post : ${allPostWithPaging}">
-                <th scope="row" th:text="${post.getPostNumber()}">1</th>
+                <td><input type="checkbox"></td>
+                <td th:text="${post.getPostNumber()}">1</td>
                 <td th:text="${post.getPoint()}">500</td>
                 <td th:text="${post.getPostTitle()}">가나다라마바사아자차카타파하abcdefghijklmnopqrstuvwxyz</td>
                 <td th:text="${post.getPostedUser().getEmail()}">abcdefghijklmn@naver.com</td>
@@ -501,21 +505,21 @@
         <nav style="text-align: center;">
             <ul class="pagination" style="display: inline-flex;" th:with="start=${(allPostWithPaging.number/maxPage)*maxPage + 1}, end=(${(allPostWithPaging.totalPages == 0) ? 1 : (start + (maxPage - 1) < allPostWithPaging.totalPages ? start + (maxPage - 1) : allPostWithPaging.totalPages)})">
                 <li class="page-item" th:if="${start > 1}">
-                    <a class="page-link" th:href="@{/admin/main(page=0)}" th:text="'<<'"></a>
+                    <a class="page-link" th:href="@{/management(pageable2.page=0)}" th:text="'<<'"></a>
                 </li>
                 <li class="page-item" th:if="${start > 1}">
-                    <a class="page-link" th:href="@{/admin/main(page=${start - maxPage})}" th:text="'<'"></a>
+                    <a class="page-link" th:href="@{/management(pageable2.page=${start - maxPage})}" th:text="'<'"></a>
                 </li>
 
                 <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                    <a class="page-link" th:text="${page}" th:href="@{/admin/main(page=${page - 1})}"></a>
+                    <a class="page-link" th:text="${page}" th:href="@{/management(pageable2.page=${page - 1})}"></a>
                 </li>
 
                 <li class="page-item" th:if="${end < allPostWithPaging.totalPages}">
-                    <a class="page-link" th:href="@{/admin/main(page=${start + maxPage})}" th:text="'>'"></a>
+                    <a class="page-link" th:href="@{/management(pageable2.page=${start + maxPage})}" th:text="'>'"></a>
                 </li>
                 <li class="page-item" th:if="${end < allPostWithPaging.totalPages}">
-                    <a class="page-link" th:href="@{/admin/main(page=${allPostWithPaging.totalPages - 1})}" th:text="'>>'"></a>
+                    <a class="page-link" th:href="@{/management(pageable2.page=${allPostWithPaging.totalPages - 1})}" th:text="'>>'"></a>
                 </li>
             </ul>
         </nav>
@@ -536,13 +540,34 @@
             </thead>
             <tbody>
             <tr th:each="pointHistory : ${allPointHistory}">
-                <th scope="row" th:text="${pointHistory.getHistoryId()}">1</th>
+                <td th:text="${pointHistory.getHistoryId()}">1</td>
                 <td th:text="${pointHistory.getUserId()}">abcdefghijklmn@naver.com</td>
                 <td th:text="${pointHistory.getContent()}">HappyPants166692</td>
                 <td th:text="${pointHistory.getSetUppedTime()}">xxxx년 mm월 dd일</td>
             </tr>
             </tbody>
         </table>
+        <nav style="text-align: center;">
+            <ul class="pagination" style="display: inline-flex;" th:with="start=${(allPointHistory.number/maxPage)*maxPage + 1}, end=(${(allPointHistory.totalPages == 0) ? 1 : (start + (maxPage - 1) < allPointHistory.totalPages ? start + (maxPage - 1) : allPointHistory.totalPages)})">
+                <li class="page-item" th:if="${start > 1}">
+                    <a class="page-link" th:href="@{/management(pageable3.page=0)}" th:text="'<<'"></a>
+                </li>
+                <li class="page-item" th:if="${start > 1}">
+                    <a class="page-link" th:href="@{/management(pageable3.page=${start - maxPage})}" th:text="'<'"></a>
+                </li>
+
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                    <a class="page-link" th:text="${page}" th:href="@{/management(pageable3.page=${page - 1})}"></a>
+                </li>
+
+                <li class="page-item" th:if="${end < allPointHistory.totalPages}">
+                    <a class="page-link" th:href="@{/management(pageable3.page=${start + maxPage})}" th:text="'>'"></a>
+                </li>
+                <li class="page-item" th:if="${end < allPointHistory.totalPages}">
+                    <a class="page-link" th:href="@{/management(pageable3.page=${allPointHistory.totalPages - 1})}" th:text="'>>'"></a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <div class="listWrapper">
@@ -550,24 +575,46 @@
         <table class="table" id="reportListTable">
             <thead>
             <tr>
+                <th>선택</th>
                 <th id="reportListTable_th1">신고 번호</th>
-                <th id="reportListTable_th2">신고 대상</th>
-                <th id="reportListTable_th3">게시글 번호</th>
-                <th id="reportListTable_th4">댓글 번호</th>
+                <th id="reportListTable_th2">신고 타입</th>
+                <th id="reportListTable_th3">대상 번호</th>
+                <th id="reportListTable_th4">신고자</th>
                 <th id="reportListTable_th5">신고일자</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>abcdefghijklmn@naver.com</td>
-                <td>0</td>
-                <td>1</td>
-                <td>xxxx년 mm월 dd일</td>
+            <tr th:each="report : ${allReportWithPaging}">
+                <td><input type="checkbox"></td>
+                <td th:text="${report.getId()}">abcdefghijklmn@naver.com</td>
+                <td th:text="${report.getDtype()}">0</td>
+                <td th:text="${report.getReportedUser().getName()}">1</td>
+                <td th:text="${report.getReportedTime()}">xxxx년 mm월 dd일</td>
             </tr>
             </tbody>
         </table>
         <button class="btn btn-danger">댓글 삭제</button>
+        <nav style="text-align: center;">
+            <ul class="pagination" style="display: inline-flex;" th:with="start=${(allReportWithPaging.number/maxPage)*maxPage + 1}, end=(${(allReportWithPaging.totalPages == 0) ? 1 : (start + (maxPage - 1) < allReportWithPaging.totalPages ? start + (maxPage - 1) : allReportWithPaging.totalPages)})">
+                <li class="page-item" th:if="${start > 1}">
+                    <a class="page-link" th:href="@{/management(pageable4.page=0)}" th:text="'<<'"></a>
+                </li>
+                <li class="page-item" th:if="${start > 1}">
+                    <a class="page-link" th:href="@{/management(pageable4.page=${start - maxPage})}" th:text="'<'"></a>
+                </li>
+
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                    <a class="page-link" th:text="${page}" th:href="@{/management(pageable4.page=${page - 1})}"></a>
+                </li>
+
+                <li class="page-item" th:if="${end < allReportWithPaging.totalPages}">
+                    <a class="page-link" th:href="@{/management(pageable4.page=${start + maxPage})}" th:text="'>'"></a>
+                </li>
+                <li class="page-item" th:if="${end < allReportWithPaging.totalPages}">
+                    <a class="page-link" th:href="@{/management(pageable4.page=${allReportWithPaging.totalPages - 1})}" th:text="'>>'"></a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 

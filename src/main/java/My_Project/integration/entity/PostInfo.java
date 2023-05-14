@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 @Builder
-public class PostInfo {
+public class PostInfo{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -607,9 +607,9 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .select(postInfo)
                 .from(postInfo)
                 .join(postInfo.postedUser, users).fetchJoin()
+                .orderBy(postInfo.dates.uploadedTime.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(postInfo.dates.uploadedTime.desc())
                 .fetch();
 
         long l = jpaQueryFactory
