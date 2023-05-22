@@ -618,4 +618,19 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
 
         return new PageImpl<>(fetch,pageable,l);
     }
+
+    public List<PostInfo> findPostList(List<Long> postNumberList) {
+        return
+                jpaQueryFactory
+                        .selectFrom(postInfo)
+                        .join(postInfo.postedUser, users).fetchJoin()
+                        .leftJoin(postInfo.photo, photo).fetchJoin()
+                        .leftJoin(photo.postInfo).fetchJoin()
+                        .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                        .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                        .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+//                        .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+                        .where(postInfo.postNumber.in(postNumberList))
+                        .fetch();
+    }
 }

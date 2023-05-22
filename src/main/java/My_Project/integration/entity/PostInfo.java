@@ -25,7 +25,7 @@ public class PostInfo{
     private Long postNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "email")
     private Users postedUser;
 
     @Column(name = "post_title", length = 50, nullable = false)

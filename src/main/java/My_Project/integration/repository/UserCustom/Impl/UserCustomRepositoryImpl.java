@@ -81,4 +81,13 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 
         return new PageImpl<>(fetch, pageable, l);
     }
+
+    public long deleteUserList(List<String> userEmailList) {
+
+
+        return jpaQueryFactory
+                .delete(users)
+                .where(users.email.in(userEmailList))
+                .execute();
+    }
 }

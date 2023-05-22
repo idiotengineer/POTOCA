@@ -98,5 +98,8 @@ public class UserService {
         return usersRepository.findAllUsersWithPaging(pageable);
     }
 
-
+    @Transactional
+    public long deleteUserList(List<String> userEmailList) {
+        return usersRepository.deleteUserList(userEmailList);
+    }
 }

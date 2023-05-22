@@ -14,10 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -344,5 +345,19 @@ public class ManagementController {
         } else {
             return "months";
         }
+    }
+
+    @ResponseBody
+    @PostMapping("deletePostList")
+    public ResponseEntity<Long> deletePostList(@RequestBody List<Long> postNumberList) {
+        long l = postService.deletePostList(postNumberList);
+        return new ResponseEntity<Long>(l, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping("deleteUsersList")
+    public ResponseEntity<Long> deleteUserList(@RequestBody List<String> userEmailList) {
+        long l = userService.deleteUserList(userEmailList);
+        return new ResponseEntity<Long>(l, HttpStatus.OK);
     }
 }

@@ -19,7 +19,74 @@
         integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
         crossorigin="anonymous"></script>
 
+<script>
+    function usersDelete() {
+        var table = document.getElementById('userListTable'); // table_id에는 테이블의 id를 넣어줍니다.
+        var trs = table.querySelectorAll('tr'); // table 내부의 모든 tr 태그를 가져옵니다.
 
+        var checkedRows = []; // 체크된 row들을 저장할 배열을 만듭니다.
+        var userEmailList = [];
+
+        // 각각의 tr 태그를 순회하면서 체크된 row를 checkedRows에 추가합니다.
+        trs.forEach(tr => {
+            var checkbox = tr.querySelector('td input[type="checkbox"]');
+            if (checkbox && checkbox.checked) {
+                checkedRows.push(tr);
+                userEmailList.push(tr.querySelectorAll('td')[2].innerHTML);
+            }
+        });
+
+        fetch('deleteUsersList', {
+            method: 'POST', // HTTP 요청 메서드 (POST, GET, PUT, DELETE 등)
+            headers: {
+                'Content-Type': 'application/json', // 전송할 데이터의 타입 (JSON 형식)
+            },
+            body: JSON.stringify(userEmailList), // 전송할 데이터를 JSON 형식으로 변환하여 body에 설정
+        })
+            .then(response => response.json()) // 서버로부터의 응답을 JSON 형식으로 파싱
+            .then(data => {
+                alert(data + '개의 데이터를 수정하였습니다.'); // 서버로부터 받은 응답 데이터 출력
+                // 응답에 대한 추가적인 처리 작업 수행 가능
+            })
+            .catch(error => {
+                console.error('요청 실패:', error); // 요청 실패 시 에러 처리
+            });
+    }
+
+    function postDelete() {
+        var table = document.getElementById('postListTable'); // table_id에는 테이블의 id를 넣어줍니다.
+        var trs = table.querySelectorAll('tr'); // table 내부의 모든 tr 태그를 가져옵니다.
+
+        var checkedRows = []; // 체크된 row들을 저장할 배열을 만듭니다.
+        var postNumberList = [];
+
+        // 각각의 tr 태그를 순회하면서 체크된 row를 checkedRows에 추가합니다.
+        trs.forEach(tr => {
+            var checkbox = tr.querySelector('td input[type="checkbox"]');
+            if (checkbox && checkbox.checked) {
+                checkedRows.push(tr);
+                postNumberList.push(tr.querySelectorAll('td')[1].innerHTML);
+            }
+        });
+
+        fetch('deletePostList', {
+            method: 'POST', // HTTP 요청 메서드 (POST, GET, PUT, DELETE 등)
+            headers: {
+                'Content-Type': 'application/json', // 전송할 데이터의 타입 (JSON 형식)
+            },
+            body: JSON.stringify(postNumberList), // 전송할 데이터를 JSON 형식으로 변환하여 body에 설정
+        })
+            .then(response => response.json()) // 서버로부터의 응답을 JSON 형식으로 파싱
+            .then(data => {
+                alert(data + '개의 데이터를 수정하였습니다.'); // 서버로부터 받은 응답 데이터 출력
+                // 응답에 대한 추가적인 처리 작업 수행 가능
+            })
+            .catch(error => {
+                console.error('요청 실패:', error); // 요청 실패 시 에러 처리
+            });
+
+    }
+</script>
 <nav style="position: relative" class="navbar bg-light fixed-top" id="container-fluid_custom">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -441,7 +508,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="users : ${allUsersWithPaging}">
+            <tr th:each="users, i : ${allUsersWithPaging}">
                 <td><input type="checkbox"></td>
                 <td scope="row" th:text="${users.getPoint()}">1</td>
                 <td th:text="${users.getEmail()}">abcdefghijklmn@naver.com</td>
@@ -450,7 +517,7 @@
             </tr>
             </tbody>
         </table>
-        <button class="btn btn-danger">회원 삭제</button>
+        <button class="btn btn-danger" th:onclick="usersDelete()">회원 삭제</button>
         <nav style="text-align: center;">
             <ul class="pagination" style="display: inline-flex;"
                 th:with="
@@ -501,7 +568,7 @@
             </tr>
             </tbody>
         </table>
-        <button class="btn btn-danger">게시글 삭제</button>
+        <button class="btn btn-danger" onclick="postDelete()">게시글 삭제</button>
         <nav style="text-align: center;">
             <ul class="pagination" style="display: inline-flex;" th:with="start=${(allPostWithPaging.number/maxPage)*maxPage + 1}, end=(${(allPostWithPaging.totalPages == 0) ? 1 : (start + (maxPage - 1) < allPostWithPaging.totalPages ? start + (maxPage - 1) : allPostWithPaging.totalPages)})">
                 <li class="page-item" th:if="${start > 1}">

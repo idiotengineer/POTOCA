@@ -8,7 +8,6 @@ import My_Project.integration.entity.ResponseDto.PostInfoResponseDto;
 import My_Project.integration.entity.ResponseDto.PostLikeAndDislikeDto;
 import My_Project.integration.repository.*;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,13 +18,11 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Transient;
 import javax.servlet.http.Cookie;
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
-import javax.xml.stream.events.Comment;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -608,5 +605,47 @@ public class PostService {
     @Transactional
     public Page<PostInfo> findPostAllWithPaging(Pageable pageable) {
         return postRepository.findAllWithPaging(pageable);
+    }
+
+    @Transactional
+    public long deletePostList(List<Long> postNumberList) {
+        List<PostInfo> postList = postRepository.findPostList(postNumberList);
+        AtomicInteger count = new AtomicInteger();
+
+        postList
+                .stream()
+                .forEach(
+                        (postInfo) -> {
+                            PostLikeAndDislike postLikeAndDislike = postInfo.getPostLikeAndDislike();
+
+                            if (postLikeAndDislike != null) {
+                                //            postLikeAndDislike.setPostInfo(null);
+                                for (Liked liked : postLikeAndDislike.getLiked()) {
+                                    liked.setPostLikeAndDislike(null);
+                                }
+                                for (DisLiked disLiked : postLikeAndDislike.getDisLiked()) {
+                                    disLiked.setPostLikeAndDislike(null);
+                                }
+                            }
+                            postInfo.setPostLikeAndDislike(null);
+
+
+                            Set<PostComments> comments = postInfo.getComments();
+                            for (PostComments comment : comments) {
+                                comment.setPostInfo(null);
+                                comment.setPostLikeAndDislike(null);
+                            }
+
+                            Set<Photo> photo = postInfo.getPhoto();
+                            for (Photo photo1 : photo) {
+                                photo1.setPostInfo(null);
+                            }
+
+                            em.remove(postInfo);
+                            count.getAndIncrement();
+                        }
+                );
+
+        return count.get();
     }
 }

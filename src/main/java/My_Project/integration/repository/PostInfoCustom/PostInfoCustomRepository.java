@@ -48,4 +48,5 @@ public interface PostInfoCustomRepository {
 
     public Page<PostInfo> findAllWithPaging(Pageable pageable);
 
+    public List<PostInfo> findPostList(List<Long> postNumberList);
 }

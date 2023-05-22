@@ -6,10 +6,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserCustomRepository {
 
     boolean duplicateCheck(Users users);
 
     public Page<Users> findAllUsersWithPaging(Pageable pageable);
+
+    public long deleteUserList(List<String> userEmailList);
 }
