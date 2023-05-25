@@ -18,6 +18,12 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 
+import static My_Project.integration.entity.QDisLiked.disLiked;
+import static My_Project.integration.entity.QLiked.liked;
+import static My_Project.integration.entity.QPointHistory.pointHistory;
+import static My_Project.integration.entity.QPostInfo.postInfo;
+import static My_Project.integration.entity.QUsers.users;
+
 @SpringBootTest
 @Transactional
 @DisplayName("회원 도메인 테스트")

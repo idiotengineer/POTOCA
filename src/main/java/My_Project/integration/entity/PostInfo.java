@@ -3,6 +3,7 @@ package My_Project.integration.entity;
 import My_Project.integration.entity.Dto.PostInfoDto;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class PostInfo{
     private Long postNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "email")
+    @JoinColumn
     private Users postedUser;
 
     @Column(name = "post_title", length = 50, nullable = false)

@@ -58,7 +58,6 @@ public class MyScheduler {
                                                 .forEach(
                                                         (postComments) -> {
                                                             Users users = usersRepository.findUsersByEmail(postComments.getPostCommentedUsersEmail()).get();
-
                                                             Long point1 = users.getPoint() + point;
                                                             users.setPoint(point1);
                                                         }

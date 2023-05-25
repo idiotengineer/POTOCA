@@ -633,4 +633,27 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                         .where(postInfo.postNumber.in(postNumberList))
                         .fetch();
     }
+
+    public List<PostInfo> findPostListByUsersEmail(List<String> userEmailList) {
+        return
+                jpaQueryFactory
+                        .selectFrom(postInfo)
+                        .join(postInfo.postedUser, users).fetchJoin()
+                        .leftJoin(postInfo.photo, photo).fetchJoin()
+                        .leftJoin(photo.postInfo).fetchJoin()
+                        .join(postInfo.postLikeAndDislike, postLikeAndDislike).fetchJoin()
+                        .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                        .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
+//                        .leftJoin(postLikeAndDislike.postInfo).fetchJoin()
+                        .where(postInfo.postedUser.email.in(userEmailList))
+                        .fetch();
+    }
+
+    public long deletePostList(List<Long> postNumberList) {
+        return
+                jpaQueryFactory
+                        .delete(postInfo)
+                        .where(postInfo.postNumber.in(postNumberList))
+                        .execute();
+    }
 }

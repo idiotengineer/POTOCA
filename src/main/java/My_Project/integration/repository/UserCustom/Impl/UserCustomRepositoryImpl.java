@@ -1,6 +1,6 @@
 package My_Project.integration.repository.UserCustom.Impl;
 
-import My_Project.integration.entity.Users;
+import My_Project.integration.entity.*;
 import My_Project.integration.repository.UserCustom.UserCustomRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,13 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static My_Project.integration.entity.QBigComments.bigComments;
+import static My_Project.integration.entity.QDisLiked.*;
+import static My_Project.integration.entity.QLiked.*;
+import static My_Project.integration.entity.QPointHistory.*;
+import static My_Project.integration.entity.QPostComments.*;
+import static My_Project.integration.entity.QPostInfo.postInfo;
+import static My_Project.integration.entity.QPostLikeAndDislike.postLikeAndDislike;
 import static My_Project.integration.entity.QUsers.users;
 
 @RequiredArgsConstructor
@@ -83,11 +90,27 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     }
 
     public long deleteUserList(List<String> userEmailList) {
-
+//        long execute = jpaQueryFactory
+//                .delete(postInfo)
+//                .where(postInfo.postedUser.email.in(userEmailList))
+//                .execute();
 
         return jpaQueryFactory
                 .delete(users)
                 .where(users.email.in(userEmailList))
                 .execute();
+    }
+
+    public List<Users> findUserByEmailList(List<String> userEmailList) {
+        return jpaQueryFactory
+                .select(users)
+                .from(users)
+                .leftJoin(users.disLiked, disLiked).fetchJoin()
+                .leftJoin(users.pointHistories, pointHistory).fetchJoin()
+                .leftJoin(users.uploadedPost, postInfo).fetchJoin()
+                .leftJoin(users.liked, liked).fetchJoin()
+                .where(users.email.in(userEmailList))
+                .distinct()
+                .fetch();
     }
 }

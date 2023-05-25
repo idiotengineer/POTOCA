@@ -17,7 +17,7 @@ public class BigComments {
     @Column(name = "big_comments_number")
     private Long bigCommentsNumber;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users")
     private Users bigCommentedUser;
 

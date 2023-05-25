@@ -45,22 +45,26 @@ public class Users {
     @Column(name = "point")
     private Long point;
 
-    @OneToMany(mappedBy = "postedUser")
-    private List<PostInfo> uploadedPost = new ArrayList<>();
+    @OneToMany(mappedBy = "postedUser", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<PostInfo> uploadedPost = new HashSet<>();
 
-    @OneToMany(mappedBy = "userId")
-    private List<PointHistory> pointHistories = new ArrayList<>();
+    @OneToMany(mappedBy = "userId", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<PointHistory> pointHistories = new HashSet<>();
 
     @Embedded
     private Dates dates;
 
     @OneToMany(
-            mappedBy = "users"
+            mappedBy = "users",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private Set<Liked> liked = new HashSet<>();
 
     @OneToMany(
-            mappedBy = "users"
+            mappedBy = "users",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private Set<DisLiked> disLiked = new HashSet<>();
 
@@ -83,8 +87,8 @@ public class Users {
 
         this.setAddress(address);
 
-        List<PostInfo> postInfoList = new ArrayList<>();
-        List<PointHistory> pointHistoryList = new ArrayList<>();
+        Set<PostInfo> postInfoList = new HashSet<>();
+        Set<PointHistory> pointHistoryList = new HashSet<>();
 
         this.setUploadedPost(postInfoList);
         this.setPointHistories(pointHistoryList);

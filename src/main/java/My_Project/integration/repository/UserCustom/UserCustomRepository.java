@@ -16,4 +16,7 @@ public interface UserCustomRepository {
     public Page<Users> findAllUsersWithPaging(Pageable pageable);
 
     public long deleteUserList(List<String> userEmailList);
+
+    public List<Users> findUserByEmailList(List<String> userEmailList);
+
 }

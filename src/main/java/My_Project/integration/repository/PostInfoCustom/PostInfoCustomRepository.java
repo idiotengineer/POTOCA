@@ -49,4 +49,8 @@ public interface PostInfoCustomRepository {
     public Page<PostInfo> findAllWithPaging(Pageable pageable);
 
     public List<PostInfo> findPostList(List<Long> postNumberList);
+
+    public long deletePostList(List<Long> postNumberList);
+
+    public List<PostInfo> findPostListByUsersEmail(List<String> userEmailList);
 }
