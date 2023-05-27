@@ -655,12 +655,15 @@
                 <td><input type="checkbox"></td>
                 <td th:text="${report.getId()}">abcdefghijklmn@naver.com</td>
                 <td th:text="${report.getDtype()}">0</td>
+                <td th:if="${report.getDtype().equals('POST')}" th:text="${report.getPostInfo().getPostNumber()}"></td>
+                <td th:if="${report.getDtype().equals('COMMENT')}" th:text="${report.getPostComments().getCommentNumber()}"></td>
+                <td th:if="${report.getDtype().equals('BIGCOMMENT')}" th:text="${report.getBigComments().getBigCommentsNumber()}"></td>
                 <td th:text="${report.getReportedUser().getName()}">1</td>
                 <td th:text="${report.getReportedTime()}">xxxx년 mm월 dd일</td>
             </tr>
             </tbody>
         </table>
-        <button class="btn btn-danger">댓글 삭제</button>
+<!--        <button class="btn btn-danger">댓글 삭제</button>-->
         <nav style="text-align: center;">
             <ul class="pagination" style="display: inline-flex;" th:with="start=${(allReportWithPaging.number/maxPage)*maxPage + 1}, end=(${(allReportWithPaging.totalPages == 0) ? 1 : (start + (maxPage - 1) < allReportWithPaging.totalPages ? start + (maxPage - 1) : allReportWithPaging.totalPages)})">
                 <li class="page-item" th:if="${start > 1}">

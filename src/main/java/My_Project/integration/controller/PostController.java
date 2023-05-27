@@ -42,6 +42,9 @@ public class PostController {
     @Autowired
     BigCommentsService bigCommentsService;
 
+    @Autowired
+    ReportService reportService;
+
     @PostMapping(value = "/post_execute2", consumes = {"multipart/form-data"})
     public String create(
             @RequestPart(value = "image", required = false) List<MultipartFile> files,
@@ -379,9 +382,8 @@ public class PostController {
         }
     }
 
-
-//    public boolean likedButtonCheckedWhether(Set<Liked> set,Optional<Users> users1) throws Exception {
-public boolean likedButtonCheckedWhether(Set<LikedResponseDto> set, Optional<Users> users1) throws Exception {
+    //public boolean likedButtonCheckedWhether(Set<Liked> set,Optional<Users> users1) throws Exception {
+    public boolean likedButtonCheckedWhether(Set<LikedResponseDto> set, Optional<Users> users1) throws Exception {
         Users users = users1.get();
 
         if (set == null) return false;
@@ -392,7 +394,7 @@ public boolean likedButtonCheckedWhether(Set<LikedResponseDto> set, Optional<Use
     }
 
 //    public boolean disLikedButtonCheckedWhether(Set<DisLiked> set,Optional<Users> users1) throws Exception {
-public boolean disLikedButtonCheckedWhether(Set<DisLikedResponseDto> set, Optional<Users> users1) throws Exception {
+    public boolean disLikedButtonCheckedWhether(Set<DisLikedResponseDto> set, Optional<Users> users1) throws Exception {
         Users users = users1.get();
 
         if (set == null) return false;
@@ -400,6 +402,17 @@ public boolean disLikedButtonCheckedWhether(Set<DisLikedResponseDto> set, Option
         else if(!set.stream().anyMatch(disLiked -> disLiked.getUsers().getEmail().equals(users.getEmail()))) return false;
         else if (set.stream().anyMatch(disLiked -> disLiked.getUsers().getEmail().equals(users.getEmail()))) return true;
         else throw new Exception("PostController.disLikedButtonCheckedWhether 메서드 에러발생");
+    }
+
+    @RequestMapping(value = "/reportPost", method = RequestMethod.POST)
+    public ResponseEntity<String> reportMethod(
+            @RequestBody HashMap<String, Object> data,
+            @CookieValue("users") Optional<Cookie> cookie) {
+        if (cookie.isPresent()) {
+            Report newReport = reportService.createNewReport(data,cookie);
+            return new ResponseEntity<>("신고가 완료 되었습니다.",HttpStatus.OK);
+        }
+        return new ResponseEntity<>("로그인 안됨",HttpStatus.BAD_REQUEST);
     }
 }
 
