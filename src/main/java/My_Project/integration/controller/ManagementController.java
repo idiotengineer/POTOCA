@@ -8,6 +8,8 @@ import My_Project.integration.service.PointService;
 import My_Project.integration.service.PostService;
 import My_Project.integration.service.ReportService;
 import My_Project.integration.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller
+@Api(tags = "관리자 페이지 API")
 public class ManagementController {
 
     @Autowired
@@ -42,6 +45,8 @@ public class ManagementController {
     ReportService reportService;
 
     @GetMapping("/management")
+    @ApiOperation(value = "관리자 페이지 접속 API",
+    notes = "관리자 페이지에 접속하는 API입니다. Pageable 파라미터는 숨기겠습니다. pageableNPage는 페이지 번호를 입력하시면 됩니다.")
     public String management(
             @Qualifier("pageable1") @PageableDefault(size = 5) Pageable pageable1,
             @Qualifier("pageable2") @PageableDefault(size = 5) Pageable pageable2,
@@ -349,6 +354,8 @@ public class ManagementController {
 
     @ResponseBody
     @PostMapping("deletePostList")
+    @ApiOperation(value = "게시글 리스트 삭제 API",
+    notes = "게시글의 ID를 리스트 형태로 갖고 일괄 삭제하는 API입니다.")
     public ResponseEntity<Long> deletePostList(@RequestBody List<Long> postNumberList) {
         long l = postService.deletePostList(postNumberList);
         return new ResponseEntity<Long>(l, HttpStatus.OK);
@@ -356,6 +363,8 @@ public class ManagementController {
 
     @ResponseBody
     @PostMapping("deleteUsersList")
+    @ApiOperation(value = "유저 리스트 삭제 API",
+            notes = "유저의 EMAIL을 리스트 형태로 갖고 일괄 삭제하는 API입니다.")
     public ResponseEntity<Long> deleteUserList(@RequestBody List<String> userEmailList) {
         long l = userService.deleteUserList(userEmailList);
         return new ResponseEntity<Long>(l, HttpStatus.OK);

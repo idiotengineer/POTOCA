@@ -7,6 +7,8 @@ import My_Project.integration.entity.QPointHistory;
 import My_Project.integration.entity.Users;
 import My_Project.integration.repository.UsersRepository;
 import My_Project.integration.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -15,18 +17,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.util.StringUtils;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.Cookie;
 import java.util.Optional;
 
 @Controller
+@Api(tags = "포인트 API")
 public class PointController {
 
     @Autowired
     UserService userService;
 
     @PostMapping("/LOL_Exchange")
-    public String LOLExchange(ExchangeDto exchangeDto, @CookieValue("users") Optional<Cookie> cookie, RedirectAttributes redirectAttributes) {
+    @ApiOperation(value = "MyPoint -> League Of Legend로 환전 API",
+    notes = "MyPoint를 League Of Legend 게임으로 환전하는 API입니다. ExchangeDto를 통해서 데이터를 받아옵니다. (로그인 확인 시 사용되는 cookie는 숨기겠습니다.)")
+    public String LOLExchange(ExchangeDto exchangeDto, @ApiIgnore @CookieValue("users") Optional<Cookie> cookie, @ApiIgnore RedirectAttributes redirectAttributes) {
         if (cookie.isPresent()) {
             Users users = userService.findById(cookie.get().getValue()).get();
 
@@ -61,7 +67,9 @@ public class PointController {
     }
 
     @PostMapping("/Valorant_Exchange")
-    public String ValorantExchange(ExchangeDto exchangeDto, @CookieValue("users") Optional<Cookie> cookie, RedirectAttributes redirectAttributes) {
+    @ApiOperation(value = "MyPoint -> Valorant 게임로 환전 API",
+            notes = "MyPoint를 Valorant 게임으로 환전하는 API입니다. ExchangeDto를 통해서 데이터를 받아옵니다. (로그인 확인 시 사용되는 cookie는 숨기겠습니다.)")
+    public String ValorantExchange(ExchangeDto exchangeDto,@ApiIgnore @CookieValue("users") Optional<Cookie> cookie,@ApiIgnore RedirectAttributes redirectAttributes) {
         if (cookie.isPresent()) {
             Users users = userService.findById(cookie.get().getValue()).get();
 
@@ -96,7 +104,9 @@ public class PointController {
     }
 
     @PostMapping("/STARCRAFT_Exchange")
-    public String STARCRAFTExchange(ExchangeDto exchangeDto, @CookieValue("users") Optional<Cookie> cookie, RedirectAttributes redirectAttributes) {
+    @ApiOperation(value = "MyPoint -> STARCRAFT 게임으로 환전 API",
+            notes = "MyPoint를 STARCRAFT 게임으로 환전하는 API입니다. ExchangeDto를 통해서 데이터를 받아옵니다. (로그인 확인 시 사용되는 cookie는 숨기겠습니다.)")
+    public String STARCRAFTExchange(ExchangeDto exchangeDto,@ApiIgnore @CookieValue("users") Optional<Cookie> cookie,@ApiIgnore RedirectAttributes redirectAttributes) {
         if (cookie.isPresent()) {
             Users users = userService.findById(cookie.get().getValue()).get();
 
@@ -132,7 +142,9 @@ public class PointController {
     }
 
     @PostMapping("/LOSTARK_Exchange")
-    public String LOSTARKExchange(ExchangeDto exchangeDto, @CookieValue("users") Optional<Cookie> cookie, RedirectAttributes redirectAttributes) {
+    @ApiOperation(value = "MyPoint -> LOSTARK 게임으로 환전 API",
+            notes = "MyPoint를 LOSTARK 게임으로 환전하는 API입니다. ExchangeDto를 통해서 데이터를 받아옵니다. (로그인 확인 시 사용되는 cookie는 숨기겠습니다.)")
+    public String LOSTARKExchange(ExchangeDto exchangeDto,@ApiIgnore @CookieValue("users") Optional<Cookie> cookie,@ApiIgnore RedirectAttributes redirectAttributes) {
         if (cookie.isPresent()) {
             Users users = userService.findById(cookie.get().getValue()).get();
 
@@ -168,7 +180,9 @@ public class PointController {
     }
 
     @PostMapping("/MAPLESTORY_Exchange")
-    public String MAPLESTORYExchange(ExchangeDto exchangeDto, @CookieValue("users") Optional<Cookie> cookie, RedirectAttributes redirectAttributes) {
+    @ApiOperation(value = "MyPoint -> MAPLESTORY 게임으로 환전 API",
+            notes = "MyPoint를 MAPLESTORY 게임으로 환전하는 API입니다. ExchangeDto를 통해서 데이터를 받아옵니다. (로그인 확인 시 사용되는 cookie는 숨기겠습니다.)")
+    public String MAPLESTORYExchange(ExchangeDto exchangeDto,@ApiIgnore @CookieValue("users") Optional<Cookie> cookie,@ApiIgnore RedirectAttributes redirectAttributes) {
         if (cookie.isPresent()) {
             Users users = userService.findById(cookie.get().getValue()).get();
 

@@ -3,6 +3,7 @@ package My_Project.integration.controller;
 import My_Project.integration.entity.Dto.ListingPostDto;
 import My_Project.integration.entity.Dto.PostDto;
 import My_Project.integration.service.PostService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +26,16 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
+@Api(tags = {"리스팅 API"})
 public class ListPageController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ListPageController.class);
     @Autowired
     PostService postService;
 
-    @ApiOperation(value = "일반 게시글 리스트 페이지 접속")
+    @ApiOperation(
+            value = "Regular 게시글 리스트 페이지 접속",
+            notes = "Regular 게시글의 리스팅 페이지에 접속합니다. Pageable 파라미터가 필요합니다")
     @GetMapping("/Regular_listpage")
     public String listPage(@ApiIgnore Model model, @PageableDefault Pageable pageable, HttpServletRequest request)
     {
@@ -50,12 +54,8 @@ public class ListPageController {
         return "listpage_copy";
     }
 
-   /* @GetMapping("/search_title")
-    public String searchByTitle() {
-
-    }*/
-
-    @GetMapping("/search_user")
+    /*@GetMapping("/search_user")
+    @ApiOperation(value = "")
     public String searchByUser(
             @RequestParam(value = "dtype") String s,
             @RequestParam(value = "string") String string,
@@ -77,7 +77,7 @@ public class ListPageController {
         model.addAttribute("keyword",string);
         model.addAttribute("how_to_search","title");
         return "listpage_copy2";
-    }
+    }*/
 
 
     /*@GetMapping("/searchPage")
@@ -89,9 +89,10 @@ public class ListPageController {
         return "listpage_copy2";
     }*/
 
-    @ApiOperation(value = "LOL 갤러리 리스팅 페이지")
+    @ApiOperation(value = "LOL 갤러리 리스팅 페이지",
+            notes = "LOL 게시글의 리스팅 페이지에 접속합니다. Pageable 파라미터가 필요합니다")
     @GetMapping("/LeagueOfLegends_listpage")
-    public String lolListPage(Model model,HttpServletRequest request, @PageableDefault Pageable pageable) {
+    public String lolListPage(@ApiIgnore Model model, @ApiIgnore HttpServletRequest request,@PageableDefault Pageable pageable) {
         LOGGER.info("LOL 갤러리 리스팅 페이지 접속");
 
         Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
@@ -101,7 +102,6 @@ public class ListPageController {
             Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
             model.addAttribute("list",list);
         } else {
-            LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
             Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"LEAGUEOFLEGEND");
             model.addAttribute("list", postDtoList);
@@ -110,9 +110,10 @@ public class ListPageController {
         return "listpage_LeagueOfLegends";
     }
 
-    @ApiOperation(value = "VALORANT 갤러리 리스팅 페이지")
+    @ApiOperation(value = "VALORANT 갤러리 리스팅 페이지",
+            notes = "VALORANT 게시글의 리스팅 페이지에 접속합니다. Pageable 파라미터가 필요합니다")
     @GetMapping("/Valorant_listpage")
-    public String valorantListPage(Model model,HttpServletRequest request, @PageableDefault Pageable pageable) {
+    public String valorantListPage(@ApiIgnore Model model,@ApiIgnore HttpServletRequest request, @PageableDefault Pageable pageable) {
         LOGGER.info("VaLoRanT 갤러리 리스팅 페이지 접속");
 
         Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
@@ -122,7 +123,6 @@ public class ListPageController {
             Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
             model.addAttribute("list",list);
         } else {
-            LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
             Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"VALORANT");
             model.addAttribute("list", postDtoList);
@@ -130,9 +130,10 @@ public class ListPageController {
         return "listpage_valorant";
     }
 
-    @ApiOperation(value = "lostArk 갤러리 리스팅 페이지")
+    @ApiOperation(value = "lostArk 갤러리 리스팅 페이지",
+            notes = "LOSTARK 게시글의 리스팅 페이지에 접속합니다. Pageable 파라미터가 필요합니다")
     @GetMapping("/LostArk_listpage")
-    public String lostArkListPage(Model model,HttpServletRequest request, @PageableDefault Pageable pageable) {
+    public String lostArkListPage(@ApiIgnore Model model,@ApiIgnore HttpServletRequest request, @PageableDefault Pageable pageable) {
         LOGGER.info("lostArk 갤러리 리스팅 페이지 접속");
 
         Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
@@ -142,7 +143,6 @@ public class ListPageController {
             Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
             model.addAttribute("list",list);
         } else {
-            LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
             Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"LOSTARK");
             model.addAttribute("list", postDtoList);
@@ -150,9 +150,10 @@ public class ListPageController {
         return "listpage_lostArk";
     }
 
-    @ApiOperation(value = "mapleStory 갤러리 리스팅 페이지")
+    @ApiOperation(value = "mapleStory 갤러리 리스팅 페이지",
+            notes = "mapleStory 게시글의 리스팅 페이지에 접속합니다. Pageable 파라미터가 필요합니다")
     @GetMapping("/MapleStory_listpage")
-    public String mapleStoryListPage(Model model,HttpServletRequest request, @PageableDefault Pageable pageable) {
+    public String mapleStoryListPage(@ApiIgnore Model model,@ApiIgnore HttpServletRequest request, @PageableDefault Pageable pageable) {
         LOGGER.info("mapleStory 갤러리 리스팅 페이지 접속");
 
         Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
@@ -162,7 +163,6 @@ public class ListPageController {
             Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
             model.addAttribute("list",list);
         } else {
-            LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
             Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"MAPLESTORY");
             model.addAttribute("list", postDtoList);
@@ -171,7 +171,8 @@ public class ListPageController {
         return "listpage_mapleStory";
     }
 
-    @ApiOperation(value = "starCraft 갤러리 리스팅 페이지")
+    @ApiOperation(value = "starCraft 갤러리 리스팅 페이지",
+            notes = "starCraft 게시글의 리스팅 페이지에 접속합니다. Pageable 파라미터가 필요합니다")
     @GetMapping("/StarCraft_listpage")
     public String starCraftListPage(Model model,HttpServletRequest request, @PageableDefault Pageable pageable) {
         LOGGER.info("starCraft 갤러리 리스팅 페이지 접속");
@@ -183,7 +184,6 @@ public class ListPageController {
             Page<ListingPostDto> list = (Page<ListingPostDto>) flashMap.get("list");
             model.addAttribute("list",list);
         } else {
-            LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
 //            Page<ListingPostDto> postDtoList = postService.getPostInfoList(pageable);
             Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable, "STARCRAFT");
@@ -193,7 +193,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_user/RegularPost")
-    public String searchByUserRegularPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+    @ApiOperation(
+            value = "Regular 갤러리 게시글을 작성자 이메일로 조회",
+            notes = "Regular 갤러리 게시글을 게시자의 이메일로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByUserRegularPost(@RequestParam(value = "string") String string,@ApiIgnore @PageableDefault Pageable pageable,@ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByNameV2(string, pageable, "Regular");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -202,7 +205,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_title/RegularPost")
-    public String searchByTitleRegularPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+    @ApiOperation(
+            value = "Regular 갤러리 게시글을 제목으로 조회",
+            notes = "Regular 갤러리 게시글을 게시글의 제목으로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByTitleRegularPost(@RequestParam(value = "string") String string,@PageableDefault @ApiIgnore Pageable pageable,@ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"Regular");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -211,7 +217,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_user/LOLPost")
-    public String searchByUserLOLPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+    @ApiOperation(
+            value = "LOL 갤러리 게시글을 작성자 이메일로 조회",
+            notes = "LOL 갤러리 게시글을 게시자의 이메일로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByUserLOLPost(@RequestParam(value = "string") String string,@PageableDefault @ApiIgnore Pageable pageable, @ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByNameV2(string, pageable, "LEAGUEOFLEGEND");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -220,7 +229,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_title/LOLPost")
-    public String searchByTitleLOLPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+    @ApiOperation(
+            value = "LOL 갤러리 게시글을 제목으로 조회",
+            notes = "LOL 갤러리 게시글을 게시글의 제목으로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByTitleLOLPost(@RequestParam(value = "string") String string,@PageableDefault @ApiIgnore Pageable pageable,@ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"LEAGUEOFLEGEND");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -229,7 +241,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_user/LostArkPost")
-    public String searchByUserLostArkPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+    @ApiOperation(
+            value = "LOSTARK 갤러리 게시글을 작성자 이메일로 조회",
+            notes = "LOSTARK 갤러리 게시글을 게시자의 이메일로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByUserLostArkPost(@RequestParam(value = "string") String string,@PageableDefault @ApiIgnore Pageable pageable, @ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByNameV2(string, pageable, "LOSTARK");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -238,7 +253,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_title/LostArkPost")
-    public String searchByTitleLostArkPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+    @ApiOperation(
+            value = "LOSTARK 갤러리 게시글을 제목으로 조회",
+            notes = "LOSTARK 갤러리 게시글을 게시글의 제목으로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByTitleLostArkPost(@RequestParam(value = "string") String string,@ApiIgnore @PageableDefault Pageable pageable,@ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"LOSTARK");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -247,7 +265,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_user/MapleStoryPost")
-    public String searchByUserMapleStoryPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+    @ApiOperation(
+            value = "MAPLESTORY 갤러리 게시글을 작성자 이메일로 조회",
+            notes = "MAPLESTORY 갤러리 게시글을 게시자의 이메일로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByUserMapleStoryPost(@RequestParam(value = "string") String string,@ApiIgnore @PageableDefault Pageable pageable,@ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByNameV2(string, pageable, "MAPLESTORY");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -256,7 +277,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_title/MapleStoryPost")
-    public String searchByTitleMapleStoryPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+    @ApiOperation(
+            value = "MAPLESTORY 갤러리 게시글을 제목으로 조회",
+            notes = "MAPLESTORY 갤러리 게시글을 게시글의 제목으로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByTitleMapleStoryPost(@RequestParam(value = "string") String string,@ApiIgnore @PageableDefault Pageable pageable,@ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"MAPLESTORY");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -265,7 +289,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_user/StarCraftPost")
-    public String searchByUserStarCraftPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+    @ApiOperation(
+            value = "STARCRAFT 갤러리 게시글을 작성자 이메일로 조회",
+            notes = "STARCRAFT 갤러리 게시글을 게시자의 이메일로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByUserStarCraftPost(@RequestParam(value = "string") String string,@ApiIgnore @PageableDefault Pageable pageable,@ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByNameV2(string, pageable, "STARCRAFT");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -274,7 +301,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_title/StarCraftPost")
-    public String searchByTitleStarCraftPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+    @ApiOperation(
+            value = "STARCRAFT 갤러리 게시글을 제목으로 조회",
+            notes = "STARCRAFT 갤러리 게시글을 게시글의 제목으로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByTitleStarCraftPost(@RequestParam(value = "string") String string,@ApiIgnore @PageableDefault Pageable pageable,@ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"STARCRAFT");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -283,7 +313,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_user/ValorantPost")
-    public String searchByUserValorantPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+    @ApiOperation(
+            value = "VALORANT 갤러리 게시글을 작성자 이메일로 조회",
+            notes = "VALORANT 갤러리 게시글을 게시자의 이메일로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByUserValorantPost(@RequestParam(value = "string") String string,@ApiIgnore @PageableDefault Pageable pageable, @ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByNameV2(string, pageable, "VALORANT");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
@@ -292,7 +325,10 @@ public class ListPageController {
     }
 
     @GetMapping("/search_title/ValorantPost")
-    public String searchByTitleValorantPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+    @ApiOperation(
+            value = "VALORANT 갤러리 게시글을 제목으로 조회",
+            notes = "VALORANT 갤러리 게시글을 게시글의 제목으로 조회하여 리스팅 페이지를 리턴합니다. (Pageable 메서드는 숨기겠습니다)")
+    public String searchByTitleValorantPost(@RequestParam(value = "string") String string,@ApiIgnore @PageableDefault Pageable pageable,@ApiIgnore Model model) {
         Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"VALORANT");
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);

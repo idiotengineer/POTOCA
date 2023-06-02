@@ -3,6 +3,8 @@ package My_Project.integration.controller;
 import My_Project.integration.entity.Dto.PhotoDto;
 import My_Project.integration.entity.Photo;
 import My_Project.integration.service.PhotoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import java.io.InputStream;
 
 @RequiredArgsConstructor
 @RestController
+@Api(tags = "사진 API")
 public class PhotoController {
 
     @Autowired
@@ -30,6 +33,8 @@ public class PhotoController {
      * 이미지 개별 조회
      */
     @CrossOrigin
+    @ApiOperation(value = "사진 조회 API",
+    notes = "사진을 id값으로 하나하나 조회해오는 API입니다")
     @GetMapping(
             value = "/image/{id}",
             produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
