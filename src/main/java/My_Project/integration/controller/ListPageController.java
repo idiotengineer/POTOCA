@@ -32,7 +32,7 @@ public class ListPageController {
     PostService postService;
 
     @ApiOperation(value = "일반 게시글 리스트 페이지 접속")
-    @GetMapping("/listpage")
+    @GetMapping("/Regular_listpage")
     public String listPage(@ApiIgnore Model model, @PageableDefault Pageable pageable, HttpServletRequest request)
     {
         Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
@@ -44,7 +44,7 @@ public class ListPageController {
         } else {
             LOGGER.info("리스트페이지 접속");
 //            Page<PostDto> postDtoList = postService.getPostInfoList(pageable);
-            Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"regular");
+            Page<ListingPostDto> postDtoList = postService.getPostInfoListV2(pageable,"Regular");
             model.addAttribute("list", postDtoList);
         }
         return "listpage_copy";
@@ -56,8 +56,11 @@ public class ListPageController {
     }*/
 
     @GetMapping("/search_user")
-    public String searchByUser(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
-        Page<PostDto> list = postService.SearchByName(string, pageable);
+    public String searchByUser(
+            @RequestParam(value = "dtype") String s,
+            @RequestParam(value = "string") String string,
+            @PageableDefault Pageable pageable, Model model) {
+        Page<PostDto> list = postService.SearchByNameV2(string, pageable,s);
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
         model.addAttribute("how_to_search","user");
@@ -65,8 +68,11 @@ public class ListPageController {
     }
 
     @GetMapping("/search_title")
-    public String searchByTitle(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
-        Page<PostDto> list = postService.SearchByTitle(string, pageable);
+    public String searchByTitle(
+            @RequestParam(value = "dtype") String s,
+            @RequestParam(value = "string") String string,
+            @PageableDefault Pageable pageable,Model model) {
+        Page<PostDto> list = postService.SearchByTitleV2(string,pageable,s);
         model.addAttribute("list", list);
         model.addAttribute("keyword",string);
         model.addAttribute("how_to_search","title");
@@ -184,6 +190,24 @@ public class ListPageController {
             model.addAttribute("list", postDtoList);
         }
         return "listpage_starCraft";
+    }
+
+    @GetMapping("/search_user/RegularPost")
+    public String searchByUserRegularPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable, Model model) {
+        Page<PostDto> list = postService.SearchByNameV2(string, pageable, "Regular");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","user");
+        return "listpage_copy";
+    }
+
+    @GetMapping("/search_title/RegularPost")
+    public String searchByTitleRegularPost(@RequestParam(value = "string") String string,@PageableDefault Pageable pageable,Model model) {
+        Page<PostDto> list = postService.SearchByTitleV2(string, pageable,"Regular");
+        model.addAttribute("list", list);
+        model.addAttribute("keyword",string);
+        model.addAttribute("how_to_search","title");
+        return "listpage_copy";
     }
 
     @GetMapping("/search_user/LOLPost")

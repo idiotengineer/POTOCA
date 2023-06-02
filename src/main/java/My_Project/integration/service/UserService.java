@@ -96,7 +96,7 @@ public class UserService {
     public void insertUsersPointHistory(Users users, ExchangeDto exchangeDto, UsingType usingType, PlusOrMinus plusOrMinus, String s) {
         PointHistory pointHistory = PointHistory.builder()
                 .setUppedTime(LocalDateTime.now())
-                .point(exchangeDto.getPoint())
+                .point(exchangeDto.getPoint().get())
                 .userId(exchangeDto.getEmail())
                 .usingType(usingType)
                 .plusOrMinus(plusOrMinus)
@@ -108,9 +108,9 @@ public class UserService {
         users.getPointHistories().add(pointHistory);
 
         if (plusOrMinus == PlusOrMinus.PLUS) {
-            users.setPoint(users.getPoint() + exchangeDto.getPoint());
+            users.setPoint(users.getPoint() + exchangeDto.getPoint().get());
         } else {
-            users.setPoint(users.getPoint() - exchangeDto.getPoint());
+            users.setPoint(users.getPoint() - exchangeDto.getPoint().get());
         }
     }
 

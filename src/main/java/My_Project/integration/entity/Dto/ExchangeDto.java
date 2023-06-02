@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,5 +15,5 @@ public class ExchangeDto {
 
     private String email;
     private String password;
-    private Long point;
+    private Optional<Long> point;
 }

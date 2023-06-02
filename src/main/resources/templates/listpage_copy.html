@@ -19,14 +19,14 @@
       };
 
       let stringify = JSON.stringify(data);
-*/
+*/    var dtype = "regular";
       let request = new XMLHttpRequest();
       if (value1 == "title") {
-        window.location.replace("/search_title?string=" + string);/*
+        window.location.replace("/search_title/RegularPost?string=" + string);/*
         request.open("GET", "/search_title?string=" + string);
         request.send();*/
       } else {
-        window.location.replace("/search_user?string=" + string);
+        window.location.replace("/search_user/RegularPost?string=" + string);
         /*request.open("GET", "/search_user?string=" + string);
         request.send();*/
       }
@@ -83,7 +83,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="product : ${list}" th:onclick="'location.href=\'' + @{find_post(id=${product.getPostNumber()})} + '\''">
+    <tr th:each="product : ${list}" th:onclick="|location.href='/find_post?id=${product.getPostNumber()}'|">
       <th scope="row" th:text="${product.getLikedCount()}">1</th>
       <td style="
             overflow:hidden;

@@ -28,6 +28,7 @@ public class PostDto {
 
     private Long point;
 
+    private Long LikedCount;
     private LocalDateTime closingTime;
 
     public PostDto(PostInfo postInfo) {
@@ -46,6 +47,8 @@ public class PostDto {
         this.bestPostCommentsList = postInfo.getBestPostCommentsList();
         this.point = postInfo.getPoint();
         this.closingTime = postInfo.getClosingTime();
+
+        this.LikedCount = postInfo.getLikedCount();
 //        Collections.copy(this.images, postInfo.getPhoto());
 //        Collections.copy(this.comments,postInfo.getComments());
     }

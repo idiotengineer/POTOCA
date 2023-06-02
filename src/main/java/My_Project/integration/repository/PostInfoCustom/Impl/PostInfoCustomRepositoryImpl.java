@@ -69,6 +69,11 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
     public List<PostDto> searchByNameV2(String name,String s) {
         List<PostInfo> fetch = jpaQueryFactory.
                 selectFrom(postInfo)
+                .leftJoin(postInfo.photo, photo).fetchJoin()
+                .leftJoin(postInfo.comments, postComments).fetchJoin()
+                .leftJoin(postInfo.postLikeAndDislike,postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked,disLiked).fetchJoin()
                 .where(
                         postInfo.postedUser.email.contains(name),
                         eqRegular(s),
@@ -78,6 +83,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                         eqStarCraft(s),
                         eqMapleStory(s)
                 )
+                .distinct()
                 .fetch();
 
         return fetch.stream().map(
@@ -100,6 +106,11 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
     public List<PostDto> searchByTitleV2(String name,String s) {
         List<PostInfo> fetch = jpaQueryFactory.
                 selectFrom(postInfo)
+                .leftJoin(postInfo.photo, photo).fetchJoin()
+                .leftJoin(postInfo.comments, postComments).fetchJoin()
+                .leftJoin(postInfo.postLikeAndDislike,postLikeAndDislike).fetchJoin()
+                .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
+                .leftJoin(postLikeAndDislike.disLiked,disLiked).fetchJoin()
                 .where(
                         postInfo.postTitle.contains(name),
                         eqRegular(s),
@@ -109,6 +120,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                         eqStarCraft(s),
                         eqMapleStory(s)
                 )
+                .distinct()
                 .fetch();
 
         return fetch.stream().map(
@@ -333,7 +345,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
     }
 
     public BooleanExpression eqRegular(String s) {
-        if (StringUtils.isNullOrEmpty(s) || !s.equals("regular")) {
+        if (StringUtils.isNullOrEmpty(s) || !s.equals("Regular")) {
             return null;
         }
 
@@ -530,7 +542,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .distinct()
                 .fetch();
 
-        return postInfo1;
+            return postInfo1;
     }
 
     public List<PostInfo> findExpiredPost() {
