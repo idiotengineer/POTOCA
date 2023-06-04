@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserCustomRepository {
@@ -18,5 +19,7 @@ public interface UserCustomRepository {
     public long deleteUserList(List<String> userEmailList);
 
     public List<Users> findUserByEmailList(List<String> userEmailList);
+
+    public Users findUsersByEmailCustom(String s);
 
 }

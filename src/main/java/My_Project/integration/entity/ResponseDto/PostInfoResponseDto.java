@@ -69,25 +69,25 @@ public class PostInfoResponseDto {
                 ).collect(Collectors.toSet());
     }
 
-    public boolean checkLike(Users users) {
+    public boolean checkLike(String email) {
         return getPostLikeAndDislike().getLikedUser().stream()
                 .anyMatch(
-                        liked -> liked.getUsers().equals(users)
+                        liked -> liked.getUsers().getEmail().equals(email)
                 );
     }
 
-    public boolean checkDisLike(Users users) {
+    public boolean checkDisLike(String email) {
         return getPostLikeAndDislike().getDisLikedUser().stream()
                 .anyMatch(
-                        disLikedResponseDto -> disLikedResponseDto.getUsers().equals(users)
+                        disLikedResponseDto -> disLikedResponseDto.getUsers().getEmail().equals(email)
                 );
     }
 
-    public String checkLikeAndDisLike(Optional<Users> users) {
-        if (users.isPresent()) {
-            if (checkLike(users.get())) {
+    public String checkLikeAndDisLike(Optional<String> email) {
+        if (email.isPresent()) {
+            if (checkLike(email.get())) {
                 return "likeChecked";
-            } else if (checkDisLike(users.get())) {
+            } else if (checkDisLike(email.get())) {
                 return "dislikeChecked";
             }
             return "noneChecked";

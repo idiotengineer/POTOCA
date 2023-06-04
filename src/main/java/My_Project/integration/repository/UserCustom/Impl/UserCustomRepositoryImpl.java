@@ -11,8 +11,10 @@ import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static My_Project.integration.entity.QBigComments.bigComments;
 import static My_Project.integration.entity.QDisLiked.*;
@@ -112,5 +114,16 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
                 .where(users.email.in(userEmailList))
                 .distinct()
                 .fetch();
+    }
+
+    public Users findUsersByEmailCustom(String s) {
+        return jpaQueryFactory
+                .selectFrom(users)
+                .leftJoin(users.uploadedPost, postInfo).fetchJoin()
+                .leftJoin(users.liked, liked).fetchJoin()
+                .leftJoin(users.disLiked, disLiked).fetchJoin()
+                .leftJoin(users.pointHistories, pointHistory).fetchJoin()
+                .where(users.email.eq(s))
+                .fetchOne();
     }
 }

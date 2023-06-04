@@ -123,4 +123,16 @@ public class UserService {
     public long deleteUserList(List<String> userEmailList) {
         return bigCommentsRepository.deleteBigCommentsListByUsersEmailList(userEmailList);
     }
+
+    @Transactional
+    public Users findByIdCustom(String s) {
+        return usersRepository.findUsersByEmailCustom(s);
+    }
+
+    @Transactional
+    public Users UserPlus500Point(String s) {
+        Users usersByEmailCustom = usersRepository.findUsersByEmailCustom(s);
+        usersByEmailCustom.setPoint(usersByEmailCustom.getPoint() + 500L);
+        return usersByEmailCustom;
+    }
 }

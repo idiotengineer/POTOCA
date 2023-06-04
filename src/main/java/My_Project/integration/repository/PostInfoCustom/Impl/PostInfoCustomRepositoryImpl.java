@@ -474,6 +474,7 @@ public class PostInfoCustomRepositoryImpl implements PostInfoCustomRepository {
                 .leftJoin(postLikeAndDislike.liked, liked).fetchJoin()
                 .leftJoin(postLikeAndDislike.disLiked, disLiked).fetchJoin()
                 .leftJoin(postInfo.comments, postComments).fetchJoin()
+                .leftJoin(postInfo.bestPostCommentsList).fetchJoin()
                 .where(postInfo.postNumber.eq(id))
                 .fetchOne();
 

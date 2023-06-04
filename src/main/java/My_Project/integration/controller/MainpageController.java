@@ -8,6 +8,7 @@ import My_Project.integration.service.PostService;
 import My_Project.integration.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +105,7 @@ public class MainpageController {
     }
 
     @RequestMapping(value = "/find_post", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "게시글 페이지로 이동 API", notes = "게시글 페이지로 이동하는 API입니다. 게시글의 ID(Long)으로 이동합니다. (로그인에 필요한 cookie는 숨기겠습니다.)")
     public String findPost(@RequestParam("id") Long id, Model model, @CookieValue("users") Optional<Cookie> cookie, @ModelAttribute("string") String s) {
         try {
             PageRequest of = PageRequest.of(0, 10);
@@ -115,8 +117,8 @@ public class MainpageController {
             boolean logined = true;
 
             if (cookie.isPresent()) { // 로그인 되어 있을 시
-                Optional<Users> usersOptional = userService.findById(cookie.get().getValue());
-                model.addAttribute("checked", postV4.checkLikeAndDisLike(usersOptional));
+                Optional<Users> usersOptional = Optional.ofNullable(userService.findByIdCustom(cookie.get().getValue()));
+                model.addAttribute("checked", postV4.checkLikeAndDisLike(Optional.of(usersOptional.get().getEmail())));
                 model.addAttribute("cookie", usersOptional);
             } else {
                 logined = false;
@@ -246,5 +248,10 @@ public class MainpageController {
     @GetMapping("/setPoint")
     public void setPoint(@RequestParam Long id) {
         postService.setPoint(id);
+    }
+
+    @GetMapping("/setUserPoint")
+    public void setUserPoint(@RequestParam String id) {
+        userService.UserPlus500Point(id);
     }
 }
